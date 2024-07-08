@@ -1,0 +1,109 @@
+[gd_scene load_steps=19 format=3 uid="uid://bjgcah7n83kha"]
+
+[ext_resource type="Script" path="res://addons/intervals/events/event.gd" id="1_n3q6b"]
+[ext_resource type="Script" path="res://addons/intervals/events/animation_player_event.gd" id="2_a0nkr"]
+[ext_resource type="Script" path="res://addons/intervals/events/func_event.gd" id="2_ckcgm"]
+[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="2_xwu8x"]
+
+[sub_resource type="GDScript" id="GDScript_vv5ss"]
+script/source = "extends Node
+
+@export var multi_event: MultiEvent
+"
+
+[sub_resource type="Resource" id="Resource_1ym7a"]
+script = ExtResource("1_n3q6b")
+
+[sub_resource type="Resource" id="Resource_hr0nu"]
+script = ExtResource("1_n3q6b")
+
+[sub_resource type="Resource" id="Resource_ke2ig"]
+script = ExtResource("1_n3q6b")
+
+[sub_resource type="Resource" id="Resource_fw1fp"]
+script = ExtResource("1_n3q6b")
+
+[sub_resource type="Resource" id="Resource_b2psy"]
+script = ExtResource("2_a0nkr")
+animation_player_np = NodePath("")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_1wene"]
+resource_name = "Surrepticiously Unavailable?"
+script = ExtResource("1_n3q6b")
+
+[sub_resource type="Resource" id="Resource_h55pl"]
+script = ExtResource("2_xwu8x")
+events = []
+event_connections = {}
+event_positions = {}
+complete_mode = 0
+debug = false
+
+[sub_resource type="Resource" id="Resource_xiob2"]
+script = ExtResource("2_xwu8x")
+events = []
+event_connections = {}
+event_positions = {}
+complete_mode = 0
+debug = false
+
+[sub_resource type="Resource" id="Resource_wbkdx"]
+script = ExtResource("1_n3q6b")
+
+[sub_resource type="Resource" id="Resource_nijne"]
+script = ExtResource("1_n3q6b")
+
+[sub_resource type="Resource" id="Resource_1d65n"]
+script = ExtResource("1_n3q6b")
+
+[sub_resource type="Resource" id="Resource_k8asw"]
+script = ExtResource("2_ckcgm")
+node_path = NodePath("")
+function_name = ""
+args = []
+
+[sub_resource type="Resource" id="Resource_2j6pl"]
+script = ExtResource("2_xwu8x")
+events = [SubResource("Resource_1ym7a"), SubResource("Resource_hr0nu"), SubResource("Resource_ke2ig"), SubResource("Resource_fw1fp"), SubResource("Resource_k8asw"), SubResource("Resource_b2psy"), SubResource("Resource_1wene"), SubResource("Resource_h55pl"), SubResource("Resource_xiob2"), SubResource("Resource_wbkdx"), SubResource("Resource_nijne"), SubResource("Resource_1d65n")]
+event_connections = {
+SubResource("Resource_1ym7a"): {
+0: [SubResource("Resource_hr0nu"), SubResource("Resource_ke2ig")]
+},
+SubResource("Resource_ke2ig"): {
+0: [SubResource("Resource_fw1fp")]
+},
+SubResource("Resource_hr0nu"): {
+0: [SubResource("Resource_fw1fp")]
+},
+SubResource("Resource_b2psy"): {
+0: [SubResource("Resource_1wene")]
+},
+SubResource("Resource_1wene"): {
+0: [SubResource("Resource_h55pl"), SubResource("Resource_xiob2")]
+},
+SubResource("Resource_wbkdx"): {
+0: [SubResource("Resource_nijne"), SubResource("Resource_1d65n")]
+}
+}
+event_positions = {
+SubResource("Resource_1ym7a"): Vector2i(6176, 2724),
+SubResource("Resource_hr0nu"): Vector2i(6376, 2784),
+SubResource("Resource_ke2ig"): Vector2i(6376, 2664),
+SubResource("Resource_fw1fp"): Vector2i(6576, 2724),
+SubResource("Resource_k8asw"): Vector2i(3676, 927),
+SubResource("Resource_b2psy"): Vector2i(1468, 13),
+SubResource("Resource_1wene"): Vector2i(1741, 45),
+SubResource("Resource_h55pl"): Vector2i(2048, -27),
+SubResource("Resource_xiob2"): Vector2i(2048, 93),
+SubResource("Resource_wbkdx"): Vector2i(180, 180),
+SubResource("Resource_nijne"): Vector2i(540, 120),
+SubResource("Resource_1d65n"): Vector2i(420, 260)
+}
+complete_mode = 0
+debug = false
+
+[node name="Node" type="Node"]
+script = SubResource("GDScript_vv5ss")
+multi_event = SubResource("Resource_2j6pl")
