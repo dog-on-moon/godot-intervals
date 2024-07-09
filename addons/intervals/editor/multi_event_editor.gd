@@ -1,10 +1,13 @@
 @tool
-extends VSplitContainer
+extends Control
 ## The editor for MultiEvents.
 
 const MultiEventGraphEdit = preload("res://addons/intervals/editor/multi_event_graph_edit.gd")
+const MULTI_EVENT_GRAPH_EDIT = preload("res://addons/intervals/editor/multi_event_graph_edit.tscn")
 
 @onready var header: HBoxContainer = $Header
+@onready var tab_container: TabContainer = $TabContainer
+
 @onready var graph_edit: MultiEventGraphEdit = $GraphEdit
 @onready var label: Label = $Label
 
@@ -47,6 +50,8 @@ var event_owner: Node:
 
 func _ready() -> void:
 	multi_event = multi_event
+	
+	theme = EditorInterface.get_editor_theme()
 	
 	debug_box.toggled.connect(func (x: bool): multi_event.debug = x)
 	option_button.item_selected.connect(func (x: int): multi_event.complete_mode = x)

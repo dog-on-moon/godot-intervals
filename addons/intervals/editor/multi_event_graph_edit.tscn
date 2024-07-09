@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://5sdisb0w3ncf"]
+
+[ext_resource type="Script" path="res://addons/intervals/editor/multi_event_graph_edit.gd" id="1_78cnt"]
+[ext_resource type="Script" path="res://addons/intervals/editor/multi_event_create_event.gd" id="2_ina6o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bb02y"]
+
+[node name="MultiEvent" type="GraphEdit"]
+custom_minimum_size = Vector2(0, 128)
+grid_pattern = 1
+minimap_enabled = false
+show_zoom_label = true
+script = ExtResource("1_78cnt")
+metadata/_tab_index = 0
+
+[node name="MultiEventCreateEvent" type="GraphElement" parent="."]
+visible = false
+custom_minimum_size = Vector2(180, 220)
+layout_mode = 0
+offset_left = 582.0
+offset_top = 18.0
+offset_right = 762.0
+offset_bottom = 238.0
+position_offset = Vector2(582, 18)
+script = ExtResource("2_ina6o")
+
+[node name="Panel" type="Panel" parent="MultiEventCreateEvent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Tree" type="Tree" parent="MultiEventCreateEvent/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_bb02y")
