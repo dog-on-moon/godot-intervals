@@ -6,18 +6,16 @@ class_name AnimationPlayerEvent
 @export var animation_name: StringName
 @export var blocking := true
 
-## Returns the interval for this specific event.
-## Must be implemented by event subclasses.
-#func _get_interval(owner: Node, state: Dictionary) -> Interval:
-	#var animation_player: AnimationPlayer = owner.get_node(animation_player_np)
-	#if blocking:
-		#animation_player.animation_finished.connect(animation_finished, CONNECT_ONE_SHOT)
-		#return Func.new(animation_player.play, [animation_name])
-	#else:
-		#return Sequence.new([
-			#Func.new(animation_player.play, [animation_name]),
-			#Func.new(done.emit)
-		#])
+func _get_interval(owner: Node, state: Dictionary) -> Interval:
+	var animation_player: AnimationPlayer = owner.get_node(animation_player_np)
+	if blocking:
+		animation_player.animation_finished.connect(animation_finished, CONNECT_ONE_SHOT)
+		return Func.new(animation_player.play.bind(animation_name))
+	else:
+		return Sequence.new([
+			Func.new(animation_player.play.bind(animation_name)),
+			Func.new(done.emit)
+		])
 
 func animation_finished(_name):
 	done.emit()
@@ -33,9 +31,8 @@ static func get_editor_name() -> String:
 
 ## The editor description of the event.
 func get_editor_description_text(owner: Node) -> String:
-	var valid_np := animation_player_np and owner and owner.get_node_or_null(animation_player_np)
-	return "[b]%s\nAnimation:[/b] %s\n%sBlocking" % [
-		animation_player_np if valid_np else "[color=red]Invalid NodePath[/color]",
+	return "%s\n[b]Animation:[/b] %s\n%sBlocking" % [
+		get_node_path_string(owner, animation_player_np),
 		animation_name if animation_name else "undefined", "Not " if not blocking else "Is "
 	]
 

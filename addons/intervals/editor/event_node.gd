@@ -1,6 +1,8 @@
 @tool
 extends GraphNode
-class_name EventNode
+
+const EventEditorInfoContainer = preload("res://addons/intervals/editor/event_editor_info_container.gd")
+const MultiEventEditor = preload("res://addons/intervals/editor/multi_event_editor.gd")
 
 signal request_delete(event: Event)
 signal inspect_event(event: Event)
@@ -33,9 +35,6 @@ func _ready() -> void:
 	event = event
 	branch_label.hide()
 	
-	if get_tree() and get_tree().edited_scene_root == self:
-		theme = EditorInterface.get_editor_theme()
-	
 	inspect_button.pressed.connect(func ():
 		inspect_event.emit(event)
 	)
@@ -66,8 +65,8 @@ func update_appearance():
 		
 		## Update node color.
 		var event_color := event.get_editor_color()
-		get_theme_stylebox("titlebar").bg_color = event_color
-		get_theme_stylebox("titlebar_selected").bg_color = Color(0.3, 0.3, 0.3, 1.0) + event_color
+		get_theme_stylebox("titlebar").bg_color = event_color * 0.7
+		get_theme_stylebox("titlebar_selected").bg_color = event_color * 0.85
 		
 		## Update node description.
 		var description := event.get_editor_description_text(event_owner)

@@ -3,13 +3,13 @@ extends IntervalContainer
 class_name Parallel
 ## An IntervalContainer that plays all of its elements simultaneously.
 
-func onto_tween(tween: Tween):
+func _onto_tween(tween: Tween):
 	if not intervals:
 		return
 	if OS.has_feature("editor"):
 		for ival in intervals:
 			assert(ival is not IntervalContainer, "Parallels cannot contain other containers (bug)")
-	intervals[0].onto_tween(tween)
+	intervals[0]._onto_tween(tween)
 	for ival in intervals.slice(1):
 		tween.parallel()
-		ival.onto_tween(tween)
+		ival._onto_tween(tween)

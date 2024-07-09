@@ -1,3 +1,4 @@
+@tool
 extends Event
 class_name WaitEvent
 

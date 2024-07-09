@@ -1,6 +1,9 @@
 @tool
 extends GraphEdit
-class_name MultiEventGraphEdit
+
+const EventNode = preload("res://addons/intervals/editor/event_node.gd")
+const MultiEventCreateEvent = preload("res://addons/intervals/editor/multi_event_create_event.gd")
+const MultiEventEditor = preload("res://addons/intervals/editor/multi_event_editor.gd")
 
 const EVENT_NODE = preload("res://addons/intervals/editor/event_node.tscn")
 
@@ -17,12 +20,14 @@ const EVENT_NODE = preload("res://addons/intervals/editor/event_node.tscn")
 			multi_event.editor_refresh.connect(refresh)
 		if is_node_ready():
 			refresh()
+			_recenter()
 
 var event_to_node := {}
 var event_nodes: Array[EventNode] = []
 var selected_nodes: Array[EventNode] = []
 
 var event_clipboard := {}
+var clipboard_pos := Vector2.ZERO
 
 func _ready() -> void:
 	## Signals from Signals Dot Com
@@ -43,8 +48,7 @@ func _ready() -> void:
 func _connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int):
 	var from_event_node: EventNode = get_node(NodePath(from_node))
 	var to_event_node: EventNode = get_node(NodePath(to_node))
-	var branch_idx := max(0, from_port - 2)
-	multi_event.connect_events(from_event_node.event, to_event_node.event, branch_idx)
+	multi_event.connect_events(from_event_node.event, to_event_node.event, from_port)
 
 func _connection_from_empty(to_node: StringName, to_port: int, release_position: Vector2):
 	var pos := (release_position + scroll_offset) / zoom
@@ -59,13 +63,13 @@ func _connection_to_empty(from_node: StringName, from_port: int, release_positio
 func _disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int):
 	var from_event_node: EventNode = get_node(NodePath(from_node))
 	var to_event_node: EventNode = get_node(NodePath(to_node))
-	var branch_idx := max(0, from_port - 2)
-	multi_event.disconnect_events(from_event_node.event, to_event_node.event, branch_idx)
+	multi_event.disconnect_events(from_event_node.event, to_event_node.event, from_port)
 
 func _copy_nodes_request():
 	event_clipboard = {}
+	clipboard_pos = scroll_offset
 	for node in selected_nodes:
-		event_clipboard[node.event.duplicate()] = node.position_offset - scroll_offset
+		event_clipboard[node.event.duplicate()] = node.position_offset - clipboard_pos
 
 func _paste_nodes_request():
 	for node in selected_nodes.duplicate():
@@ -73,7 +77,7 @@ func _paste_nodes_request():
 	var old_clipboard := event_clipboard.duplicate()
 	event_clipboard = {}
 	for event in old_clipboard:
-		new_event(event, old_clipboard[event] + scroll_offset)
+		new_event(event, old_clipboard[event] - clipboard_pos + (scroll_offset * 2))
 		event_to_node[event].set_selected(true)
 		event_clipboard[event.duplicate()] = old_clipboard[event]
 
@@ -155,7 +159,7 @@ func refresh():
 		for event: Event in multi_event.event_connections:
 			var branch_dict: Dictionary = multi_event.event_connections[event]
 			for branch_idx: int in branch_dict:
-				var slot_idx := 0 if branch_idx == 0 else branch_idx + 2
+				var slot_idx := branch_idx
 				for to_event: Event in branch_dict[branch_idx]:
 					connect_node(event_to_node[event].name, slot_idx, event_to_node[to_event].name, 0)
 		
@@ -176,4 +180,17 @@ func _input(event: InputEvent) -> void:
 		for node in selected_nodes.duplicate():
 			event_clipboard[node.event] = node.position_offset - scroll_offset
 			delete_event(node.event)
+		clipboard_pos = scroll_offset
 		accept_event()
+
+func _recenter():
+	zoom = 1.0
+	await get_tree().process_frame
+	if not event_nodes:
+		scroll_offset = Vector2.ZERO
+		return
+	var average_node_position := Vector2.ZERO
+	for node in event_nodes:
+		average_node_position += node.position_offset + (node.size / 2)
+	average_node_position /= event_nodes.size()
+	scroll_offset = average_node_position - (size / 2)

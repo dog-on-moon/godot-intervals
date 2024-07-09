@@ -14,11 +14,6 @@ config/name="intervals"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
-[display]
-
-window/size/viewport_width=1260
-window/size/viewport_height=310
-
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/intervals/plugin.cfg")

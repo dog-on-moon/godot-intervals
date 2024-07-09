@@ -1,109 +1,91 @@
-[gd_scene load_steps=19 format=3 uid="uid://bjgcah7n83kha"]
+[gd_scene load_steps=16 format=3 uid="uid://bjgcah7n83kha"]
 
-[ext_resource type="Script" path="res://addons/intervals/events/event.gd" id="1_n3q6b"]
-[ext_resource type="Script" path="res://addons/intervals/events/animation_player_event.gd" id="2_a0nkr"]
-[ext_resource type="Script" path="res://addons/intervals/events/func_event.gd" id="2_ckcgm"]
-[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="2_xwu8x"]
+[ext_resource type="Script" path="res://addons/intervals/nodes/event_player.gd" id="1_uleni"]
+[ext_resource type="Script" path="res://addons/intervals/events/event.gd" id="2_gbmrm"]
+[ext_resource type="Script" path="res://addons/intervals/events/routing/random_router.gd" id="3_7uo8l"]
+[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="3_g1s76"]
+[ext_resource type="Script" path="res://addons/intervals/events/common/wait_event.gd" id="3_hc36l"]
+[ext_resource type="Script" path="res://addons/intervals/events/meta/print_event.gd" id="4_8n01d"]
 
-[sub_resource type="GDScript" id="GDScript_vv5ss"]
+[sub_resource type="GDScript" id="GDScript_gyeig"]
 script/source = "extends Node
 
-@export var multi_event: MultiEvent
+
+func test(extra := \"\"):
+	print('Hello world! ' + extra)
 "
 
-[sub_resource type="Resource" id="Resource_1ym7a"]
-script = ExtResource("1_n3q6b")
+[sub_resource type="Resource" id="Resource_ie3rv"]
+script = ExtResource("4_8n01d")
+msg = "[color=maroon]Neither..."
 
-[sub_resource type="Resource" id="Resource_hr0nu"]
-script = ExtResource("1_n3q6b")
+[sub_resource type="Resource" id="Resource_nxe2r"]
+script = ExtResource("3_hc36l")
+duration = 1.0
 
-[sub_resource type="Resource" id="Resource_ke2ig"]
-script = ExtResource("1_n3q6b")
+[sub_resource type="Resource" id="Resource_qxepi"]
+script = ExtResource("4_8n01d")
+msg = "[wave]Branch 1!"
 
-[sub_resource type="Resource" id="Resource_fw1fp"]
-script = ExtResource("1_n3q6b")
+[sub_resource type="Resource" id="Resource_0xgvn"]
+script = ExtResource("4_8n01d")
+msg = "[shake]Branch 2..."
 
-[sub_resource type="Resource" id="Resource_b2psy"]
-script = ExtResource("2_a0nkr")
-animation_player_np = NodePath("")
-animation_name = &""
-blocking = true
+[sub_resource type="Resource" id="Resource_7xj87"]
+script = ExtResource("3_hc36l")
+duration = 2.0
 
-[sub_resource type="Resource" id="Resource_1wene"]
-resource_name = "Surrepticiously Unavailable?"
-script = ExtResource("1_n3q6b")
+[sub_resource type="Resource" id="Resource_h2cbk"]
+script = ExtResource("3_7uo8l")
+branches = 4
 
-[sub_resource type="Resource" id="Resource_h55pl"]
-script = ExtResource("2_xwu8x")
-events = []
-event_connections = {}
-event_positions = {}
-complete_mode = 0
-debug = false
+[sub_resource type="Resource" id="Resource_r5jb2"]
+script = ExtResource("4_8n01d")
+msg = "Rolling the dice..."
 
-[sub_resource type="Resource" id="Resource_xiob2"]
-script = ExtResource("2_xwu8x")
-events = []
-event_connections = {}
-event_positions = {}
-complete_mode = 0
-debug = false
-
-[sub_resource type="Resource" id="Resource_wbkdx"]
-script = ExtResource("1_n3q6b")
-
-[sub_resource type="Resource" id="Resource_nijne"]
-script = ExtResource("1_n3q6b")
-
-[sub_resource type="Resource" id="Resource_1d65n"]
-script = ExtResource("1_n3q6b")
-
-[sub_resource type="Resource" id="Resource_k8asw"]
-script = ExtResource("2_ckcgm")
-node_path = NodePath("")
-function_name = ""
-args = []
-
-[sub_resource type="Resource" id="Resource_2j6pl"]
-script = ExtResource("2_xwu8x")
-events = [SubResource("Resource_1ym7a"), SubResource("Resource_hr0nu"), SubResource("Resource_ke2ig"), SubResource("Resource_fw1fp"), SubResource("Resource_k8asw"), SubResource("Resource_b2psy"), SubResource("Resource_1wene"), SubResource("Resource_h55pl"), SubResource("Resource_xiob2"), SubResource("Resource_wbkdx"), SubResource("Resource_nijne"), SubResource("Resource_1d65n")]
+[sub_resource type="Resource" id="Resource_n7ig1"]
+resource_name = "Cool Dice Roll"
+script = ExtResource("3_g1s76")
+events = Array[ExtResource("2_gbmrm")]([SubResource("Resource_qxepi"), SubResource("Resource_0xgvn"), SubResource("Resource_ie3rv"), SubResource("Resource_r5jb2"), SubResource("Resource_7xj87"), SubResource("Resource_nxe2r"), SubResource("Resource_h2cbk")])
 event_connections = {
-SubResource("Resource_1ym7a"): {
-0: [SubResource("Resource_hr0nu"), SubResource("Resource_ke2ig")]
+SubResource("Resource_ie3rv"): {
+0: [SubResource("Resource_nxe2r")]
 },
-SubResource("Resource_ke2ig"): {
-0: [SubResource("Resource_fw1fp")]
+SubResource("Resource_qxepi"): {
+0: [SubResource("Resource_nxe2r")]
 },
-SubResource("Resource_hr0nu"): {
-0: [SubResource("Resource_fw1fp")]
+SubResource("Resource_0xgvn"): {
+0: [SubResource("Resource_nxe2r")]
 },
-SubResource("Resource_b2psy"): {
-0: [SubResource("Resource_1wene")]
+SubResource("Resource_7xj87"): {
+0: [SubResource("Resource_h2cbk")]
 },
-SubResource("Resource_1wene"): {
-0: [SubResource("Resource_h55pl"), SubResource("Resource_xiob2")]
+SubResource("Resource_r5jb2"): {
+0: [SubResource("Resource_7xj87")]
 },
-SubResource("Resource_wbkdx"): {
-0: [SubResource("Resource_nijne"), SubResource("Resource_1d65n")]
+SubResource("Resource_h2cbk"): {
+0: [SubResource("Resource_ie3rv")],
+1: [SubResource("Resource_qxepi")],
+2: [SubResource("Resource_0xgvn")]
 }
 }
 event_positions = {
-SubResource("Resource_1ym7a"): Vector2i(6176, 2724),
-SubResource("Resource_hr0nu"): Vector2i(6376, 2784),
-SubResource("Resource_ke2ig"): Vector2i(6376, 2664),
-SubResource("Resource_fw1fp"): Vector2i(6576, 2724),
-SubResource("Resource_k8asw"): Vector2i(3676, 927),
-SubResource("Resource_b2psy"): Vector2i(1468, 13),
-SubResource("Resource_1wene"): Vector2i(1741, 45),
-SubResource("Resource_h55pl"): Vector2i(2048, -27),
-SubResource("Resource_xiob2"): Vector2i(2048, 93),
-SubResource("Resource_wbkdx"): Vector2i(180, 180),
-SubResource("Resource_nijne"): Vector2i(540, 120),
-SubResource("Resource_1d65n"): Vector2i(420, 260)
+SubResource("Resource_qxepi"): Vector2i(2967, -3701),
+SubResource("Resource_0xgvn"): Vector2i(2967, -3601),
+SubResource("Resource_ie3rv"): Vector2i(2967, -3801),
+SubResource("Resource_r5jb2"): Vector2i(2247, -3761),
+SubResource("Resource_7xj87"): Vector2i(2487, -3761),
+SubResource("Resource_nxe2r"): Vector2i(3247, -3741),
+SubResource("Resource_h2cbk"): Vector2i(2733, -3779)
 }
 complete_mode = 0
 debug = false
 
 [node name="Node" type="Node"]
-script = SubResource("GDScript_vv5ss")
-multi_event = SubResource("Resource_2j6pl")
+script = SubResource("GDScript_gyeig")
+
+[node name="EventPlayer" type="Node" parent="."]
+script = ExtResource("1_uleni")
+multi_event = SubResource("Resource_n7ig1")
+autoplay = true
+looping = true

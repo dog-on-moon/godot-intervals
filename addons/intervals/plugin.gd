@@ -2,12 +2,13 @@
 extends EditorPlugin
 
 const MULTI_EVENT_EDITOR := preload("res://addons/intervals/editor/multi_event_editor.tscn")
+const MultiEventEditor = preload("res://addons/intervals/editor/multi_event_editor.gd")
 
 var multi_event_editor: MultiEventEditor = null
 var multi_event_editor_button: Button = null
 
 func _enter_tree():
-	const EVENT = preload("res://addons/intervals/icons/event.png")
+	const EVENT_PLAYER := preload("res://addons/intervals/icons/event_player.png")
 	const INTERVAL := preload("res://addons/intervals/icons/interval.png")
 	const INTERVAL_CONTAINER := preload("res://addons/intervals/icons/interval_container.png")
 	
@@ -26,9 +27,8 @@ func _enter_tree():
 	add_custom_type("Sequence", "IntervalContainer", preload("res://addons/intervals/interval/container/sequence.gd"), INTERVAL_CONTAINER)
 	add_custom_type("SequenceRandom", "IntervalContainer", preload("res://addons/intervals/interval/container/sequence_random.gd"), INTERVAL_CONTAINER)
 	
-	## Events
-	add_custom_type("Event", "Resource", preload("res://addons/intervals/events/event.gd"), EVENT)
-	add_custom_type("MultiEvent", "Event", preload("res://addons/intervals/events/multi_event.gd"), EVENT)
+	## Nodes
+	add_custom_type("EventPlayer", "Node", preload("res://addons/intervals/nodes/event_player.gd"), EVENT_PLAYER)
 	
 	## MultiEvent Editor
 	multi_event_editor = MULTI_EVENT_EDITOR.instantiate()
@@ -73,7 +73,6 @@ func _property_selected(property: String):
 	var object := EditorInterface.get_inspector().get_edited_object()
 	var value := object.get(property)
 	if value is MultiEvent:
-		multi_event_editor.event_owner = object
 		multi_event_editor.multi_event = value
 		if not multi_event_editor_button.visible:
 			multi_event_editor_button.visible = true
@@ -85,4 +84,3 @@ func _edited_object_changed():
 		multi_event_editor_button.button_pressed = false
 		multi_event_editor_button.visible = false
 		multi_event_editor.multi_event = null
-		multi_event_editor.event_owner = null

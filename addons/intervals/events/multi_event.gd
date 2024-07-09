@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/intervals/icons/multi_event.png")
+@icon("res://addons/intervals/icons/event_player.png")
 extends Event
 class_name MultiEvent
 ## A MultiEvent contains multiple events and can be used for advanced, dynamic cutscenes.
@@ -40,7 +40,7 @@ var started_events: Array[Event] = []
 func _get_interval(owner: Node, state: Dictionary) -> Interval:
 	completed = false
 	started_events = []
-	return Func.new(func (owner: Node, state: Dictionary):
+	return Func.new(func ():
 		## Get all open-facing branches.
 		var unresolved_int_events := get_unresolved_int_events()
 		if not unresolved_int_events:
@@ -64,7 +64,7 @@ func _start_branch(event: Event, owner: Node, state: Dictionary, count_branch :=
 	if debug:
 		event.print_debug_info()
 	started_events.append(event)
-	event.play(owner, _end_branch.bind(owner, state, event), state)
+	event.play(owner, _end_branch.bind(event, owner, state), state)
 
 ## Called when an event branch is complete.
 func _end_branch(event: Event, owner: Node, state: Dictionary):
@@ -75,11 +75,15 @@ func _end_branch(event: Event, owner: Node, state: Dictionary):
 	
 	## Update active branch state.
 	active_branches -= 1
-	if complete_mode == CompleteMode.AnyBranches and not completed:
+	if (complete_mode == CompleteMode.AnyBranches and not completed) \
+		or (complete_mode == CompleteMode.AllBranches and active_branches == 0) \
+		or (event is EndMultiEvent):
+		_finish()
+
+func _finish():
+	if not completed:
+		done.emit()
 		completed = true
-		done.emit()
-	elif complete_mode == CompleteMode.AllBranches and active_branches == 0:
-		done.emit()
 #endregion
 
 #region Editor API
@@ -125,7 +129,13 @@ func disconnect_events(pre_event: Event, post_event: Event, pre_event_branch: in
 
 ## Determines the events that comes after a given event.
 func get_event_connections(event: Event) -> Array:
-	return event_connections.get_or_add(event, {}).get_or_add(event.get_branch_index(), [])
+	var connected_events: Dictionary = event_connections.get_or_add(event, {})
+	var branch_idx := event.get_branch_index()
+	if branch_idx in connected_events:
+		return connected_events[branch_idx]
+	if 0 in connected_events:
+		return connected_events[0]
+	return []
 
 ## Stores the XY position of the event node in the editor.
 func set_event_editor_position(event: Event, position: Vector2i, refresh := true):
@@ -152,13 +162,13 @@ func get_unresolved_int_events() -> Array:
 ## Returns Dict[Event, Array[int]]
 func get_unresolved_ext_events() -> Dictionary:
 	var ret_events := {}
-	for event: Event in event_connections:
+	for event: Event in events:
 		for branch_idx in event.get_branch_names().size():
-			var connected_events: Array = event_connections[event].get_or_add(branch_idx, [])
+			var connected_events: Array = event_connections.get(event, {}).get_or_add(branch_idx, [])
 			# If this slot has no connected events,
 			# we know that it must be unresolved.
 			if not connected_events:
-				ret_events.get_or_add(event).append(branch_idx)
+				ret_events.get_or_add(event, []).append(branch_idx)
 	return ret_events
 #endregion
 
@@ -174,7 +184,7 @@ func get_branch_names() -> Array:
 		var event_name: String = event.to_string()
 		for branch_idx: int in unresolved_ext_events[event]:
 			var branch_name: String = branch_names[branch_idx]
-			base_names.append('[%s] %s' % [event_name, branch_idx])
+			base_names.append('[%s] %s' % [event_name, branch_name])
 	
 	## Return base names.
 	return base_names
@@ -194,4 +204,7 @@ static func get_editor_name() -> String:
 ## The editor description of the event.
 func get_editor_description_text(owner: Node) -> String:
 	return "[b][center]%s Sub-Events" % (events.size() if events else 0)
+
+func setup_editor_info_container(owner: Node, info_container: EventEditorInfoContainer):
+	info_container.inspect.text = "Edit"
 #endregion

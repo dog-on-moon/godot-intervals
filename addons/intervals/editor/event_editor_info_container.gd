@@ -1,6 +1,7 @@
 @tool
 extends VBoxContainer
-class_name EventEditorInfoContainer
+
+const EventNode = preload("res://addons/intervals/editor/event_node.gd")
 
 @onready var event_node: EventNode = $".."
 @onready var rich_text_label: RichTextLabel = $RichTextLabel

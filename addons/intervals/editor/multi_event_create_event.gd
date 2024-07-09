@@ -1,6 +1,7 @@
 @tool
 extends GraphElement
-class_name MultiEventCreateEvent
+
+const MultiEventGraphEdit = preload("res://addons/intervals/editor/multi_event_graph_edit.gd")
 
 const EVENT = preload("res://addons/intervals/icons/event.png")
 const DELIMITER = "/"
@@ -58,13 +59,12 @@ func deactivate():
 	activation_branch = 0
 
 func _process(delta: float) -> void:
-	if is_visible_in_tree():
-		if mouse_inside:
-			multi_event_graph_edit.zoom_max = multi_event_graph_edit.zoom
-			multi_event_graph_edit.zoom_min = multi_event_graph_edit.zoom
-		else:
-			multi_event_graph_edit.zoom_max = _zoom_max
-			multi_event_graph_edit.zoom_min = _zoom_min
+	if is_visible_in_tree() and mouse_inside:
+		multi_event_graph_edit.zoom_max = multi_event_graph_edit.zoom
+		multi_event_graph_edit.zoom_min = multi_event_graph_edit.zoom
+	else:
+		multi_event_graph_edit.zoom_max = _zoom_max
+		multi_event_graph_edit.zoom_min = _zoom_min
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and is_visible_in_tree() \

@@ -23,7 +23,7 @@ func _init(p_method: Callable = _do_nothing,
 	ease = p_ease
 	trans = p_trans
 
-func onto_tween(tween: Tween):
+func _onto_tween(tween: Tween):
 	tween.tween_method(method, from, to, duration).set_ease(ease).set_trans(trans)
 
 static func _do_nothing(_x = null):

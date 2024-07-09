@@ -1,38 +1,42 @@
+@tool
 extends Event
-class_name SignalEvent
-## An event that emits done after a node's signal has been raised.
+class_name FuncEvent
 
-@export_node_path("Node") var node_path: NodePath = ^""
-@export var signal_name: StringName = &""
+@export_node_path("Node") var node_path: NodePath
+@export var function_name: String
+@export var args: Array = []
 
-## Returns the interval for this specific event.
-## Must be implemented by event subclasses.
 func _get_interval(owner: Node, state: Dictionary) -> Interval:
 	var node: Node = owner.get_node(node_path)
-	return Func.new(connect_signal.bind(node))
+	assert(function_name in node)
+	var callable: Callable = node[function_name]
+	return Sequence.new([
+		Func.new(callable.bindv(args)),
+		Func.new(done.emit)
+	])
 
-func connect_signal(node: Node):
-	node.connect(signal_name, done.emit, CONNECT_ONE_SHOT)
+func get_branch_names() -> Array:
+	return ["Default"]
 
 #region Editor Overrides
+## The color that represents this event in the editor.
 static func get_editor_color() -> Color:
-	return Color(0.8, 0.545, 0.376, 1.0)
+	return Color(0.922, 0.749, 0.549, 1.0)
 
 ## String representation of the event. Important to define.
 static func get_editor_name() -> String:
-	return "SignalEvent"
+	return "FuncEvent"
 
 ## The editor description of the event.
 func get_editor_description_text(owner: Node) -> String:
-	var valid_np := node_path and owner and owner.get_node_or_null(node_path)
-	return "[b]%s\nAwaits Signal:[/b] %s" % [
-		node_path if valid_np else "[color=red]Invalid NodePath[/color]",
-		signal_name if signal_name else "undefined"
+	return "%s\n[b]Callable:[/b] %s\n[b]Arguments: [/b] %s" % [
+		get_node_path_string(owner, node_path),
+		function_name if function_name else "undefined", args
 	]
 
 ## The editor category that the event belongs to.
 static func get_editor_category() -> String:
-	return "Meta"
+	return "General"
 
 ## Set up the editor info container.
 ## This is the Control widget that appears within the Event nodes (above the connections).
@@ -40,7 +44,9 @@ func setup_editor_info_container(owner: Node, info_container: EventEditorInfoCon
 	info_container.add_new_button("Open Script", 1).pressed.connect(func ():
 		if node_path:
 			var node := owner.get_node_or_null(node_path)
+			print(node)
 			if node and node.get_script():
+				EditorInterface.set_main_screen_editor("Script")
 				EditorInterface.edit_script(node.get_script())
 	)
 #endregion

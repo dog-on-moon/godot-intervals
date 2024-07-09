@@ -10,4 +10,7 @@ static func get_editor_color() -> Color:
 ## String representation of the event. Important to define.
 static func get_editor_name() -> String:
 	return "EndMultiEvent"
+
+static func get_editor_category() -> String:
+	return "Meta"
 #endregion

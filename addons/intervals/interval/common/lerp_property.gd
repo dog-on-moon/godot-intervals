@@ -45,7 +45,7 @@ func interp(ease := Tween.EASE_IN_OUT, trans := Tween.TRANS_LINEAR) -> LerpPrope
 	self.trans = trans
 	return self
 
-func onto_tween(tween: Tween):
+func _onto_tween(tween: Tween):
 	var property_tweener := tween.tween_property(object, property, final_val, duration)\
 	.set_ease(ease).set_trans(trans)
 	if relative:

@@ -8,5 +8,5 @@ class_name Wait
 func _init(p_time := 0.0) -> void:
 	time = p_time
 
-func onto_tween(tween: Tween):
+func _onto_tween(tween: Tween):
 	tween.tween_interval(time)

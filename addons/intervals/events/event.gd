@@ -11,6 +11,8 @@ class_name Event
 ##
 ## Subclasses must implement [method _get_interval].
 
+const EventEditorInfoContainer = preload("res://addons/intervals/editor/event_editor_info_container.gd")
+
 ## Emitted when this event is complete.
 signal done()
 
@@ -63,6 +65,10 @@ func get_branch_index() -> int:
 #region Dev
 func _to_string() -> String:
 	return resource_name if resource_name else get_editor_name()
+
+static func get_node_path_string(owner: Node, np: NodePath) -> String:
+	var valid_np := np and owner and owner.get_node_or_null(np)
+	return ('[b]%s[/b] "^%s"' % [owner.get_node(np).name, np]) if valid_np else "[color=red]Invalid NodePath[/color]"
 
 ## Prints debugging information on this event.
 func print_debug_info():
