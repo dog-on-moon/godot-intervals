@@ -15,8 +15,8 @@ func _onto_tween(tween: Tween):
 	assert(false, "Subclasses must implement this function.")
 
 ## Converts the Interval into an active Tween.
-## [param owner] is the Node that the Tween is bound to.
-func as_tween(owner: Node) -> Tween:
-	var tween := owner.create_tween()
+## [param _owner] is the Node that the Tween is bound to.
+func as_tween(_owner: Node) -> Tween:
+	var tween := _owner.create_tween()
 	_onto_tween(tween)
 	return tween

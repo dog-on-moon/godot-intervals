@@ -1,14 +1,15 @@
 @tool
 extends Event
 class_name RandomRouter
+## A routing event that chooses a random branch.
 
 @export var branches := 2
 
 var chosen_branch := 0
 
-func _get_interval(owner: Node, state: Dictionary) -> Interval:
+func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	chosen_branch = 1 + randi_range(0, branches - 1)
-	return super(owner, state)
+	return super(_owner, _state)
 
 ## Gets the names of the outgoing branches.
 ## Note that MultiEvents are responsible for linking branches.
@@ -28,7 +29,7 @@ static func get_editor_color() -> Color:
 
 ## String representation of the event. Important to define.
 static func get_editor_name() -> String:
-	return "RandomRouter"
+	return "Router: Random"
 
 ## The editor category that the event belongs to.
 static func get_editor_category() -> String:

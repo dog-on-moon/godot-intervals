@@ -6,7 +6,7 @@ class_name IntervalContainer
 ## Interval containers store and playback multiple Intervals.
 ## They can be used to arrange multiple Intervals together.
 
-var intervals: Array[Interval]
+var intervals: Array
 
-func _init(p_intervals: Array[Interval] = []) -> void:
+func _init(p_intervals: Array = []) -> void:
 	intervals = p_intervals

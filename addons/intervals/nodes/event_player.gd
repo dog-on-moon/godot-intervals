@@ -3,6 +3,8 @@ extends Node
 class_name EventPlayer
 ## A simple node for storing and playing back an Event.
 
+signal finished
+
 ## The event to play back.
 @export var multi_event: MultiEvent = null
 
@@ -24,14 +26,17 @@ func _ready() -> void:
 	if autoplay:
 		play()
 
-func play():
+func play(callback: Callable = func(): pass):
 	active = true
 	plays += 1
 	state['PLAYS'] = plays
-	tween = multi_event.play(owner, complete, state)
+	tween = multi_event.play(owner, _complete.bind(callback), state)
 
-func complete():
+func _complete(callback: Callable):
 	active = false
 	tween = null
+	if callback:
+		callback.call()
+	finished.emit()
 	if looping:
 		play.call_deferred()

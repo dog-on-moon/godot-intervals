@@ -107,21 +107,21 @@ func refresh():
 	for event_class_name in event_classes:
 		var event_class: Script = event_classes[event_class_name]
 		var category: String = event_class.get_editor_category()
-		groups.get_or_add(category, []).append(event_class_name)
+		groups.get_or_add(category, []).append([event_class.get_editor_name(), event_class_name])
 	for group_array: Array in groups.values():
-		group_array.sort()
+		group_array.sort_custom(func (a, b): return a[0] < b[0])
 	
 	# Build all tree items now.
 	item_to_event_class = {}
 	for category in groups:
-		for event_class_name: String in groups[category]:
+		for event_data: Array in groups[category]:
 			# Create and setup tree item.
 			var tree_item := tree.create_item(category_path_to_tree_item.get(category))
-			var event_class: GDScript = event_classes[event_class_name]
+			var event_class: GDScript = event_classes[event_data[1]]
 			tree_item.set_icon(0, EVENT)
 			tree_item.set_icon_max_width(0, 16)
 			tree_item.set_icon_modulate(0, event_class.get_editor_color())
-			tree_item.set_text(0, event_class_name)
+			tree_item.set_text(0, event_data[0])
 			
 			# Setup event class mapping.
 			item_to_event_class[tree_item] = event_class
@@ -154,7 +154,10 @@ static func get_event_classes() -> Dictionary:
 			if item['class'] in ret_dict:
 				continue
 			if item['base'] in ret_dict or item['class'] == &"Event":
-				ret_dict[item['class']] = load(item['path'])
+				var event_class := load(item['path'])
+				if not event_class._editor_can_be_created():
+					continue
+				ret_dict[item['class']] = event_class
 	return ret_dict
 
 func _recusrive_make_category_items(header_paths: Dictionary, out: Dictionary, parent: TreeItem = null, path: String = ""):

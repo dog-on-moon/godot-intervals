@@ -1,83 +1,22 @@
-[gd_scene load_steps=16 format=3 uid="uid://bjgcah7n83kha"]
+[gd_scene load_steps=6 format=3 uid="uid://bjgcah7n83kha"]
 
 [ext_resource type="Script" path="res://addons/intervals/nodes/event_player.gd" id="1_uleni"]
-[ext_resource type="Script" path="res://addons/intervals/events/event.gd" id="2_gbmrm"]
-[ext_resource type="Script" path="res://addons/intervals/events/routing/random_router.gd" id="3_7uo8l"]
+[ext_resource type="Script" path="res://addons/intervals/events/event.gd" id="2_ke26o"]
 [ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="3_g1s76"]
-[ext_resource type="Script" path="res://addons/intervals/events/common/wait_event.gd" id="3_hc36l"]
-[ext_resource type="Script" path="res://addons/intervals/events/meta/print_event.gd" id="4_8n01d"]
 
 [sub_resource type="GDScript" id="GDScript_gyeig"]
 script/source = "extends Node
-
 
 func test(extra := \"\"):
 	print('Hello world! ' + extra)
 "
 
-[sub_resource type="Resource" id="Resource_ie3rv"]
-script = ExtResource("4_8n01d")
-msg = "[color=maroon]Neither..."
-
-[sub_resource type="Resource" id="Resource_nxe2r"]
-script = ExtResource("3_hc36l")
-duration = 1.0
-
-[sub_resource type="Resource" id="Resource_qxepi"]
-script = ExtResource("4_8n01d")
-msg = "[wave]Branch 1!"
-
-[sub_resource type="Resource" id="Resource_0xgvn"]
-script = ExtResource("4_8n01d")
-msg = "[shake]Branch 2..."
-
-[sub_resource type="Resource" id="Resource_7xj87"]
-script = ExtResource("3_hc36l")
-duration = 2.0
-
-[sub_resource type="Resource" id="Resource_h2cbk"]
-script = ExtResource("3_7uo8l")
-branches = 4
-
-[sub_resource type="Resource" id="Resource_r5jb2"]
-script = ExtResource("4_8n01d")
-msg = "Rolling the dice..."
-
 [sub_resource type="Resource" id="Resource_n7ig1"]
 resource_name = "Cool Dice Roll"
 script = ExtResource("3_g1s76")
-events = Array[ExtResource("2_gbmrm")]([SubResource("Resource_qxepi"), SubResource("Resource_0xgvn"), SubResource("Resource_ie3rv"), SubResource("Resource_r5jb2"), SubResource("Resource_7xj87"), SubResource("Resource_nxe2r"), SubResource("Resource_h2cbk")])
-event_connections = {
-SubResource("Resource_ie3rv"): {
-0: [SubResource("Resource_nxe2r")]
-},
-SubResource("Resource_qxepi"): {
-0: [SubResource("Resource_nxe2r")]
-},
-SubResource("Resource_0xgvn"): {
-0: [SubResource("Resource_nxe2r")]
-},
-SubResource("Resource_7xj87"): {
-0: [SubResource("Resource_h2cbk")]
-},
-SubResource("Resource_r5jb2"): {
-0: [SubResource("Resource_7xj87")]
-},
-SubResource("Resource_h2cbk"): {
-0: [SubResource("Resource_ie3rv")],
-1: [SubResource("Resource_qxepi")],
-2: [SubResource("Resource_0xgvn")]
-}
-}
-event_positions = {
-SubResource("Resource_qxepi"): Vector2i(2967, -3701),
-SubResource("Resource_0xgvn"): Vector2i(2967, -3601),
-SubResource("Resource_ie3rv"): Vector2i(2967, -3801),
-SubResource("Resource_r5jb2"): Vector2i(2247, -3761),
-SubResource("Resource_7xj87"): Vector2i(2487, -3761),
-SubResource("Resource_nxe2r"): Vector2i(3247, -3741),
-SubResource("Resource_h2cbk"): Vector2i(2733, -3779)
-}
+events = Array[ExtResource("2_ke26o")]([])
+event_connections = {}
+event_positions = {}
 complete_mode = 0
 debug = false
 

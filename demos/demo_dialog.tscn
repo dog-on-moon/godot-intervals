@@ -1,0 +1,207 @@
+[gd_scene load_steps=32 format=3 uid="uid://2kdtgsh86n8m"]
+
+[ext_resource type="Script" path="res://demos/dialog/dialogue_container.gd" id="1_ntth3"]
+[ext_resource type="Script" path="res://demos/demo_dialog.gd" id="1_unvhf"]
+[ext_resource type="Script" path="res://demos/dialog/dialogue_event.gd" id="2_6k14q"]
+[ext_resource type="Script" path="res://addons/intervals/nodes/event_player.gd" id="3_s2wu6"]
+[ext_resource type="Script" path="res://addons/intervals/events/general/wait_event.gd" id="3_ugcjs"]
+[ext_resource type="Script" path="res://addons/intervals/events/event.gd" id="4_vtles"]
+[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="5_xyc0c"]
+[ext_resource type="Script" path="res://demos/dialog/clear_dialogue_event.gd" id="6_urmen"]
+[ext_resource type="Script" path="res://addons/intervals/events/general/func_event.gd" id="7_s0yun"]
+
+[sub_resource type="Gradient" id="Gradient_gd43b"]
+offsets = PackedFloat32Array(0, 0.5075, 1)
+colors = PackedColorArray(0.119, 0.23835, 0.35, 1, 0.3, 0.3, 0.3, 1, 0.119, 0.23835, 0.35, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0qoxg"]
+gradient = SubResource("Gradient_gd43b")
+width = 8
+height = 8
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Resource" id="Resource_h7q71"]
+script = ExtResource("2_6k14q")
+text = "Some wisdom from me to you:"
+
+[sub_resource type="Resource" id="Resource_ildhq"]
+script = ExtResource("2_6k14q")
+text = "Whatever it is that you think you are doing,
+or that you want to do,"
+
+[sub_resource type="Resource" id="Resource_ri0fk"]
+script = ExtResource("2_6k14q")
+text = "When was the last time you really
+thought about it?"
+
+[sub_resource type="Resource" id="Resource_77fwl"]
+script = ExtResource("7_s0yun")
+node_path = NodePath(".")
+function_name = "update_color"
+args = [Color(0.79, 0.66834, 0.4424, 1), 1.5]
+
+[sub_resource type="Resource" id="Resource_nnbqe"]
+script = ExtResource("2_6k14q")
+text = "I'm not saying you should stop
+making games. Keep doing it!"
+
+[sub_resource type="Resource" id="Resource_63di6"]
+script = ExtResource("2_6k14q")
+text = "But.. what do you want your games to
+be about?"
+
+[sub_resource type="Resource" id="Resource_21qj5"]
+script = ExtResource("2_6k14q")
+text = "What impression do you want to leave?"
+
+[sub_resource type="Resource" id="Resource_v1f37"]
+script = ExtResource("7_s0yun")
+node_path = NodePath(".")
+function_name = "update_color"
+args = [Color(0, 0, 0, 1), 1.5]
+
+[sub_resource type="Resource" id="Resource_tb2hp"]
+script = ExtResource("2_6k14q")
+text = "What do you want to inspire in others?"
+
+[sub_resource type="Resource" id="Resource_vvjww"]
+script = ExtResource("2_6k14q")
+text = "What do you love?"
+
+[sub_resource type="Resource" id="Resource_mkpy1"]
+script = ExtResource("7_s0yun")
+node_path = NodePath(".")
+function_name = "update_color"
+args = [Color(0.843137, 0.317647, 0.654902, 1), 1.5]
+
+[sub_resource type="Resource" id="Resource_p3bmh"]
+script = ExtResource("2_6k14q")
+text = "That, is what your game should be about."
+
+[sub_resource type="Resource" id="Resource_nsctv"]
+script = ExtResource("2_6k14q")
+text = "Make something special, OK?
+Promise me!"
+
+[sub_resource type="Resource" id="Resource_uk84w"]
+script = ExtResource("6_urmen")
+
+[sub_resource type="Resource" id="Resource_4eipl"]
+script = ExtResource("3_ugcjs")
+duration = 1.5
+
+[sub_resource type="Resource" id="Resource_xayqh"]
+script = ExtResource("7_s0yun")
+node_path = NodePath(".")
+function_name = "update_color"
+args = [Color(0, 0, 0, 1), 1.5]
+
+[sub_resource type="Resource" id="Resource_tlaoo"]
+script = ExtResource("2_6k14q")
+text = "...Thanks for listening."
+
+[sub_resource type="Resource" id="Resource_mqetr"]
+script = ExtResource("3_ugcjs")
+duration = 1.0
+
+[sub_resource type="Resource" id="Resource_etw8j"]
+script = ExtResource("6_urmen")
+
+[sub_resource type="Resource" id="Resource_26j27"]
+resource_name = "Mission Statement"
+script = ExtResource("5_xyc0c")
+events = Array[ExtResource("4_vtles")]([SubResource("Resource_h7q71"), SubResource("Resource_ildhq"), SubResource("Resource_ri0fk"), SubResource("Resource_nnbqe"), SubResource("Resource_63di6"), SubResource("Resource_21qj5"), SubResource("Resource_tb2hp"), SubResource("Resource_vvjww"), SubResource("Resource_p3bmh"), SubResource("Resource_nsctv"), SubResource("Resource_tlaoo"), SubResource("Resource_4eipl"), SubResource("Resource_uk84w"), SubResource("Resource_xayqh"), SubResource("Resource_mqetr"), SubResource("Resource_77fwl"), SubResource("Resource_v1f37"), SubResource("Resource_mkpy1"), SubResource("Resource_etw8j")])
+event_connections = {
+SubResource("Resource_h7q71"): {
+0: [SubResource("Resource_ildhq")]
+},
+SubResource("Resource_ildhq"): {
+0: [SubResource("Resource_ri0fk"), SubResource("Resource_77fwl")]
+},
+SubResource("Resource_ri0fk"): {
+0: [SubResource("Resource_nnbqe")]
+},
+SubResource("Resource_nnbqe"): {
+0: [SubResource("Resource_63di6")]
+},
+SubResource("Resource_63di6"): {
+0: [SubResource("Resource_21qj5"), SubResource("Resource_v1f37")]
+},
+SubResource("Resource_21qj5"): {
+0: [SubResource("Resource_tb2hp")]
+},
+SubResource("Resource_tb2hp"): {
+0: [SubResource("Resource_vvjww"), SubResource("Resource_mkpy1")]
+},
+SubResource("Resource_vvjww"): {
+0: [SubResource("Resource_p3bmh")]
+},
+SubResource("Resource_p3bmh"): {
+0: [SubResource("Resource_nsctv")]
+},
+SubResource("Resource_nsctv"): {
+0: [SubResource("Resource_uk84w"), SubResource("Resource_4eipl"), SubResource("Resource_xayqh")]
+},
+SubResource("Resource_4eipl"): {
+0: [SubResource("Resource_tlaoo")]
+},
+SubResource("Resource_tlaoo"): {
+0: [SubResource("Resource_mqetr"), SubResource("Resource_etw8j")]
+}
+}
+event_positions = {
+SubResource("Resource_etw8j"): Vector2i(-10265388, -13068764),
+SubResource("Resource_mkpy1"): Vector2i(-10265108, -13069150),
+SubResource("Resource_v1f37"): Vector2i(-10265828, -13068970),
+SubResource("Resource_77fwl"): Vector2i(-10265788, -13069290),
+SubResource("Resource_mqetr"): Vector2i(-10265388, -13068850),
+SubResource("Resource_xayqh"): Vector2i(-10265828, -13068750),
+SubResource("Resource_uk84w"): Vector2i(-10265828, -13068650),
+SubResource("Resource_4eipl"): Vector2i(-10265828, -13068850),
+SubResource("Resource_tlaoo"): Vector2i(-10265628, -13068850),
+SubResource("Resource_nsctv"): Vector2i(-10266128, -13068850),
+SubResource("Resource_p3bmh"): Vector2i(-10266508, -13068850),
+SubResource("Resource_vvjww"): Vector2i(-10265108, -13069050),
+SubResource("Resource_tb2hp"): Vector2i(-10265468, -13069070),
+SubResource("Resource_21qj5"): Vector2i(-10265828, -13069070),
+SubResource("Resource_63di6"): Vector2i(-10266188, -13069070),
+SubResource("Resource_nnbqe"): Vector2i(-10266488, -13069070),
+SubResource("Resource_ri0fk"): Vector2i(-10265788, -13069190),
+SubResource("Resource_ildhq"): Vector2i(-10266188, -13069190),
+SubResource("Resource_h7q71"): Vector2i(-10266488, -13069190)
+}
+complete_mode = 0
+cycles = false
+debug = false
+
+[node name="DemoDialog" type="Node" node_paths=PackedStringArray("event_player")]
+script = ExtResource("1_unvhf")
+event_player = NodePath("Background/EventPlayer")
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_0qoxg")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="EventPlayer" type="Node" parent="Background"]
+script = ExtResource("3_s2wu6")
+multi_event = SubResource("Resource_26j27")
+autoplay = true
+
+[node name="DialogueContainer" type="Container" parent="Background"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_right = -3.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("1_ntth3")

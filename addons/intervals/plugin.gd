@@ -1,7 +1,6 @@
 @tool
 extends EditorPlugin
 
-const MULTI_EVENT_EDITOR := preload("res://addons/intervals/editor/multi_event_editor.tscn")
 const MultiEventEditor = preload("res://addons/intervals/editor/multi_event_editor.gd")
 
 var multi_event_editor: MultiEventEditor = null
@@ -16,6 +15,7 @@ func _enter_tree():
 	add_custom_type("Interval", "RefCounted", preload("res://addons/intervals/interval/interval.gd"), INTERVAL)
 	
 	## Common Intervals
+	add_custom_type("Connect", "Interval", preload("res://addons/intervals/interval/common/connect.gd"), INTERVAL)
 	add_custom_type("Func", "Interval", preload("res://addons/intervals/interval/common/func.gd"), INTERVAL)
 	add_custom_type("LerpFunc", "Interval", preload("res://addons/intervals/interval/common/lerp_func.gd"), INTERVAL)
 	add_custom_type("LerpProperty", "Interval", preload("res://addons/intervals/interval/common/lerp_property.gd"), INTERVAL)
@@ -31,9 +31,7 @@ func _enter_tree():
 	add_custom_type("EventPlayer", "Node", preload("res://addons/intervals/nodes/event_player.gd"), EVENT_PLAYER)
 	
 	## MultiEvent Editor
-	multi_event_editor = MULTI_EVENT_EDITOR.instantiate()
-	multi_event_editor_button = add_control_to_bottom_panel(multi_event_editor, "MultiEvent")
-	multi_event_editor_button.visible = false
+	_create_editor()
 	
 	## Signals
 	EditorInterface.get_inspector().property_edited.connect(_property_selected)
@@ -61,26 +59,71 @@ func _exit_tree():
 	remove_custom_type("MultiEvent")
 	
 	## MultiEvent Editor
-	remove_control_from_bottom_panel(multi_event_editor)
-	multi_event_editor.queue_free()
+	_cleanup_editor()
 	
 	## Signals
 	EditorInterface.get_inspector().property_edited.disconnect(_property_selected)
 	EditorInterface.get_inspector().property_selected.disconnect(_property_selected)
 	EditorInterface.get_inspector().edited_object_changed.disconnect(_edited_object_changed)
 
+var _stored_object: WeakRef = null
+var _stored_property: String = ""
+
 func _property_selected(property: String):
 	var object := EditorInterface.get_inspector().get_edited_object()
 	var value := object.get(property)
 	if value is MultiEvent:
-		multi_event_editor.multi_event = value
-		if not multi_event_editor_button.visible:
-			multi_event_editor_button.visible = true
-			multi_event_editor_button.button_pressed = true
+		_show_editor(value)
+	
+	# If the property we were observing to clears out, close the editor.
+	if _stored_object and _stored_object.get_ref() == object \
+		and property == _stored_property and value == null:
+		_hide_editor()
+	
+	_stored_object = weakref(object)
+	_stored_property = property
 
 func _edited_object_changed():
 	var object := EditorInterface.get_inspector().get_edited_object()
-	if object and object is not Event:
-		multi_event_editor_button.button_pressed = false
-		multi_event_editor_button.visible = false
-		multi_event_editor.multi_event = null
+	if object:
+		if object is EventPlayer and object.multi_event:
+			_show_editor(object.multi_event)
+			_stored_object = weakref(object)
+			_stored_property = "multi_event"
+		elif object is not Event:
+			_hide_editor()
+	else:
+		_hide_editor()
+
+func _show_editor(multi_event: MultiEvent):
+	multi_event_editor.multi_event = multi_event
+	if not multi_event_editor_button.visible:
+		multi_event_editor_button.visible = true
+		multi_event_editor_button.button_pressed = true
+
+func _hide_editor():
+	multi_event_editor_button.button_pressed = false
+	multi_event_editor_button.visible = false
+	multi_event_editor.multi_event = null
+
+func _create_editor():
+	assert(not multi_event_editor)
+	multi_event_editor = load("res://addons/intervals/editor/multi_event_editor.tscn").instantiate()
+	multi_event_editor_button = add_control_to_bottom_panel(multi_event_editor, "MultiEvent")
+	multi_event_editor_button.visible = false
+	multi_event_editor.request_reload.connect(_reload_editor)
+
+func _cleanup_editor():
+	assert(multi_event_editor)
+	remove_control_from_bottom_panel(multi_event_editor)
+	multi_event_editor.queue_free()
+	multi_event_editor = null
+
+func _reload_editor():
+	var state: Dictionary = multi_event_editor._get_state()
+	_cleanup_editor()
+	_create_editor()
+	multi_event_editor._set_state(state)
+	if not multi_event_editor_button.visible:
+		multi_event_editor_button.visible = true
+		multi_event_editor_button.button_pressed = true

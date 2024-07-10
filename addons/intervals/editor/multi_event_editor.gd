@@ -2,6 +2,8 @@
 extends VSplitContainer
 ## The editor for MultiEvents.
 
+signal request_reload
+
 const MultiEventGraphEdit = preload("res://addons/intervals/editor/multi_event_graph_edit.gd")
 
 @onready var header: HBoxContainer = $Header
@@ -13,7 +15,9 @@ const MultiEventGraphEdit = preload("res://addons/intervals/editor/multi_event_g
 @onready var event_name_edit: TextEdit = $Header/EventNameEdit
 @onready var warning_spacing: Label = $Header/WarningSpacing
 @onready var option_button: OptionButton = $Header/OptionButton
+@onready var reload_button: Button = $Header/ReloadButton
 
+@onready var cycles_box: CheckBox = $Header/CyclesBox
 @onready var debug_box: CheckBox = $Header/DebugBox
 
 var multi_event_stack: Array[MultiEvent] = []
@@ -41,6 +45,7 @@ var multi_event_stack: Array[MultiEvent] = []
 			header.visible = x != null
 			graph_edit.visible = x != null
 			label.visible = x == null
+			update()
 
 var event_owner: Node:
 	get(): return get_tree().edited_scene_root
@@ -48,10 +53,12 @@ var event_owner: Node:
 func _ready() -> void:
 	multi_event = multi_event
 	
+	cycles_box.toggled.connect(func (x: bool): multi_event.cycles = x)
 	debug_box.toggled.connect(func (x: bool): multi_event.debug = x)
 	option_button.item_selected.connect(func (x: int): multi_event.complete_mode = x)
 	up_event_button.pressed.connect(func (): up_event_stack())
 	event_name_edit.text_changed.connect(func (): multi_event.resource_name = event_name_edit.text)
+	reload_button.pressed.connect(request_reload.emit)
 
 func up_event_stack():
 	if multi_event_stack:
@@ -70,7 +77,12 @@ func _update_event_stack():
 		up_event_label.hide()
 
 func _process(delta: float) -> void:
-	if multi_event:
+	update()
+
+func update():
+	if multi_event and is_node_ready():
+		if cycles_box.button_pressed != multi_event.cycles:
+			cycles_box.button_pressed = multi_event.cycles
 		if debug_box.button_pressed != multi_event.debug:
 			debug_box.button_pressed = multi_event.debug
 		if option_button.selected != multi_event.complete_mode:
@@ -79,3 +91,19 @@ func _process(delta: float) -> void:
 			event_name_edit.text = multi_event.resource_name
 		if event_name_edit.placeholder_text != multi_event.get_editor_name():
 			event_name_edit.placeholder_text = multi_event.get_editor_name()
+
+func _get_state():
+	return {
+		'me': multi_event,
+		'me_stack': multi_event_stack,
+		'so': graph_edit.scroll_offset,
+		'z': graph_edit.zoom,
+	}
+
+func _set_state(d: Dictionary):
+	multi_event = d['me']
+	multi_event_stack = d['me_stack']
+	_update_event_stack()
+	await get_tree().process_frame
+	graph_edit.scroll_offset = d['so']
+	graph_edit.zoom = d['z']

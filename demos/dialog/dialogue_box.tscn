@@ -1,0 +1,50 @@
+[gd_scene load_steps=3 format=3 uid="uid://bti5ltblc0k1f"]
+
+[ext_resource type="Theme" uid="uid://bx5cajk44783o" path="res://demos/dialog/dialogue_theme.tres" id="1_5csfk"]
+[ext_resource type="Script" path="res://demos/dialog/dialogue_box.gd" id="1_8ofi0"]
+
+[node name="DialogueBox" type="Control"]
+custom_minimum_size = Vector2(20, 30)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 42.0
+offset_bottom = 30.0
+theme = ExtResource("1_5csfk")
+script = ExtResource("1_8ofi0")
+
+[node name="Panel" type="Panel" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = 3.0
+offset_right = -7.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="ContinueLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_right = 27.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "(Z)"
+vertical_alignment = 2

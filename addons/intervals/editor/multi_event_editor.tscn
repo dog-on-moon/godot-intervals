@@ -66,7 +66,7 @@ layout_mode = 2
 selected = 0
 item_count = 3
 popup/item_0/text = "All Branches"
-popup/item_1/text = "Any Branches"
+popup/item_1/text = "Any Branch"
 popup/item_1/id = 1
 popup/item_2/text = "Immediate"
 popup/item_2/id = 2
@@ -75,9 +75,21 @@ popup/item_2/id = 2
 custom_minimum_size = Vector2(3, 0)
 layout_mode = 2
 
+[node name="CyclesBox" type="CheckBox" parent="Header"]
+layout_mode = 2
+text = "Cycles"
+
 [node name="DebugBox" type="CheckBox" parent="Header"]
 layout_mode = 2
 text = "Debug"
+
+[node name="Spacing3" type="Control" parent="Header"]
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+
+[node name="ReloadButton" type="Button" parent="Header"]
+layout_mode = 2
+text = "Reload Editor"
 
 [node name="GraphEdit" type="GraphEdit" parent="."]
 custom_minimum_size = Vector2(0, 128)
@@ -89,12 +101,12 @@ script = ExtResource("5_vb6tf")
 
 [node name="MultiEventCreateEvent" type="GraphElement" parent="GraphEdit"]
 visible = false
-custom_minimum_size = Vector2(180, 220)
+custom_minimum_size = Vector2(220, 300)
 layout_mode = 0
 offset_left = 582.0
 offset_top = 18.0
-offset_right = 762.0
-offset_bottom = 238.0
+offset_right = 802.0
+offset_bottom = 318.0
 position_offset = Vector2(582, 18)
 script = ExtResource("6_1v6me")
 
@@ -102,6 +114,7 @@ script = ExtResource("6_1v6me")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_force_pass_scroll_events = false
 
 [node name="Tree" type="Tree" parent="GraphEdit/MultiEventCreateEvent/Panel"]
 layout_mode = 1

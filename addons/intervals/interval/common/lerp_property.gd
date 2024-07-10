@@ -2,6 +2,9 @@
 extends Interval
 class_name LerpProperty
 ## An Interval property lerp, changing a property's values over time.
+##
+## This interval can change the property of any target Object over time.
+## It is quite bulky to call with .new, you can chain with setup/values/interp instead.
 
 var object: Object
 var property: NodePath

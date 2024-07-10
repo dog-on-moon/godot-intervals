@@ -7,7 +7,7 @@ const MultiEventEditor = preload("res://addons/intervals/editor/multi_event_edit
 signal request_delete(event: Event)
 signal inspect_event(event: Event)
 
-@onready var info_container: EventEditorInfoContainer = $InfoContainer
+@onready var _info_container: EventEditorInfoContainer = $InfoContainer
 @onready var rich_text_label: RichTextLabel = $InfoContainer/RichTextLabel
 @onready var inspect_button: Button = $InfoContainer/Buttons/Inspect
 @onready var delete_button: Button = $InfoContainer/Buttons/Delete
@@ -15,7 +15,10 @@ signal inspect_event(event: Event)
 
 @export var event: Event:
 	set(x):
+		if event == x:
+			return
 		event = x
+		_has_setup_event = false
 		
 		if is_node_ready():
 			branch_label.hide()
@@ -31,7 +34,11 @@ var event_owner: Node:
 
 @onready var pre_text := delete_button.text
 
+var _has_setup_event := false
+
 func _ready() -> void:
+	if self == get_tree().edited_scene_root:
+		return
 	event = event
 	branch_label.hide()
 	
@@ -48,8 +55,6 @@ func _ready() -> void:
 		else:
 			request_delete.emit(event)
 	)
-	
-	event.setup_editor_info_container(event_owner, info_container)
 
 func _process(delta: float) -> void:
 	update_appearance()
@@ -75,10 +80,15 @@ func update_appearance():
 			rich_text_label.text = description
 			rich_text_label.visible = len(description) > 0
 		
-		## Update node connections.
-		var branch_names := event.get_branch_names().slice(1)
-		
-		if true:
+		# Setup connection ports.
+		if event.has_connection_ports():
+			## Enable default port.
+			set_slot_enabled_left(0, true)
+			set_slot_enabled_right(0, true)
+			
+			## Update node connections.
+			var branch_names := event.get_branch_names().slice(1)
+			
 			## Add new branch labels.
 			for i in range(branch_names.size() - branch_nodes.size()):
 				var new_node := branch_label.duplicate()
@@ -105,6 +115,22 @@ func update_appearance():
 				var name: String = branch_names[i]
 				if branch_nodes[i].text != name:
 					branch_nodes[i].text = name
+		else:
+			## Disable default port.
+			set_slot_enabled_left(0, false)
+			set_slot_enabled_right(0, false)
+			
+			## Clear all branch nodes.
+			for branch_node in branch_nodes.duplicate():
+				branch_node.visible = false
+				branch_node.queue_free()
+				changed = true
+		
+		## Now, call event process.
+		if not _has_setup_event:
+			event._editor_setup(event_owner, _info_container)
+			_has_setup_event = true
+		event._editor_process(event_owner, _info_container)
 	else:
 		if title != "None":
 			title = "None"

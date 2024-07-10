@@ -20,16 +20,19 @@ signal editor_refresh
 ## The condition in which this Multi-Event will emit
 ## its done signal.
 enum CompleteMode {
-	AllBranches = 0,	## The multi-event is completed when all branches end.
-	AnyBranches = 1,	## The multi-event is completed when any branch ends.
+	AllBranch = 0,		## The multi-event is completed when all branches end.
+	AnyBranch = 1,		## The multi-event is completed when any branch ends.
 	Immediate = 2,		## The multi-event is completed as soon as it begins.
 }
 
 ## The complete mode for the multi-event.
-@export var complete_mode := CompleteMode.AllBranches
+@export_storage var complete_mode := CompleteMode.AllBranch
+
+## When true, cycles are allowed in the Multievent.
+@export_storage var cycles := false
 
 ## When true, all started events will log their properties to the terminal.
-@export var debug := false
+@export_storage var debug := false
 
 var active_branches := 0
 var completed := false
@@ -37,7 +40,7 @@ var completed := false
 var started_events: Array[Event] = []
 
 #region Runtime Logic
-func _get_interval(owner: Node, state: Dictionary) -> Interval:
+func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	completed = false
 	started_events = []
 	return Func.new(func ():
@@ -50,7 +53,7 @@ func _get_interval(owner: Node, state: Dictionary) -> Interval:
 		## Start each one.
 		active_branches = unresolved_int_events.size()
 		for event in unresolved_int_events:
-			_start_branch(event, owner, state, false)
+			_start_branch(event, _owner, _state, false)
 		
 		## Immediate complete multievents are done here.
 		if complete_mode == CompleteMode.Immediate:
@@ -58,25 +61,25 @@ func _get_interval(owner: Node, state: Dictionary) -> Interval:
 	)
 
 ## Begins an event branch.
-func _start_branch(event: Event, owner: Node, state: Dictionary, count_branch := true):
+func _start_branch(event: Event, _owner: Node, _state: Dictionary, count_branch := true):
 	if count_branch:
 		active_branches += 1
 	if debug:
 		event.print_debug_info()
 	started_events.append(event)
-	event.play(owner, _end_branch.bind(event, owner, state), state)
+	event.play(_owner, _end_branch.bind(event, _owner, _state), _state)
 
 ## Called when an event branch is complete.
-func _end_branch(event: Event, owner: Node, state: Dictionary):
+func _end_branch(event: Event, _owner: Node, _state: Dictionary):
 	## Perform all connecting branches.
 	for connected_event: Event in get_event_connections(event):
-		if connected_event not in started_events:
-			_start_branch(connected_event, owner, state)
+		if connected_event not in started_events or cycles:
+			_start_branch(connected_event, _owner, _state)
 	
 	## Update active branch state.
 	active_branches -= 1
-	if (complete_mode == CompleteMode.AnyBranches and not completed) \
-		or (complete_mode == CompleteMode.AllBranches and active_branches == 0) \
+	if (complete_mode == CompleteMode.AnyBranch and not completed) \
+		or (complete_mode == CompleteMode.AllBranch and active_branches == 0) \
 		or (event is EndMultiEvent):
 		_finish()
 
@@ -149,7 +152,9 @@ func set_event_editor_position(event: Event, position: Vector2i, refresh := true
 func get_unresolved_int_events() -> Array:
 	var ret_events: Dictionary = {}
 	for event in events:
-		ret_events[event] = null
+		# Only consider events that can have an input connection.
+		if event.has_connection_ports():
+			ret_events[event] = null
 	for each_event: Event in event_connections:
 		for all_connected_events in event_connections[each_event].values():
 			for each_connected_event: Event in all_connected_events:
@@ -202,9 +207,9 @@ static func get_editor_name() -> String:
 	return "MultiEvent"
 
 ## The editor description of the event.
-func get_editor_description_text(owner: Node) -> String:
+func get_editor_description_text(_owner: Node) -> String:
 	return "[b][center]%s Sub-Events" % (events.size() if events else 0)
 
-func setup_editor_info_container(owner: Node, info_container: EventEditorInfoContainer):
-	info_container.inspect.text = "Edit"
+func _editor_setup(_owner: Node, _info_container: EventEditorInfoContainer):
+	_info_container.inspect.text = "Edit"
 #endregion
