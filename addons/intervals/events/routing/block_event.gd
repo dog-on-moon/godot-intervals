@@ -58,7 +58,7 @@ static func get_editor_category() -> String:
 
 ## Set up the editor info container.
 ## This is the Control widget that appears within the Event nodes (above the connections).
-func _editor_setup(_owner: Node, _info_container: EventEditorInfoContainer):
+func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
 	_info_container.add_new_button("View Block", 1).pressed.connect(func ():
 		if event:
 			_info_container.event_node.inspect_event.emit(event)

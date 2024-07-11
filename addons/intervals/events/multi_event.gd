@@ -92,27 +92,32 @@ func _finish():
 #region Editor API
 ## Adds an event to the multi event.
 func add_event(event: Event, position: Vector2i = Vector2.ZERO):
+	if event in events:
+		return
 	events.append(event)
 	event_positions[event] = position
 	editor_refresh.emit()
 
 ## Removes an event from the multi event.
 func remove_event(event: Event):
-	if event in events:
-		events.erase(event)
-		event_positions.erase(event)
-		event_connections.erase(event)
-		# Dictionary[Event, Dict[int, Array[Event]]]
-		for event_ext_ports: Dictionary in event_connections.values():
-			for branch: int in event_ext_ports.duplicate():
-				var outgoing_connections: Array = event_ext_ports[branch]
-				outgoing_connections.erase(event)
-				if not outgoing_connections:
-					event_ext_ports.erase(branch)
-		editor_refresh.emit()
+	if event not in events:
+		return
+	events.erase(event)
+	event_positions.erase(event)
+	event_connections.erase(event)
+	# Dictionary[Event, Dict[int, Array[Event]]]
+	for event_ext_ports: Dictionary in event_connections.values():
+		for branch: int in event_ext_ports.duplicate():
+			var outgoing_connections: Array = event_ext_ports[branch]
+			outgoing_connections.erase(event)
+			if not outgoing_connections:
+				event_ext_ports.erase(branch)
+	editor_refresh.emit()
 
 ## Connects two events together in data.
 func connect_events(pre_event: Event, post_event: Event, pre_event_branch: int = 0):
+	if not (pre_event and post_event and pre_event in events and post_event in events):
+		return
 	# Dictionary[Event, Dict[int, Array[Event]]]
 	var event_dict: Dictionary = event_connections.get_or_add(pre_event, {})
 	var event_list: Array = event_dict.get_or_add(pre_event_branch, [])
@@ -123,6 +128,8 @@ func connect_events(pre_event: Event, post_event: Event, pre_event_branch: int =
 
 ## Disconnects two events from eachother.
 func disconnect_events(pre_event: Event, post_event: Event, pre_event_branch: int = 0):
+	if not (pre_event and post_event and pre_event in events and post_event in events):
+		return
 	var event_dict: Dictionary = event_connections.get_or_add(pre_event, {})
 	var event_list: Array = event_dict.get_or_add(pre_event_branch, [])
 	if post_event in event_list:
@@ -142,10 +149,15 @@ func get_event_connections(event: Event) -> Array:
 
 ## Stores the XY position of the event node in the editor.
 func set_event_editor_position(event: Event, position: Vector2i, refresh := true):
+	if not event or event not in events:
+		return
 	if event_positions.get(event, Vector2i.ZERO) != position:
 		event_positions[event] = position
 		if refresh:
 			editor_refresh.emit()
+
+func get_event_position(event: Event) -> Vector2i:
+	return event_positions.get(event, Vector2i.ZERO)
 
 ## Returns a list of all events without an input connection.
 ## Returns Array[Event]
@@ -210,6 +222,6 @@ static func get_editor_name() -> String:
 func get_editor_description_text(_owner: Node) -> String:
 	return "[b][center]%s Sub-Events" % (events.size() if events else 0)
 
-func _editor_setup(_owner: Node, _info_container: EventEditorInfoContainer):
+func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
 	_info_container.inspect.text = "Edit"
 #endregion

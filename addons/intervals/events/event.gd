@@ -47,7 +47,7 @@ static func get_editor_category() -> String:
 ## Set up EventNode in the editor.
 ## The InfoContainer is the Control widget that appears within the Event nodes (above the connections).
 ## Here you can add new buttons to the info dropdown or do all kinds of zany things.
-func _editor_setup(_owner: Node, _info_container: EventEditorInfoContainer):
+func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
 	pass
 
 ## Process function for the EventNode in the editor.

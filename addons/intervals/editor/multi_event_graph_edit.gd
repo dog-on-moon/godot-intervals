@@ -10,6 +10,9 @@ const EVENT_NODE = preload("res://addons/intervals/editor/event_node.tscn")
 @onready var multi_event_editor: MultiEventEditor = get_parent()
 @onready var multi_event_create_event: MultiEventCreateEvent = $MultiEventCreateEvent
 
+var undo_redo: EditorUndoRedoManager:
+	get: return multi_event_editor.undo_redo
+
 @export var multi_event: MultiEvent:
 	set(x):
 		if multi_event:
@@ -48,7 +51,10 @@ func _ready() -> void:
 func _connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int):
 	var from_event_node: EventNode = get_node(NodePath(from_node))
 	var to_event_node: EventNode = get_node(NodePath(to_node))
-	multi_event.connect_events(from_event_node.event, to_event_node.event, from_port)
+	undo_redo.create_action("%s connect nodes" % multi_event.to_string())
+	undo_redo.add_do_method(multi_event, &"connect_events", from_event_node.event, to_event_node.event, from_port)
+	undo_redo.add_undo_method(multi_event, &"disconnect_events", from_event_node.event, to_event_node.event, from_port)
+	undo_redo.commit_action()
 
 func _connection_from_empty(to_node: StringName, to_port: int, release_position: Vector2):
 	var pos := (release_position + scroll_offset) / zoom
@@ -63,7 +69,10 @@ func _connection_to_empty(from_node: StringName, from_port: int, release_positio
 func _disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int):
 	var from_event_node: EventNode = get_node(NodePath(from_node))
 	var to_event_node: EventNode = get_node(NodePath(to_node))
-	multi_event.disconnect_events(from_event_node.event, to_event_node.event, from_port)
+	undo_redo.create_action("%s disconnect nodes" % multi_event.to_string())
+	undo_redo.add_do_method(multi_event, &"disconnect_events", from_event_node.event, to_event_node.event, from_port)
+	undo_redo.add_undo_method(multi_event, &"connect_events", from_event_node.event, to_event_node.event, from_port)
+	undo_redo.commit_action()
 
 func _copy_nodes_request():
 	event_clipboard = {}
@@ -98,7 +107,19 @@ func _duplicate_nodes_request():
 
 func _end_node_move():
 	for node in event_nodes:
-		multi_event.set_event_editor_position(node.event, node.position_offset + scroll_offset)
+		var node_pos := Vector2i(multi_event.get_event_position(node.event))
+		var target_pos := Vector2i(node.position_offset + scroll_offset)
+		multi_event.set_event_editor_position(node.event, target_pos)
+		# TODO - this undo is super broken and idk why
+		#  I think GraphEdit is just in a tragic position right now..
+		#undo_redo.create_action("%s move event %s" % [multi_event.to_string(), get_tree().get_frame()], UndoRedo.MERGE_ALL)
+		#undo_redo.add_do_method(multi_event, &"set_event_editor_position", node.event, target_pos)
+		#undo_redo.add_undo_method(self, &"_move_node", node, node_pos, node.position_offset)
+		#undo_redo.commit_action()
+
+func _move_node(node: EventNode, stored_pos: Vector2i, node_pos: Vector2i):
+	node.position_offset = node_pos
+	multi_event.set_event_editor_position(node.event, stored_pos)
 
 func _node_selected(node: Node):
 	if node is EventNode:
@@ -118,10 +139,16 @@ func new_event(event: Event, position: Vector2i):
 				position += Vector2i(32, 32)
 				continue
 		break
-	multi_event.add_event(event, position)
+	undo_redo.create_action("%s new event %s" % [multi_event.to_string(), get_tree().get_frame()], UndoRedo.MERGE_ALL)
+	undo_redo.add_do_method(multi_event, &"add_event", event, position)
+	undo_redo.add_undo_method(multi_event, &"remove_event", event)
+	undo_redo.commit_action()
 
 func delete_event(event: Event):
-	multi_event.remove_event(event)
+	undo_redo.create_action("%s delete event %s" % [multi_event.to_string(), get_tree().get_frame()], UndoRedo.MERGE_ALL)
+	undo_redo.add_do_method(multi_event, &"remove_event", event)
+	undo_redo.add_undo_method(multi_event, &"add_event", event, multi_event.get_event_position(event))
+	undo_redo.commit_action()
 
 func refresh():
 	if not multi_event:
@@ -152,10 +179,11 @@ func refresh():
 				event_node.request_delete.connect(_event_node_request_delete)
 				event_node.inspect_event.connect(_event_node_inspect_event)
 				add_child(event_node)
-				event_node.position_offset = multi_event.event_positions.get(event, Vector2i.ZERO)
+				event_node.position_offset = multi_event.get_event_position(event)
 		
 		## Rebuild connections.
 		## Dictionary[Event, Dict[int, Array[Event]]]
+		clear_connections()
 		for event: Event in multi_event.event_connections:
 			var branch_dict: Dictionary = multi_event.event_connections[event]
 			for branch_idx: int in branch_dict:

@@ -42,7 +42,7 @@ func get_editor_description_text(_owner: Node) -> String:
 static func get_editor_category() -> String:
 	return "General"
 
-func _editor_setup(_owner: Node, _info_container: EventEditorInfoContainer):
+func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
 	_editor_owner = _owner
 	_script_button = _editor_make_script_button(
 		func (): return _editor_get_target_node(node_path, _owner),

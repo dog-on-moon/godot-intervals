@@ -50,12 +50,29 @@ var multi_event_stack: Array[MultiEvent] = []
 var event_owner: Node:
 	get(): return get_tree().edited_scene_root
 
+var undo_redo: EditorUndoRedoManager
+
 func _ready() -> void:
 	multi_event = multi_event
 	
-	cycles_box.toggled.connect(func (x: bool): multi_event.cycles = x)
-	debug_box.toggled.connect(func (x: bool): multi_event.debug = x)
-	option_button.item_selected.connect(func (x: int): multi_event.complete_mode = x)
+	cycles_box.pressed.connect(func ():
+		undo_redo.create_action("Set %s cycles" % multi_event.to_string())
+		undo_redo.add_do_property(multi_event, &"cycles", not multi_event.cycles)
+		undo_redo.add_undo_property(multi_event, &"cycles", multi_event.cycles)
+		undo_redo.commit_action()
+	)
+	debug_box.pressed.connect(func ():
+		undo_redo.create_action("Set %s debug" % multi_event.to_string())
+		undo_redo.add_do_property(multi_event, &"debug", not multi_event.debug)
+		undo_redo.add_undo_property(multi_event, &"debug", multi_event.debug)
+		undo_redo.commit_action()
+	)
+	option_button.item_selected.connect(func (x: int):
+		undo_redo.create_action("Set %s completion" % multi_event.to_string())
+		undo_redo.add_do_property(multi_event, &"complete_mode", x)
+		undo_redo.add_undo_property(multi_event, &"complete_mode", multi_event.complete_mode)
+		undo_redo.commit_action()
+	)
 	up_event_button.pressed.connect(func (): up_event_stack())
 	event_name_edit.text_changed.connect(func (): multi_event.resource_name = event_name_edit.text)
 	reload_button.pressed.connect(request_reload.emit)

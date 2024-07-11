@@ -40,7 +40,7 @@ func _get_editor_description_prefix() -> String:
 static func get_editor_category() -> String:
 	return "Routing"
 
-func _editor_setup(_owner: Node, _info_container: EventEditorInfoContainer):
+func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
 	_editor_owner = _owner
 	_script_button = FuncEvent._editor_make_script_button(
 		func (): return FuncEvent._editor_get_target_node(node_path, _owner),

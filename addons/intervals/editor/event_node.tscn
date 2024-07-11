@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/intervals/editor/event_node.gd" id="1_1cyv4"]
 [ext_resource type="Script" path="res://addons/intervals/editor/event_editor_info_container.gd" id="2_j7rqu"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvymi"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dingj"]
 resource_local_to_scene = true
 content_margin_left = 5.0
 content_margin_top = 3.0
@@ -43,7 +43,7 @@ corner_radius_bottom_left = 4
 offset_right = 215.0
 offset_bottom = 86.0
 mouse_filter = 1
-theme_override_styles/titlebar = SubResource("StyleBoxFlat_dvymi")
+theme_override_styles/titlebar = SubResource("StyleBoxFlat_dingj")
 theme_override_styles/titlebar_selected = SubResource("StyleBoxFlat_7tw32")
 position_offset = Vector2(106, 31)
 title = "None"
@@ -109,7 +109,6 @@ size_flags_horizontal = 3
 text = "Delete"
 
 [node name="Connection" type="Label" parent="."]
-visible = false
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 text = "Choice1"

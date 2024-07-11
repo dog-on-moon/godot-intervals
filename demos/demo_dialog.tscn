@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://2kdtgsh86n8m"]
+[gd_scene load_steps=34 format=3 uid="uid://2kdtgsh86n8m"]
 
 [ext_resource type="Script" path="res://demos/dialog/dialogue_container.gd" id="1_ntth3"]
 [ext_resource type="Script" path="res://demos/demo_dialog.gd" id="1_unvhf"]
@@ -150,25 +150,41 @@ SubResource("Resource_tlaoo"): {
 }
 }
 event_positions = {
-SubResource("Resource_etw8j"): Vector2i(-10265388, -13068764),
-SubResource("Resource_mkpy1"): Vector2i(-10265108, -13069150),
-SubResource("Resource_v1f37"): Vector2i(-10265828, -13068970),
-SubResource("Resource_77fwl"): Vector2i(-10265788, -13069290),
-SubResource("Resource_mqetr"): Vector2i(-10265388, -13068850),
-SubResource("Resource_xayqh"): Vector2i(-10265828, -13068750),
-SubResource("Resource_uk84w"): Vector2i(-10265828, -13068650),
-SubResource("Resource_4eipl"): Vector2i(-10265828, -13068850),
-SubResource("Resource_tlaoo"): Vector2i(-10265628, -13068850),
-SubResource("Resource_nsctv"): Vector2i(-10266128, -13068850),
-SubResource("Resource_p3bmh"): Vector2i(-10266508, -13068850),
-SubResource("Resource_vvjww"): Vector2i(-10265108, -13069050),
-SubResource("Resource_tb2hp"): Vector2i(-10265468, -13069070),
-SubResource("Resource_21qj5"): Vector2i(-10265828, -13069070),
-SubResource("Resource_63di6"): Vector2i(-10266188, -13069070),
-SubResource("Resource_nnbqe"): Vector2i(-10266488, -13069070),
-SubResource("Resource_ri0fk"): Vector2i(-10265788, -13069190),
-SubResource("Resource_ildhq"): Vector2i(-10266188, -13069190),
-SubResource("Resource_h7q71"): Vector2i(-10266488, -13069190)
+SubResource("Resource_h7q71"): Vector2i(-34098932, -43408456),
+SubResource("Resource_ildhq"): Vector2i(-34098612, -43408456),
+SubResource("Resource_ri0fk"): Vector2i(-34098192, -43408456),
+SubResource("Resource_nnbqe"): Vector2i(-34098900, -43408324),
+SubResource("Resource_63di6"): Vector2i(-34098600, -43408324),
+SubResource("Resource_21qj5"): Vector2i(-34098240, -43408324),
+SubResource("Resource_tb2hp"): Vector2i(-34097880, -43408324),
+SubResource("Resource_vvjww"): Vector2i(-34097520, -43408304),
+SubResource("Resource_p3bmh"): Vector2i(-34098920, -43408104),
+SubResource("Resource_nsctv"): Vector2i(-34098540, -43408104),
+SubResource("Resource_tlaoo"): Vector2i(-34098040, -43408104),
+SubResource("Resource_4eipl"): Vector2i(-34098240, -43408104),
+SubResource("Resource_uk84w"): Vector2i(-34098240, -43407904),
+SubResource("Resource_xayqh"): Vector2i(-34098240, -43408004),
+SubResource("Resource_mqetr"): Vector2i(-34097800, -43408104),
+SubResource("Resource_77fwl"): Vector2i(-34098172, -43408556),
+SubResource("Resource_v1f37"): Vector2i(-34098240, -43408224),
+SubResource("Resource_mkpy1"): Vector2i(-34097520, -43408404),
+SubResource("Resource_etw8j"): Vector2i(-34097800, -43408020)
+}
+complete_mode = 1
+cycles = true
+debug = true
+
+[sub_resource type="Resource" id="Resource_hxi3v"]
+script = ExtResource("4_vtles")
+
+[sub_resource type="Resource" id="Resource_y7kl1"]
+script = ExtResource("5_xyc0c")
+events = Array[ExtResource("4_vtles")]([SubResource("Resource_hxi3v")])
+event_connections = {
+SubResource("Resource_hxi3v"): {}
+}
+event_positions = {
+SubResource("Resource_hxi3v"): Vector2i(-107162, 133814)
 }
 complete_mode = 0
 cycles = false
@@ -205,3 +221,7 @@ offset_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_ntth3")
+
+[node name="EventPlayer2" type="Node" parent="Background"]
+script = ExtResource("3_s2wu6")
+multi_event = SubResource("Resource_y7kl1")

@@ -109,6 +109,7 @@ func _hide_editor():
 func _create_editor():
 	assert(not multi_event_editor)
 	multi_event_editor = load("res://addons/intervals/editor/multi_event_editor.tscn").instantiate()
+	multi_event_editor.undo_redo = get_undo_redo()
 	multi_event_editor_button = add_control_to_bottom_panel(multi_event_editor, "MultiEvent")
 	multi_event_editor_button.visible = false
 	multi_event_editor.request_reload.connect(_reload_editor)

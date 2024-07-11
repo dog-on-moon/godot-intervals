@@ -25,7 +25,7 @@ static func get_editor_category() -> String:
 
 var _editor_dialogue_box: DialogueBox
 
-func _editor_setup(_owner: Node, _info_container: EventEditorInfoContainer):
+func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
 	_editor_dialogue_box = DIALOGUE_BOX.instantiate()
 	_info_container.add_child(_editor_dialogue_box)
 	_info_container.move_child(_editor_dialogue_box, 0)

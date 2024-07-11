@@ -128,7 +128,7 @@ func update_appearance():
 		
 		## Now, call event process.
 		if not _has_setup_event:
-			event._editor_setup(event_owner, _info_container)
+			event._editor_ready(event_owner, _info_container)
 			_has_setup_event = true
 		event._editor_process(event_owner, _info_container)
 	else:
