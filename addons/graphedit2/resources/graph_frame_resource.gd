@@ -23,5 +23,4 @@ static func validate_implementation(resource: Resource) -> bool:
 	return resource is GraphNodeResource or (resource \
 		and GraphElementResource.validate_implementation(resource) \
 		and resource.has_method(&"get_graph_frame_title") \
-		and resource.has_method(&"get_graph_frame_color") \
-		and resource.has_method(&"_make_graph_control"))
+		and resource.has_method(&"get_graph_frame_color"))

@@ -18,6 +18,7 @@ events = Array[ExtResource("2_ke26o")]([])
 event_connections = {}
 event_positions = {}
 complete_mode = 0
+cycles = false
 debug = false
 
 [node name="Node" type="Node"]

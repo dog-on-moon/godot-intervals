@@ -90,6 +90,10 @@ func move_resource(resource: Resource, position: Vector2):
 ## Returns True if a given resource has correctly implemented our trait.
 static func validate_implementation(resource: Resource) -> bool:
 	return resource is GraphEditResource or (resource \
+		and resource.has_signal(&"editor_refresh") \
+		and resource.get(&"resources") \
+		and resource.get(&"connections") \
+		and resource.get(&"positions") \
 		and resource.has_method(&"add_resource") \
 		and resource.has_method(&"remove_resource") \
 		and resource.has_method(&"connect_resource") \

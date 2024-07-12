@@ -1,5 +1,8 @@
 @tool
 extends EditorPlugin
+## Intervals by dog.on.moon
+## Developer-friendly Tweens packaged with a simple, powerful, expandable cutscene editor.
+## [dependent on graphedit2]
 
 const MultiEventEditor = preload("res://addons/intervals/editor/multi_event_editor.gd")
 

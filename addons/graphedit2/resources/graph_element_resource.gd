@@ -29,8 +29,8 @@ func _make_graph_control() -> Control:
 ## Returns True if a given resource has correctly implemented our trait.
 static func validate_implementation(resource: Resource) -> bool:
 	return resource is GraphElementResource or (resource \
-		and resource.has_method(&"get_graph_dropdown_category") \
 		and resource.has_method(&"_editor_ready") \
 		and resource.has_method(&"_editor_process") \
+		and resource.has_method(&"get_graph_dropdown_category") \
 		and resource.has_method(&"is_in_graph_dropdown")) \
 		and resource.has_method(&"_make_graph_control")
