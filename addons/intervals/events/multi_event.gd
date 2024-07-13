@@ -7,17 +7,6 @@ class_name MultiEvent
 ## The editor data for this MultiEvent.
 @export_storage var editor_data: Resource = null
 
-## The condition in which this Multi-Event will emit
-## its done signal.
-enum CompleteMode {
-	AllBranch = 0,		## The multi-event is completed when all branches end.
-	AnyBranch = 1,		## The multi-event is completed when any branch ends.
-	Immediate = 2,		## The multi-event is completed as soon as it begins.
-}
-
-## The complete mode for the multi-event.
-@export_storage var complete_mode := CompleteMode.AllBranch
-
 ## When true, cycles are allowed in the Multievent.
 @export_storage var cycles := false
 
@@ -58,10 +47,6 @@ func _start(_owner: Node, _state: Dictionary):
 	active_branches = unresolved_int_events.size()
 	for event in unresolved_int_events:
 		_start_branch(event, _owner, _state, false)
-	
-	## Immediate complete multievents are done here.
-	if complete_mode == CompleteMode.Immediate:
-		_finish()
 
 ## Begins an event branch.
 func _start_branch(event: Event, _owner: Node, _state: Dictionary, count_branch := true):
@@ -83,9 +68,7 @@ func _end_branch(event: Event, _owner: Node, _state: Dictionary):
 	
 	## Update active branch state.
 	active_branches -= 1
-	if (complete_mode == CompleteMode.AnyBranch and not completed) \
-		or (complete_mode == CompleteMode.AllBranch and active_branches == 0) \
-		or (event is EndMultiEvent):
+	if active_branches == 0 or event is EndMultiEvent:
 		_finish()
 
 ## Determines the events that comes after a given event.
@@ -137,10 +120,6 @@ func _get_output_dict() -> Dictionary:
 
 func get_branch_names() -> Array:
 	var base_names := super()
-	
-	## No branching occurs in these modes.
-	if complete_mode == CompleteMode.Immediate or not editor_data.get_unresolved_input_resources():
-		return base_names
 	
 	## Iterate over each available output port.
 	var output_dict := _get_output_dict()

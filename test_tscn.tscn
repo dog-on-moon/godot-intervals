@@ -67,7 +67,6 @@ SubResource("Resource_bkslh"): Vector2(-84.5, -42)
 resource_name = "everything all at once"
 script = ExtResource("4_a4xyj")
 editor_data = SubResource("Resource_bylcc")
-complete_mode = 0
 cycles = false
 debug = false
 
@@ -159,7 +158,6 @@ SubResource("Resource_up525"): Vector2(-39.6493, 20.8757)
 [sub_resource type="Resource" id="Resource_qc5ex"]
 script = ExtResource("4_a4xyj")
 editor_data = SubResource("Resource_ommmu")
-complete_mode = 0
 cycles = false
 debug = false
 

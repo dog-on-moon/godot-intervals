@@ -14,7 +14,6 @@ const MultiEventGraphEdit = preload("res://addons/intervals/editor/multi_event_g
 @onready var up_event_label: Label = $Header/UpEventLabel
 @onready var event_name_edit: TextEdit = $Header/EventNameEdit
 @onready var warning_spacing: Label = $Header/WarningSpacing
-@onready var option_button: OptionButton = $Header/OptionButton
 @onready var reload_button: Button = $Header/ReloadButton
 
 @onready var cycles_box: CheckBox = $Header/CyclesBox
@@ -69,12 +68,6 @@ func _ready() -> void:
 		undo_redo.add_undo_property(multi_event, &"debug", multi_event.debug)
 		undo_redo.commit_action()
 	)
-	option_button.item_selected.connect(func (x: int):
-		undo_redo.create_action("Set %s completion" % multi_event.to_string())
-		undo_redo.add_do_property(multi_event, &"complete_mode", x)
-		undo_redo.add_undo_property(multi_event, &"complete_mode", multi_event.complete_mode)
-		undo_redo.commit_action()
-	)
 	up_event_button.pressed.connect(func (): up_event_stack())
 	event_name_edit.text_changed.connect(func (): multi_event.resource_name = event_name_edit.text)
 	reload_button.pressed.connect(request_reload.emit)
@@ -104,8 +97,6 @@ func update():
 			cycles_box.button_pressed = multi_event.cycles
 		if debug_box.button_pressed != multi_event.debug:
 			debug_box.button_pressed = multi_event.debug
-		if option_button.selected != multi_event.complete_mode:
-			option_button.selected = multi_event.complete_mode
 		if event_name_edit.text != multi_event.resource_name:
 			event_name_edit.text = multi_event.resource_name
 		if event_name_edit.placeholder_text != multi_event.to_string():

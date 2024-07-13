@@ -360,7 +360,6 @@ SubResource("Resource_du3d6"): Vector2(-439, -92.5)
 resource_name = "Color Chooser"
 script = ExtResource("5_wowsj")
 editor_data = SubResource("Resource_r746a")
-complete_mode = 0
 cycles = false
 debug = false
 

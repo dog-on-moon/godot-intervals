@@ -51,33 +51,17 @@ theme_override_colors/font_color = Color(1, 0.870588, 0.4, 1)
 horizontal_alignment = 1
 clip_text = true
 
-[node name="CompletionLabel" type="Label" parent="Header"]
-layout_mode = 2
-size_flags_horizontal = 8
-text = "Completion: "
-horizontal_alignment = 2
-
-[node name="OptionButton" type="OptionButton" parent="Header"]
-layout_mode = 2
-selected = 0
-item_count = 3
-popup/item_0/text = "All Branches"
-popup/item_1/text = "First Branch"
-popup/item_1/id = 1
-popup/item_2/text = "Immediate"
-popup/item_2/id = 2
-
 [node name="Spacing2" type="Control" parent="Header"]
 custom_minimum_size = Vector2(3, 0)
 layout_mode = 2
 
 [node name="CyclesBox" type="CheckBox" parent="Header"]
 layout_mode = 2
-text = "Cycles"
+text = "Allow Cycles"
 
 [node name="DebugBox" type="CheckBox" parent="Header"]
 layout_mode = 2
-text = "Debug"
+text = "Print at Runtime"
 
 [node name="Spacing3" type="Control" parent="Header"]
 custom_minimum_size = Vector2(3, 0)

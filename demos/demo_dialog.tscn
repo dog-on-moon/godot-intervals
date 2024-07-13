@@ -156,7 +156,6 @@ SubResource("Resource_wyr88"): Vector2(-1309.88, -752.297)
 resource_name = "Mission Statement"
 script = ExtResource("5_xyc0c")
 editor_data = SubResource("Resource_hwiab")
-complete_mode = 0
 cycles = true
 debug = false
 
