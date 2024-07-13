@@ -36,7 +36,7 @@ func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> Str
 	return ("%s %s.%s()" % [
 		_get_editor_description_prefix(),
 		get_node_path_string(_editor_owner, node_path), signal_name
-	]) if _editor_script_exists() else ("[b][color=red]Invalid Signal")
+	]) if _editor_signal_exists() else ("[b][color=red]Invalid Signal")
 
 static func get_graph_node_color() -> Color:
 	return Color(0.8, 0.545, 0.376, 1.0)
@@ -54,11 +54,19 @@ func _editor_ready(_edit: GraphEdit, _element: GraphElement):
 #endregion
 
 #region Script Search Logic
-func _editor_script_exists() -> bool:
+func _editor_script_exists(node: Node = null) -> bool:
+	if not _editor_owner or not is_instance_valid(_editor_owner):
+		return false
 	return _editor_find_node_script(
 		_editor_get_substring(),
-		FuncEvent._editor_get_target_node(node_path, _editor_owner)
+		node if node else FuncEvent._editor_get_target_node(node_path, _editor_owner)
 	)
+
+func _editor_signal_exists() -> bool:
+	if not _editor_owner or not is_instance_valid(_editor_owner):
+		return false
+	var node := FuncEvent._editor_get_target_node(node_path, _editor_owner)
+	return node and node.has_signal(signal_name) or _editor_script_exists(node)
 
 func _editor_get_substring():
 	return "signal %s" % signal_name

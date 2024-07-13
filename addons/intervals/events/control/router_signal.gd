@@ -14,6 +14,8 @@ class_name RouterSignal
 		if _script_button:
 			_script_button.visible = _editor_script_exists()
 
+@export var branches := 2
+
 var _script_button: Button = null
 var _editor_owner: Node = null
 
@@ -24,8 +26,11 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 		done.emit()
 	, CONNECT_ONE_SHOT)
 
+func get_branch_count() -> int:
+	return branches
+
 static func get_graph_node_title() -> String:
-	return "Router: Signal"
+	return "Router: Signal Result"
 
 static func is_in_graph_dropdown() -> bool:
 	return true

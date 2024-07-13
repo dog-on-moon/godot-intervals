@@ -35,7 +35,7 @@ class_name PropertyEvent
 @export_storage var initial_value: Variant
 
 var node: Node:
-	get: return _editor_owner.get_node_or_null(node_path) if node_path and _editor_owner else null
+	get: return _editor_owner.get_node_or_null(node_path) if node_path and _editor_owner and is_instance_valid(_editor_owner) else null
 
 var _node_button: Button = null
 var _editor_owner: Node = null
@@ -141,6 +141,8 @@ func _validate_property(p: Dictionary):
 		p.hint = node_property.hint
 		p.hint_string = node_property.hint_string
 		p.usage = node_property.usage
+		if not (p.usage & PROPERTY_USAGE_STORAGE):
+			p.usage += PROPERTY_USAGE_STORAGE
 	elif duration:
 		match p.name:
 			"initial_value":

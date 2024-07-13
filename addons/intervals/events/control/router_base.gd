@@ -4,16 +4,19 @@ class_name RouterBase
 ## Base class for routers.
 ## Ensure you override is_in_graph_dropdown for subclasses.
 
-@export var branches := 2
-
 var chosen_branch := 0
 
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
-	chosen_branch = 1 + randi_range(0, branches - 1)
-	return super(_owner, _state)
+	return Sequence.new([
+		Func.new(func (): chosen_branch = 0),
+		Func.new(done.emit)
+	])
+
+func get_branch_count() -> int:
+	return 1
 
 static func get_graph_node_title() -> String:
-	return "Router Base"
+	return "Router: Base"
 
 static func is_in_graph_dropdown() -> bool:
 	return false
@@ -21,7 +24,7 @@ static func is_in_graph_dropdown() -> bool:
 #region Branching Logic
 func get_branch_names() -> Array:
 	var base_list := super()
-	for i in branches:
+	for i in get_branch_count():
 		base_list.append("Choice #%s" % (i + 1))
 	return base_list
 

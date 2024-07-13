@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://bn20pfjlckb8g"]
+
+[ext_resource type="PackedScene" uid="uid://2kdtgsh86n8m" path="res://demos/demo_dialog.tscn" id="1_plly4"]
+[ext_resource type="PackedScene" uid="uid://bly5b6gw3xcg2" path="res://demos/demo_colors.tscn" id="2_10btf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_v8yia"]
+font_size = 24
+
+[sub_resource type="GDScript" id="GDScript_x7c8c"]
+resource_name = "start_demo"
+script/source = "extends Button
+
+@export var demo: PackedScene
+
+
+func _pressed() -> void:
+	var new_demo := demo.instantiate()
+	add_child(new_demo)
+"
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -46.5
+offset_right = 64.0
+offset_bottom = 46.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Select a Demo"
+label_settings = SubResource("LabelSettings_v8yia")
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Dialogue"
+script = SubResource("GDScript_x7c8c")
+demo = ExtResource("1_plly4")
+
+[node name="Button2" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Colors"
+script = SubResource("GDScript_x7c8c")
+demo = ExtResource("2_10btf")

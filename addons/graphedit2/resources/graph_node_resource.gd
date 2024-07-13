@@ -22,7 +22,7 @@ static func get_graph_node_color() -> Color:
 
 ## Returns the minimum width of this graph node.
 static func get_graph_node_width() -> int:
-	return 160
+	return 80
 
 ## Returns the number of input connections.
 func get_input_connections() -> int:

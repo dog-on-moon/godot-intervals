@@ -12,5 +12,5 @@ const MultiEventEditor = preload("res://addons/intervals/editor/multi_event_edit
 
 static func get_element_resource_classes() -> Array:
 	var events := load_scripts_of_base_class(&"Event")
-	events.erase(Event)
+	# events.erase(Event)
 	return events

@@ -1,0 +1,497 @@
+[gd_scene load_steps=44 format=3 uid="uid://bly5b6gw3xcg2"]
+
+[ext_resource type="Script" path="res://demos/demo.gd" id="1_xvvey"]
+[ext_resource type="Script" path="res://addons/intervals/nodes/event_player.gd" id="2_4i7x8"]
+[ext_resource type="Script" path="res://demos/colors/rich_text_label.gd" id="2_lxdwq"]
+[ext_resource type="Script" path="res://demos/colors/color_button.gd" id="3_mowfk"]
+[ext_resource type="Script" path="res://addons/intervals/events/script/property_event.gd" id="3_tvtdk"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/signal_event.gd" id="4_jrirq"]
+[ext_resource type="Script" path="res://addons/graphedit2/resources/graph_edit_resource.gd" id="4_vxy25"]
+[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="5_wowsj"]
+[ext_resource type="Script" path="res://addons/intervals/events/meta/end_multi_event.gd" id="9_6360d"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/router_signal_multi.gd" id="15_fp53o"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7qkha"]
+bg_color = Color(1, 0.34, 0.34, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x7byh"]
+bg_color = Color(0.417, 1, 0.34, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wwgvv"]
+bg_color = Color(0.34, 0.604, 1, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ajauv"]
+bg_color = Color(1, 0.34, 0.967, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="Resource" id="Resource_ocqe1"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Hmmm..."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_tppjc"]
+script = ExtResource("4_jrirq")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_47utp"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "It's not very scenic around here."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_jeh68"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Could you select a color?"
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_du3d6"]
+resource_name = "Mover Onscreen"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/ColorRoot/Mover")
+property = "position"
+value = Vector2(0, 0)
+duration = 1.0
+ease = 1
+trans = 4
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_vjqly"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Pink! You got it."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_501h4"]
+script = ExtResource("4_jrirq")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_uhmtd"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Blue, a classic."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_xctna"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Green... A wise choice."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_v6rwp"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Red? Very well then."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_gk1es"]
+resource_name = "Update Background"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background")
+property = "self_modulate"
+value = Color(1, 0.31, 0.31, 1)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_c1vl8"]
+resource_name = "Update Background"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background")
+property = "self_modulate"
+value = Color(0.4435, 1, 0.37, 1)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_vovbw"]
+resource_name = "Update Background"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background")
+property = "self_modulate"
+value = Color(0.37, 0.4435, 1, 1)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_8by4s"]
+resource_name = "Update Background"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background")
+property = "self_modulate"
+value = Color(0.901, 0.34, 1, 1)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_67kft"]
+script = ExtResource("4_jrirq")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_dhtnr"]
+script = ExtResource("9_6360d")
+
+[sub_resource type="Resource" id="Resource_u5ufq"]
+resource_name = "Mover Offscreen"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/ColorRoot/Mover")
+property = "position"
+value = Vector2(0, 400)
+duration = 1.0
+ease = 0
+trans = 4
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_esx2u"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "I hope that is to your liking."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_h4udb"]
+script = ExtResource("4_jrirq")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_ngrk8"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Thank you for your time."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_md4fo"]
+script = ExtResource("4_jrirq")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_x6hkj"]
+resource_name = "Set Label Text"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "I'd like your feedback."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_ypl5m"]
+script = ExtResource("4_jrirq")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_q1tpa"]
+script = ExtResource("15_fp53o")
+signal_count = 4
+node_paths = Array[NodePath]([NodePath("Background/ColorRoot/Mover/HBoxContainer/RedButton"), NodePath("Background/ColorRoot/Mover/HBoxContainer/GreenButton"), NodePath("Background/ColorRoot/Mover/HBoxContainer/BlueButton"), NodePath("Background/ColorRoot/Mover/HBoxContainer/PinkButton")])
+signal_names = Array[StringName]([&"pressed", &"pressed", &"pressed", &"pressed"])
+node_path_1 = NodePath("Background/ColorRoot/Mover/HBoxContainer/RedButton")
+signal_name_1 = &"pressed"
+node_path_2 = NodePath("Background/ColorRoot/Mover/HBoxContainer/GreenButton")
+signal_name_2 = &"pressed"
+node_path_3 = NodePath("Background/ColorRoot/Mover/HBoxContainer/BlueButton")
+signal_name_3 = &"pressed"
+node_path_4 = NodePath("Background/ColorRoot/Mover/HBoxContainer/PinkButton")
+signal_name_4 = &"pressed"
+
+[sub_resource type="Resource" id="Resource_tlnfw"]
+resource_name = "Visible Root"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/ColorRoot")
+property = "modulate"
+value = Color(1, 1, 1, 1)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_rbmes"]
+resource_name = "Invisible Root"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/ColorRoot")
+property = "modulate"
+value = Color(1, 1, 1, 0)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_35oes"]
+resource_name = "ColorRoot Offscreen"
+script = ExtResource("3_tvtdk")
+node_path = NodePath("Background/ColorRoot/Mover")
+property = "position"
+value = Vector2(0, 400)
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+initial_value = null
+
+[sub_resource type="Resource" id="Resource_r746a"]
+script = ExtResource("4_vxy25")
+resources = [SubResource("Resource_ocqe1"), SubResource("Resource_tppjc"), SubResource("Resource_47utp"), SubResource("Resource_jeh68"), SubResource("Resource_x6hkj"), SubResource("Resource_35oes"), SubResource("Resource_du3d6"), SubResource("Resource_501h4"), SubResource("Resource_vjqly"), SubResource("Resource_uhmtd"), SubResource("Resource_xctna"), SubResource("Resource_v6rwp"), SubResource("Resource_gk1es"), SubResource("Resource_c1vl8"), SubResource("Resource_vovbw"), SubResource("Resource_8by4s"), SubResource("Resource_h4udb"), SubResource("Resource_67kft"), SubResource("Resource_dhtnr"), SubResource("Resource_u5ufq"), SubResource("Resource_esx2u"), SubResource("Resource_ngrk8"), SubResource("Resource_md4fo"), SubResource("Resource_ypl5m"), SubResource("Resource_q1tpa"), SubResource("Resource_tlnfw"), SubResource("Resource_rbmes")]
+connections = [[SubResource("Resource_ocqe1"), 0, SubResource("Resource_tppjc"), 0], [SubResource("Resource_tppjc"), 0, SubResource("Resource_47utp"), 0], [SubResource("Resource_jeh68"), 0, SubResource("Resource_du3d6"), 0], [SubResource("Resource_vjqly"), 0, SubResource("Resource_501h4"), 0], [SubResource("Resource_uhmtd"), 0, SubResource("Resource_501h4"), 0], [SubResource("Resource_xctna"), 0, SubResource("Resource_501h4"), 0], [SubResource("Resource_v6rwp"), 0, SubResource("Resource_501h4"), 0], [SubResource("Resource_v6rwp"), 0, SubResource("Resource_gk1es"), 0], [SubResource("Resource_xctna"), 0, SubResource("Resource_c1vl8"), 0], [SubResource("Resource_uhmtd"), 0, SubResource("Resource_vovbw"), 0], [SubResource("Resource_vjqly"), 0, SubResource("Resource_8by4s"), 0], [SubResource("Resource_67kft"), 0, SubResource("Resource_dhtnr"), 0], [SubResource("Resource_501h4"), 0, SubResource("Resource_u5ufq"), 0], [SubResource("Resource_501h4"), 0, SubResource("Resource_esx2u"), 0], [SubResource("Resource_501h4"), 0, SubResource("Resource_h4udb"), 0], [SubResource("Resource_h4udb"), 0, SubResource("Resource_ngrk8"), 0], [SubResource("Resource_h4udb"), 0, SubResource("Resource_67kft"), 0], [SubResource("Resource_md4fo"), 0, SubResource("Resource_x6hkj"), 0], [SubResource("Resource_tppjc"), 0, SubResource("Resource_md4fo"), 0], [SubResource("Resource_md4fo"), 0, SubResource("Resource_ypl5m"), 0], [SubResource("Resource_ypl5m"), 0, SubResource("Resource_jeh68"), 0], [SubResource("Resource_jeh68"), 0, SubResource("Resource_q1tpa"), 0], [SubResource("Resource_q1tpa"), 1, SubResource("Resource_v6rwp"), 0], [SubResource("Resource_q1tpa"), 2, SubResource("Resource_xctna"), 0], [SubResource("Resource_q1tpa"), 3, SubResource("Resource_uhmtd"), 0], [SubResource("Resource_q1tpa"), 4, SubResource("Resource_vjqly"), 0], [SubResource("Resource_jeh68"), 0, SubResource("Resource_tlnfw"), 0], [SubResource("Resource_501h4"), 0, SubResource("Resource_rbmes"), 0]]
+positions = {
+SubResource("Resource_rbmes"): Vector2(261, 247.5),
+SubResource("Resource_tlnfw"): Vector2(-439, 7.5),
+SubResource("Resource_501h4"): Vector2(21, 87.5),
+SubResource("Resource_vjqly"): Vector2(-219, -12.5),
+SubResource("Resource_uhmtd"): Vector2(-219, -92.5),
+SubResource("Resource_xctna"): Vector2(-219, -172.5),
+SubResource("Resource_v6rwp"): Vector2(-219, -252.5),
+SubResource("Resource_gk1es"): Vector2(21, -252.5),
+SubResource("Resource_c1vl8"): Vector2(21, -172.5),
+SubResource("Resource_vovbw"): Vector2(21, -92.5),
+SubResource("Resource_8by4s"): Vector2(21, -12.5),
+SubResource("Resource_h4udb"): Vector2(261, 87.5),
+SubResource("Resource_67kft"): Vector2(501, 87.5),
+SubResource("Resource_dhtnr"): Vector2(761, 87.5),
+SubResource("Resource_u5ufq"): Vector2(261, 147.5),
+SubResource("Resource_q1tpa"): Vector2(-439, -252.5),
+SubResource("Resource_ypl5m"): Vector2(-879, -72.5),
+SubResource("Resource_md4fo"): Vector2(-1119, -72.5),
+SubResource("Resource_ngrk8"): Vector2(501, 7.5),
+SubResource("Resource_esx2u"): Vector2(261, 7.5),
+SubResource("Resource_ocqe1"): Vector2(-1359, -152.5),
+SubResource("Resource_tppjc"): Vector2(-1359, -72.5),
+SubResource("Resource_47utp"): Vector2(-1139, -152.5),
+SubResource("Resource_jeh68"): Vector2(-659, -152.5),
+SubResource("Resource_x6hkj"): Vector2(-879, -152.5),
+SubResource("Resource_35oes"): Vector2(-1359, -232.5),
+SubResource("Resource_du3d6"): Vector2(-439, -92.5)
+}
+
+[sub_resource type="Resource" id="Resource_y4ogf"]
+resource_name = "Color Chooser"
+script = ExtResource("5_wowsj")
+editor_data = SubResource("Resource_r746a")
+complete_mode = 0
+cycles = false
+debug = false
+
+[node name="DemoColors" type="Node" node_paths=PackedStringArray("event_player")]
+script = ExtResource("1_xvvey")
+event_player = NodePath("EventPlayer")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.20871, 0.20871, 0.20871, 1)
+
+[node name="ColorRoot" type="Control" parent="Background"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Mover" type="Control" parent="Background/ColorRoot"]
+anchors_preset = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/ColorRoot/Mover"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -352.0
+offset_top = -64.0
+offset_right = 352.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 64
+
+[node name="RedButton" type="Button" parent="Background/ColorRoot/Mover/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxFlat_7qkha")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7qkha")
+script = ExtResource("3_mowfk")
+color = Color(1, 0.34, 0.34, 1)
+
+[node name="GreenButton" type="Button" parent="Background/ColorRoot/Mover/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxFlat_x7byh")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x7byh")
+script = ExtResource("3_mowfk")
+color = Color(0.417, 1, 0.34, 1)
+
+[node name="BlueButton" type="Button" parent="Background/ColorRoot/Mover/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxFlat_wwgvv")
+theme_override_styles/normal = SubResource("StyleBoxFlat_wwgvv")
+script = ExtResource("3_mowfk")
+color = Color(0.34, 0.604, 1, 1)
+
+[node name="PinkButton" type="Button" parent="Background/ColorRoot/Mover/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxFlat_ajauv")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ajauv")
+script = ExtResource("3_mowfk")
+color = Color(1, 0.34, 0.967, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Background"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.5
+offset_top = 185.0
+offset_right = 221.5
+offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 32
+fit_content = true
+autowrap_mode = 0
+script = ExtResource("2_lxdwq")
+
+[node name="EventPlayer" type="Node" parent="."]
+script = ExtResource("2_4i7x8")
+multi_event = SubResource("Resource_y4ogf")
+autoplay = true

@@ -28,6 +28,7 @@ var active_elements: Array[GraphElement] = []
 var selected_elements: Array[GraphElement] = []
 
 var element_clipboard := {}
+var connection_clipboard := []
 var clipboard_pos := Vector2.ZERO
 
 var popup_menu: GraphEdit2PopupMenu
@@ -92,28 +93,62 @@ func _disconnection_request(from_node_name: StringName, from_port: int, to_node_
 	undo_redo.commit_action()
 
 func _copy_nodes_request():
+	## Create a clone for each resource.
 	element_clipboard = {}
+	connection_clipboard = []
+	var res_to_copy = {}
+	for node in selected_elements:
+		if node.resource.graph_can_be_copied():
+			res_to_copy[node.resource] = node.resource.duplicate()
+	
+	## Determine the connections to be copied.
+	for c in resource.connections:
+		if c[0] in res_to_copy and c[2] in res_to_copy:
+			connection_clipboard.append([
+				res_to_copy[c[0]],
+				c[1],
+				res_to_copy[c[2]],
+				c[3]
+			])
+	
+	## Determine the root position for our copy.
 	var top_left := Vector2(999999, 999999)
 	for node in selected_elements:
-		if not node.resource.graph_can_be_copied():
-			continue
-		top_left.x = min(top_left.x, node.position_offset.x)
-		top_left.y = min(top_left.y, node.position_offset.y)
+		if node.resource in res_to_copy:
+			top_left.x = min(top_left.x, node.position_offset.x)
+			top_left.y = min(top_left.y, node.position_offset.y)
+	
+	## Create copies of each resource.
 	for node in selected_elements:
-		if not node.resource.graph_can_be_copied():
-			continue
-		element_clipboard[node.resource.duplicate()] = node.position_offset - top_left
+		if node.resource in res_to_copy:
+			element_clipboard[res_to_copy[node.resource]] = node.position_offset - top_left
 	clipboard_pos = top_left
 
 func _paste_nodes_request(top_left_paste_pos: Vector2):
 	assert(resource)
+	## Remove our selection.
 	for node in selected_elements.duplicate():
 		node.set_selected(false)
-	var new_clipboard := {}
+	
+	## Clone all resources.
 	for resource in element_clipboard:
 		add_resource(resource, element_clipboard[resource] + top_left_paste_pos)
 		resource_to_element[resource].set_selected(true)
-		new_clipboard[resource.duplicate()] = element_clipboard[resource]
+	
+	## Clone all connections.
+	for c in connection_clipboard:
+		resource.connect_resources(c[0], c[1], c[2], c[3])
+	
+	## Create new clipboard.
+	var new_clipboard := {}
+	for resource in element_clipboard:
+		var new_res = resource.duplicate()
+		new_clipboard[new_res] = element_clipboard[resource]
+		for c in connection_clipboard:
+			if c[0] == resource:
+				c[0] = new_res
+			if c[2] == resource:
+				c[2] = new_res
 	element_clipboard = new_clipboard
 
 func _delete_nodes_request(nodes: Array[StringName]):
