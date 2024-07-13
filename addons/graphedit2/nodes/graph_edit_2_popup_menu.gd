@@ -7,6 +7,7 @@ class_name GraphEdit2PopupMenu
 const DELIMITER = "/"
 
 signal request_create_resource(resource: Resource, position: Vector2)
+signal request_paste_resources(position: Vector2)
 
 var graph_edit: GraphEdit2:
 	get: return get_parent()
@@ -32,6 +33,11 @@ func activate(pos: Vector2, resource: Resource = null, port_idx: int = 0, from_o
 		disconnect(&"id_pressed", signal_data['callable'])
 	_setup_popup_menu()
 	show()
+	
+	# reposition to make sure we are still onscreen
+	var screen_position := DisplayServer.screen_get_position(current_screen)
+	var screen_size := EditorInterface.get_base_control().size
+	position.y = min(position.y, screen_position.y + screen_size.y - size.y)
 
 func deactivate():
 	hide()
@@ -100,6 +106,24 @@ func _create_resource_menu(parent: PopupMenu):
 				if x == id:
 					_create_resource(resource_class)
 			)
+	
+	# Add paste button if present.
+	if graph_edit.element_clipboard:
+		var id: int = parent.item_count
+		parent.add_item("Paste", id)
+		parent.id_pressed.connect(func (x):
+			if x == id:
+				var new_resources: Array = graph_edit.element_clipboard.keys()
+				request_paste_resources.emit(_activation_position)
+				for res in new_resources:
+					match _activation_mode:
+						2:
+							## Connect from existing input port
+							self.resource.connect_resources(_activation_resource, _activation_port, res, 0)
+						1:
+							## Connect from existing output port
+							self.resource.connect_resources(res, 0, _activation_resource, _activation_port)
+		)
 
 ## Creates a resource by script.
 func _create_resource(resource_class: Script):

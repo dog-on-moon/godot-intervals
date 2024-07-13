@@ -49,7 +49,7 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 ## Called to begin performing the MultiEvent.
 func _start(_owner: Node, _state: Dictionary):
 	## Get all open-facing branches.
-	var unresolved_int_events: Array[GraphNodeResource] = editor_data.get_unresolved_input_resources()
+	var unresolved_int_events: Array = editor_data.get_unresolved_input_resources()
 	if not unresolved_int_events:
 		_finish()
 		return
@@ -201,7 +201,4 @@ static func get_graph_node_color() -> Color:
 
 func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
 	return "[b][center]Sub-Events: %s" % (editor_data.resources.size() if editor_data.resources else 0)
-
-static func graph_can_be_copied() -> bool:
-	return false
 #endregion

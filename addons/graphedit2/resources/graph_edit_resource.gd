@@ -99,8 +99,6 @@ func get_unresolved_input_resources(include_no_input_nodes := false) -> Array:
 		if &"get_input_connections" in resources[0] and (resource.get_input_connections() or include_no_input_nodes):
 			ret_resources[resource] = null
 	
-	# print(ret_resources)
-	
 	## Review all connections.
 	## Any resource that is connected as a to_resource has a resolved input.
 	for c in connections:

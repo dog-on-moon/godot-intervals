@@ -26,6 +26,9 @@ static func get_graph_node_title() -> String:
 static func get_graph_node_color() -> Color:
 	return Color(0.353, 0.537, 0.298, 1.0)
 
+static func get_graph_node_width() -> int:
+	return 0
+
 func _editor_ready(_edit: GraphEdit, _element: GraphElement):
 	super(_edit, _element)
 	_editor_dialogue_box = DIALOGUE_BOX.instantiate()

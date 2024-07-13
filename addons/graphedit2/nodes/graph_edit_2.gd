@@ -43,7 +43,7 @@ func _ready() -> void:
 	connection_to_empty.connect(_connection_to_empty)
 	disconnection_request.connect(_disconnection_request)
 	copy_nodes_request.connect(_copy_nodes_request)
-	paste_nodes_request.connect(_paste_nodes_request)
+	paste_nodes_request.connect(func (): _paste_nodes_request(clipboard_pos))
 	delete_nodes_request.connect(_delete_nodes_request)
 	duplicate_nodes_request.connect(_duplicate_nodes_request)
 	end_node_move.connect(_end_node_move)
@@ -58,6 +58,7 @@ func _ready() -> void:
 	
 	## Popup menu signals
 	popup_menu.request_create_resource.connect(add_resource)
+	popup_menu.request_paste_resources.connect(func (x): _paste_nodes_request(x))
 
 #region GraphEdit Signals
 func _connection_request(from_node_name: StringName, from_port: int, to_node_name: StringName, to_port: int):
@@ -92,19 +93,25 @@ func _disconnection_request(from_node_name: StringName, from_port: int, to_node_
 
 func _copy_nodes_request():
 	element_clipboard = {}
-	clipboard_pos = scroll_offset
+	var top_left := Vector2(999999, 999999)
 	for node in selected_elements:
 		if not node.resource.graph_can_be_copied():
 			continue
-		element_clipboard[node.resource.duplicate()] = node.position_offset - clipboard_pos
+		top_left.x = min(top_left.x, node.position_offset.x)
+		top_left.y = min(top_left.y, node.position_offset.y)
+	for node in selected_elements:
+		if not node.resource.graph_can_be_copied():
+			continue
+		element_clipboard[node.resource.duplicate()] = node.position_offset - top_left
+	clipboard_pos = top_left
 
-func _paste_nodes_request():
+func _paste_nodes_request(top_left_paste_pos: Vector2):
 	assert(resource)
 	for node in selected_elements.duplicate():
 		node.set_selected(false)
 	var new_clipboard := {}
 	for resource in element_clipboard:
-		add_resource(resource, element_clipboard[resource] - clipboard_pos + (scroll_offset * 2))
+		add_resource(resource, element_clipboard[resource] + top_left_paste_pos)
 		resource_to_element[resource].set_selected(true)
 		new_clipboard[resource.duplicate()] = element_clipboard[resource]
 	element_clipboard = new_clipboard
@@ -210,11 +217,9 @@ func _refresh():
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cut") and selected_elements:
-		element_clipboard = {}
+		_copy_nodes_request()
 		for node in selected_elements.duplicate():
-			element_clipboard[node.resource] = node.position_offset - scroll_offset
 			remove_resource(node.resource)
-		clipboard_pos = scroll_offset
 		accept_event()
 	if event.is_action_pressed("ui_text_select_all") and mouse_inside:
 		for node in active_elements:
