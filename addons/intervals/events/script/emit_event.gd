@@ -11,14 +11,16 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	])
 
 
-static func get_editor_color() -> Color:
-	return FuncEvent.get_editor_color()
+#region Base Editor Overrides
+static func get_graph_dropdown_category() -> String:
+	return "Script"
 
-static func get_editor_name() -> String:
-	return "Emit Signal"
+static func get_graph_node_title() -> String:
+	return "Signal"
+
+static func get_graph_node_color() -> Color:
+	return FuncEvent.get_graph_node_color()
+#endregion
 
 func _get_editor_description_prefix() -> String:
 	return "Emitting"
-
-static func get_editor_category() -> String:
-	return "General"

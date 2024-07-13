@@ -1,6 +1,6 @@
 @tool
 @icon("res://addons/intervals/icons/event.png")
-extends Resource
+extends GraphNodeResource
 class_name Event
 ## An Interval resource with playback logic for dynamic cutscenes.
 ##
@@ -11,8 +11,6 @@ class_name Event
 ##
 ## Subclasses must implement [method _get_interval].
 
-const EventEditorInfoContainer = preload("res://addons/intervals/editor/event_editor_info_container.gd")
-
 ## Emitted when this event is complete.
 signal done()
 
@@ -22,69 +20,92 @@ signal done()
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	return Func.new(done.emit)
 
-#region Editor Overrides
-## The color that represents this event in the editor.
-static func get_editor_color() -> Color:
-	return Color.DIM_GRAY
+#region Branching Logic
+## Gets the names of the outgoing branches.
+func get_branch_names() -> Array[String]:
+	return ["Default"]
 
-## String representation of the event.
-## This is used for the editor node headers
-## and name in the creation dropdown.
-static func get_editor_name() -> String:
-	return "Event"
-
-## The editor description of the event.
-## This will render text within a RichTextLabel within the editor node.
-func get_editor_description_text(_owner: Node) -> String:
-	return ""
-
-## The editor category that the event belongs to.
-## This defines the folder path for new event types when creating one.
-## You can also define nested categories with /s.
-static func get_editor_category() -> String:
-	return ""
-
-## Set up EventNode in the editor.
-## The InfoContainer is the Control widget that appears within the Event nodes (above the connections).
-## Here you can add new buttons to the info dropdown or do all kinds of zany things.
-func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
-	pass
-
-## Process function for the EventNode in the editor.
-## Called on the editor's process thread when the node is rendering.
-## Return true to force a size fix on the event node.
-func _editor_process(_owner: Node, _info_container: EventEditorInfoContainer) -> bool:
-	return false
+## Determines the branch index we're choosing based on internal state. (chosen at runtime)
+## 0 is first index of branch name array, 1 is second, etc
+func get_branch_index() -> int:
+	return 0
 #endregion
 
-#region Routing Internal
+#region Base Editor Overrides
+## The category that the event will belong to.
+static func get_graph_dropdown_category() -> String:
+	return "Meta"
+
+## The title of the graph node for this Event.
+static func get_graph_node_title() -> String:
+	return "Event"
+
+func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+	return ""
+
+## The color of the graph node for this Event.
+static func get_graph_node_color() -> Color:
+	return Color.DIM_GRAY
+
+## Called from the GraphNode regarding this Event.
+func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+	super(_edit, _element)
+	if _editor_flatten_default_label():
+		if _element.connection_labels:
+			# Remove the initial connection label and replace it with a flat control.
+			var default_connection_label: Label = _element.connection_labels.pop_at(0)
+			default_connection_label.queue_free()
+			var flat_connection_substitute := Control.new()
+			flat_connection_substitute.size = Vector2.ZERO
+			_element.add_child(flat_connection_substitute)
+			_element.move_child(flat_connection_substitute, 0)
+			_element.connection_labels.insert(0, flat_connection_substitute)
+
+## Called each frame from the Graphnode regarding this Event.
+func _editor_process(_edit: GraphEdit, _element: GraphElement):
+	super(_edit, _element)
+	
+	if _element.connection_labels:
+		var offset := 1 if _editor_flatten_default_label() else 0
+		var branch_names := get_branch_names()
+		for i: int in min(_element.connection_labels.size(), branch_names.size()) - offset:
+			var label: Label = _element.connection_labels[i + offset]
+			if label.text != branch_names[i + offset]:
+				label.text = branch_names[i + offset]
+
+## Determines if we should flattern the default label.
+func _editor_flatten_default_label() -> bool:
+	return true
+#endregion
+
+#region GraphElement overrides
+## The icon that the element uses in the dropdown.
+static func get_graph_dropdown_icon() -> Texture2D:
+	return preload("res://addons/intervals/icons/event.png")
+#endregion
+
+#region Helpers
+## Returns the scene owner for nodepaths.
+static func get_editor_owner(edit: GraphEdit) -> Node:
+	return edit.multi_event_editor.event_owner
+#endregion
+
+#region GraphNode Overrides -- do not touch
+func get_input_connections() -> int:
+	## Each Event has one input port.
+	return 1
+
+func get_output_connections() -> int:
+	## Events have one default input port, and then one for each branch.
+	return get_branch_names().size()
+#endregion
+
+#region Internal -- do not touch
 ## Performs the event. When it is finished, [signal done] will be emitted.
 func play(_owner: Node, callback: Callable = _do_nothing, _state: Dictionary = {}) -> Tween:
 	if callback != _do_nothing:
 		done.connect(callback, CONNECT_ONE_SHOT)
 	return _get_interval(_owner, _state).as_tween(_owner)
-
-## Gets the names of the outgoing branches.
-## Note that MultiEvents are responsible for linking branches.
-func get_branch_names() -> Array:
-	return ["Default"]
-
-## Determines the branch index we're choosing based on internal state.
-func get_branch_index() -> int:
-	return 0
-
-## Returns true if this event has connection ports.
-func has_connection_ports() -> bool:
-	return true
-
-## Returns true if this event should be visible in the creation menu.
-static func _editor_can_be_created() -> bool:
-	return true
-#endregion
-
-#region Dev
-func _to_string() -> String:
-	return resource_name if resource_name else get_editor_name()
 
 static func get_node_path_string(_owner: Node, np: NodePath) -> String:
 	var valid_np := np and _owner and _owner.get_node_or_null(np)
@@ -92,13 +113,12 @@ static func get_node_path_string(_owner: Node, np: NodePath) -> String:
 
 ## Prints debugging information on this event.
 func print_debug_info():
-	print("--- EVENT '%s' ACTIVE ---" % self)
-	print("resource_name: %s" % resource_name)
+	print_rich("[b]'%s'[/b]" % self)
 	for property in get_property_list():
 		if not property['usage'] & PROPERTY_USAGE_SCRIPT_VARIABLE:
 			continue
-		print('%s: %s' % [property['name'], self[property['name']]])
-	print("-------------------------")
+		print('[i]%s:[/i] %s' % [property['name'], self[property['name']]])
+	print()
 
 # Does nothing. :(
 static func _do_nothing():

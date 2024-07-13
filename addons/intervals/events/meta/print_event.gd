@@ -12,14 +12,13 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 		Func.new(done.emit)
 	]) if enabled else Func.new(done.emit)
 
-## String representation of the event. Important to define.
-static func get_editor_name() -> String:
-	return "Print"
-
-## The editor description of the event.
-func get_editor_description_text(_owner: Node) -> String:
-	return ("[color=ff6666][s]" if not enabled else "") + msg
-
-## The editor category that the event belongs to.
-static func get_editor_category() -> String:
+#region Base Editor Overrides
+static func get_graph_dropdown_category() -> String:
 	return "Meta"
+
+static func get_graph_node_title() -> String:
+	return "Print to Console"
+
+func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+	return ("[color=ff6666][s]" if not enabled else "") + (msg if msg else "[color=red][b][No Message]")
+#endregion

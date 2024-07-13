@@ -30,13 +30,15 @@ var multi_event_stack: Array[MultiEvent] = []
 		if multi_event_stack and x == multi_event_stack[-1]:
 			multi_event_stack.pop_back()
 			_update_event_stack()
-		elif multi_event and x in multi_event.events:
+		elif multi_event and multi_event.editor_data and x in multi_event.editor_data.resources:
 			multi_event_stack.append(multi_event)
 			_update_event_stack()
 		else:
 			multi_event_stack = []
 			_update_event_stack()
 		
+		if x and not x.editor_data:
+			x.editor_data = GraphEditResource.new()
 		multi_event = x
 		
 		if is_node_ready():
@@ -106,8 +108,8 @@ func update():
 			option_button.selected = multi_event.complete_mode
 		if event_name_edit.text != multi_event.resource_name:
 			event_name_edit.text = multi_event.resource_name
-		if event_name_edit.placeholder_text != multi_event.get_editor_name():
-			event_name_edit.placeholder_text = multi_event.get_editor_name()
+		if event_name_edit.placeholder_text != multi_event.to_string():
+			event_name_edit.placeholder_text = multi_event.to_string()
 
 func _get_state():
 	return {

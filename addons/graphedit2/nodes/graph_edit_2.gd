@@ -8,30 +8,20 @@ var undo_redo: EditorUndoRedoManager:
 var _resource_ref: WeakRef
 
 ## Sets the resource for the GraphEdit.
-## Resource must have all traits defined.
-## (Until traits are implemented, GraphEditResource is a usable base class)
-@export var resource: Resource:
+@export var resource: GraphEditResource:
 	set(x):
-		if not x or _validate_resource(x):
-			if resource:
-				resource.editor_refresh.disconnect(_refresh)
-			_resource_ref = weakref(resource)
-			selected_elements = []
-			if resource:
-				resource.editor_refresh.connect(_refresh)
-			if is_node_ready():
-				_refresh()
-				recenter()
+		if resource:
+			resource.editor_refresh.disconnect(_refresh)
+		_resource_ref = weakref(x)
+		selected_elements = []
+		if resource:
+			resource.editor_refresh.connect(_refresh)
+		if is_node_ready():
+			_refresh()
+			recenter()
+			recenter()
 	get:
-		return _resource_ref.get_ref()
-
-## Validate that a resource has all of the traits for the GraphEdit.
-func _validate_resource(resource: Resource) -> bool:
-	if not resource:
-		return false
-	if resource is GraphEditResource:
-		return true
-	return GraphEditResource.validate_implementation(resource)
+		return _resource_ref.get_ref() if _resource_ref else null
 
 var resource_to_element := {}
 var active_elements: Array[GraphElement] = []
@@ -41,6 +31,10 @@ var element_clipboard := {}
 var clipboard_pos := Vector2.ZERO
 
 var popup_menu: GraphEdit2PopupMenu
+
+var mouse_inside: bool:
+	get:
+		return get_global_rect().has_point(get_global_mouse_position())
 
 func _ready() -> void:
 	## GraphEdit signals
@@ -70,7 +64,7 @@ func _connection_request(from_node_name: StringName, from_port: int, to_node_nam
 	assert(resource)
 	var from_node: GraphNode2 = get_node(NodePath(from_node_name))
 	var to_node: GraphNode2 = get_node(NodePath(to_node_name))
-	undo_redo.create_action("Connect GraphNodes" % resource)
+	undo_redo.create_action("Connect GraphNodes")
 	undo_redo.add_do_method  (resource, &"connect_resources",    from_node.resource, from_port, to_node.resource, to_port)
 	undo_redo.add_undo_method(resource, &"disconnect_resources", from_node.resource, from_port, to_node.resource, to_port)
 	undo_redo.commit_action()
@@ -91,7 +85,7 @@ func _disconnection_request(from_node_name: StringName, from_port: int, to_node_
 	assert(resource)
 	var from_node: GraphNode2 = get_node(NodePath(from_node_name))
 	var to_node: GraphNode2 = get_node(NodePath(to_node_name))
-	undo_redo.create_action("Disconnect GraphNodes" % resource)
+	undo_redo.create_action("Disconnect GraphNodes")
 	undo_redo.add_do_method  (resource, &"disconnect_resources", from_node.resource, from_port, to_node.resource, to_port)
 	undo_redo.add_undo_method(resource, &"connect_resources",    from_node.resource, from_port, to_node.resource, to_port)
 	undo_redo.commit_action()
@@ -100,18 +94,20 @@ func _copy_nodes_request():
 	element_clipboard = {}
 	clipboard_pos = scroll_offset
 	for node in selected_elements:
+		if not node.resource.graph_can_be_copied():
+			continue
 		element_clipboard[node.resource.duplicate()] = node.position_offset - clipboard_pos
 
 func _paste_nodes_request():
 	assert(resource)
 	for node in selected_elements.duplicate():
 		node.set_selected(false)
-	var old_clipboard := element_clipboard.duplicate()
-	element_clipboard = {}
-	for resource in old_clipboard:
-		add_resource(resource, old_clipboard[resource] - clipboard_pos + (scroll_offset * 2))
+	var new_clipboard := {}
+	for resource in element_clipboard:
+		add_resource(resource, element_clipboard[resource] - clipboard_pos + (scroll_offset * 2))
 		resource_to_element[resource].set_selected(true)
-		element_clipboard[resource.duplicate()] = old_clipboard[resource]
+		new_clipboard[resource.duplicate()] = element_clipboard[resource]
+	element_clipboard = new_clipboard
 
 func _delete_nodes_request(nodes: Array[StringName]):
 	assert(resource)
@@ -161,7 +157,7 @@ func _popup_request(at_position: Vector2):
 ## Adds a Resource into the GraphEdit.
 func add_resource(resource: Resource, position: Vector2):
 	assert(self.resource)
-	undo_redo.create_action("New GraphElement(s) %s" % [self.resource.to_string(), get_tree().get_frame()], UndoRedo.MERGE_ALL)
+	undo_redo.create_action("New GraphElement(s) %s" % [get_tree().get_frame()], UndoRedo.MERGE_ALL)
 	undo_redo.add_do_method(self.resource, &"add_resource", resource, position)
 	undo_redo.add_undo_method(self.resource, &"remove_resource", resource)
 	undo_redo.commit_action()
@@ -169,7 +165,7 @@ func add_resource(resource: Resource, position: Vector2):
 ## Removes a Resource from the GraphEdit.
 func remove_resource(resource: Resource):
 	assert(self.resource)
-	undo_redo.create_action("Delete GraphElement(s) %s" % [self.resource.to_string(), get_tree().get_frame()], UndoRedo.MERGE_ALL)
+	undo_redo.create_action("Delete GraphElement(s) %s" % [get_tree().get_frame()], UndoRedo.MERGE_ALL)
 	undo_redo.add_do_method(self.resource, &"remove_resource", resource)
 	undo_redo.add_undo_method(self.resource, &"add_resource", resource, self.resource.positions[resource])
 	undo_redo.commit_action()
@@ -198,19 +194,19 @@ func _refresh():
 		for res in resource.resources:
 			if res not in existing_resources:
 				var element: Control = res._make_graph_control()
-				element.resource = res
 				resource_to_element[res] = element
 				active_elements.append(element)
 				add_child(element)
+				element.resource = res
 				element.position_offset = resource.positions[res]
 		
 		## Rebuild connections.
 		## Dictionary[Resource, Dict[int, Array[Resource]]]
 		clear_connections()
-		for c: GraphEditResource.Connection in resource.connections:
-			var from_node: GraphNode2 = resource_to_element[c.from_resource]
-			var to_node: GraphNode2 = resource_to_element[c.to_resource]
-			connect_node(from_node.name, c.from_port, to_node.name, c.to_port)
+		for c in resource.connections:
+			var from_node: GraphNode2 = resource_to_element[c[0]]
+			var to_node: GraphNode2 = resource_to_element[c[2]]
+			connect_node(from_node.name, c[1], to_node.name, c[3])
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cut") and selected_elements:
@@ -220,6 +216,18 @@ func _input(event: InputEvent) -> void:
 			remove_resource(node.resource)
 		clipboard_pos = scroll_offset
 		accept_event()
+	if event.is_action_pressed("ui_text_select_all") and mouse_inside:
+		for node in active_elements:
+			if node not in selected_elements:
+				node.set_selected(true)
+		accept_event()
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index  == MOUSE_BUTTON_LEFT:
+			# If we've pressed somewhere not within the grid,
+			# guarantee that we deselect all of our internal nodes
+			if selected_elements and not mouse_inside:
+				for node in selected_elements.duplicate():
+					node.set_selected(false)
 
 ## Recenters the GraphEdit.
 func recenter():
@@ -232,14 +240,32 @@ func recenter():
 	for node in active_elements:
 		average_node_position += node.position_offset + (node.size / 2)
 	average_node_position /= active_elements.size()
-	scroll_offset = average_node_position - (size / 2)
+	for node in active_elements:
+		node.position_offset -= average_node_position
+	scroll_offset = - (size / 2)
+#endregion
 
 #region Editor overrides
 ## Returns an array of all element resource classes that can be created in this GraphEdit.
 static func get_element_resource_classes() -> Array:
+	## see load_scripts_of_base_class()
 	return [GraphElementResource, GraphFrameResource, GraphNodeResource]
 
 ## Gets the popup menu class used for 
 static func _get_popup_menu_class() -> Script:
 	return GraphEdit2PopupMenu
+#endregion
+
+#region Helpers
+## Helper function to nab all scripts of a given base class
+static func load_scripts_of_base_class(base_class: StringName) -> Array:
+	var global_class_list := ProjectSettings.get_global_class_list()
+	var ret_dict := {}
+	var last_result := -1
+	while last_result != ret_dict.size():
+		last_result = ret_dict.size()
+		for item in global_class_list:
+			if item['base'] in ret_dict or item['class'] == base_class:
+				ret_dict[item['class']] = load(item['path'])
+	return ret_dict.values()
 #endregion

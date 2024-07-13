@@ -20,35 +20,40 @@ var _editor_owner: Node = null
 
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	var node: Node = _owner.get_node(node_path)
-	return Func.new(connect_signal.bind(node))
+	return Connect.new(node[signal_name], done.emit, CONNECT_ONE_SHOT)
 
-func connect_signal(node: Node):
-	node.connect(signal_name, done.emit, CONNECT_ONE_SHOT)
+#region Base Editor Overrides
+static func get_graph_dropdown_category() -> String:
+	return "Control"
 
-static func get_editor_color() -> Color:
-	return Color(0.8, 0.545, 0.376, 1.0)
-
-static func get_editor_name() -> String:
+static func get_graph_node_title() -> String:
 	return "Await Signal"
-
-func get_editor_description_text(_owner: Node) -> String:
-	return ("%s %s.%s()" % [_get_editor_description_prefix(), get_node_path_string(_owner, node_path), signal_name]) if _editor_script_exists() else ("[b][color=red]Invalid Signal")
 
 func _get_editor_description_prefix() -> String:
 	return "Awaiting"
 
-static func get_editor_category() -> String:
-	return "Routing"
+func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+	return ("%s %s.%s()" % [
+		_get_editor_description_prefix(),
+		get_node_path_string(_editor_owner, node_path), signal_name
+	]) if _editor_script_exists() else ("[b][color=red]Invalid Signal")
 
-func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
-	_editor_owner = _owner
+static func get_graph_node_color() -> Color:
+	return Color(0.8, 0.545, 0.376, 1.0)
+
+func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+	super(_edit, _element)
+	_editor_owner = get_editor_owner(_edit)
 	_script_button = FuncEvent._editor_make_script_button(
-		func (): return FuncEvent._editor_get_target_node(node_path, _owner),
+		func (): return FuncEvent._editor_get_target_node(node_path, _editor_owner),
 		func (): return _editor_get_substring(),
-		_info_container,
+		_element,
+		preload("res://addons/graphedit2/icons/Signals.png"),
 		_editor_find_node_script
 	)
+#endregion
 
+#region Script Search Logic
 func _editor_script_exists() -> bool:
 	return _editor_find_node_script(
 		_editor_get_substring(),

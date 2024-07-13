@@ -4,18 +4,8 @@ extends Event
 class_name MultiEvent
 ## A MultiEvent contains multiple events and can be used for advanced, dynamic cutscenes.
 
-signal editor_refresh
-
-## The events that the MultiEvent keeps track of.
-@export_storage var events: Array[Event] = []
-
-## Dictionary of stored event connections (from outgoing event branch x to 1 event input target)
-## Dictionary[Event, Dict[int, Array[Event]]]
-@export_storage var event_connections := {}
-
-## Editor storage for event positions.
-## Dictionary[Event, Vector2i]
-@export_storage var event_positions := {}
+## The editor data for this MultiEvent.
+@export_storage var editor_data: Resource = null
 
 ## The condition in which this Multi-Event will emit
 ## its done signal.
@@ -34,31 +24,44 @@ enum CompleteMode {
 ## When true, all started events will log their properties to the terminal.
 @export_storage var debug := false
 
-var active_branches := 0
+## Whether or not we have completed this MultiEvent.
 var completed := false
 
+## The number of current events that are running.
+var active_branches := 0
+
+## All events that have been started.
 var started_events: Array[Event] = []
+
+## The last event we've finished.
+var last_event: Event = null
 
 #region Runtime Logic
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
+	## Reset multievent state.
 	completed = false
 	started_events = []
-	return Func.new(func ():
-		## Get all open-facing branches.
-		var unresolved_int_events := get_unresolved_int_events()
-		if not unresolved_int_events:
-			done.emit()
-			return
-		
-		## Start each one.
-		active_branches = unresolved_int_events.size()
-		for event in unresolved_int_events:
-			_start_branch(event, _owner, _state, false)
-		
-		## Immediate complete multievents are done here.
-		if complete_mode == CompleteMode.Immediate:
-			done.emit()
-	)
+	last_event = null
+	
+	## Create multievent start function.
+	return Func.new(_start.bind(_owner, _state))
+
+## Called to begin performing the MultiEvent.
+func _start(_owner: Node, _state: Dictionary):
+	## Get all open-facing branches.
+	var unresolved_int_events: Array[GraphNodeResource] = editor_data.get_unresolved_input_resources()
+	if not unresolved_int_events:
+		_finish()
+		return
+	
+	## Start each one.
+	active_branches = unresolved_int_events.size()
+	for event in unresolved_int_events:
+		_start_branch(event, _owner, _state, false)
+	
+	## Immediate complete multievents are done here.
+	if complete_mode == CompleteMode.Immediate:
+		_finish()
 
 ## Begins an event branch.
 func _start_branch(event: Event, _owner: Node, _state: Dictionary, count_branch := true):
@@ -71,6 +74,8 @@ func _start_branch(event: Event, _owner: Node, _state: Dictionary, count_branch 
 
 ## Called when an event branch is complete.
 func _end_branch(event: Event, _owner: Node, _state: Dictionary):
+	last_event = event
+	
 	## Perform all connecting branches.
 	for connected_event: Event in get_event_connections(event):
 		if connected_event not in started_events or cycles:
@@ -83,145 +88,120 @@ func _end_branch(event: Event, _owner: Node, _state: Dictionary):
 		or (event is EndMultiEvent):
 		_finish()
 
+## Determines the events that comes after a given event.
+func get_event_connections(event: Event) -> Array[Event]:
+	## Get connection information about the event.
+	var ret_events: Array[Event] = []
+	var branch_idx := event.get_branch_index()
+	var event_outputs: Dictionary = editor_data.get_resource_outputs(event)
+	## Use the requested branch index if defined.
+	if branch_idx in event_outputs:
+		ret_events.assign(event_outputs[branch_idx])
+	## Otherwise, try and use the default branch index.
+	elif 0 in event_outputs:
+		ret_events.assign(event_outputs[0])
+	## No good.
+	return ret_events
+
 func _finish():
 	if not completed:
 		done.emit()
 		completed = true
 #endregion
 
-#region Editor API
-## Adds an event to the multi event.
-func add_event(event: Event, position: Vector2i = Vector2.ZERO):
-	if event in events:
-		return
-	events.append(event)
-	event_positions[event] = position
-	editor_refresh.emit()
-
-## Removes an event from the multi event.
-func remove_event(event: Event):
-	if event not in events:
-		return
-	events.erase(event)
-	event_positions.erase(event)
-	event_connections.erase(event)
-	# Dictionary[Event, Dict[int, Array[Event]]]
-	for event_ext_ports: Dictionary in event_connections.values():
-		for branch: int in event_ext_ports.duplicate():
-			var outgoing_connections: Array = event_ext_ports[branch]
-			outgoing_connections.erase(event)
-			if not outgoing_connections:
-				event_ext_ports.erase(branch)
-	editor_refresh.emit()
-
-## Connects two events together in data.
-func connect_events(pre_event: Event, post_event: Event, pre_event_branch: int = 0):
-	if not (pre_event and post_event and pre_event in events and post_event in events):
-		return
-	# Dictionary[Event, Dict[int, Array[Event]]]
-	var event_dict: Dictionary = event_connections.get_or_add(pre_event, {})
-	var event_list: Array = event_dict.get_or_add(pre_event_branch, [])
-	if post_event not in event_list:
-		event_list.append(post_event)
-		editor_refresh.emit()
-		notify_property_list_changed()
-
-## Disconnects two events from eachother.
-func disconnect_events(pre_event: Event, post_event: Event, pre_event_branch: int = 0):
-	if not (pre_event and post_event and pre_event in events and post_event in events):
-		return
-	var event_dict: Dictionary = event_connections.get_or_add(pre_event, {})
-	var event_list: Array = event_dict.get_or_add(pre_event_branch, [])
-	if post_event in event_list:
-		event_list.erase(post_event)
-		editor_refresh.emit()
-		notify_property_list_changed()
-
-## Determines the events that comes after a given event.
-func get_event_connections(event: Event) -> Array:
-	var connected_events: Dictionary = event_connections.get_or_add(event, {})
-	var branch_idx := event.get_branch_index()
-	if branch_idx in connected_events:
-		return connected_events[branch_idx]
-	if 0 in connected_events:
-		return connected_events[0]
-	return []
-
-## Stores the XY position of the event node in the editor.
-func set_event_editor_position(event: Event, position: Vector2i, refresh := true):
-	if not event or event not in events:
-		return
-	if event_positions.get(event, Vector2i.ZERO) != position:
-		event_positions[event] = position
-		if refresh:
-			editor_refresh.emit()
-
-func get_event_position(event: Event) -> Vector2i:
-	return event_positions.get(event, Vector2i.ZERO)
-
-## Returns a list of all events without an input connection.
-## Returns Array[Event]
-func get_unresolved_int_events() -> Array:
-	var ret_events: Dictionary = {}
-	for event in events:
-		# Only consider events that can have an input connection.
-		if event.has_connection_ports():
-			ret_events[event] = null
-	for each_event: Event in event_connections:
-		for all_connected_events in event_connections[each_event].values():
-			for each_connected_event: Event in all_connected_events:
-				# Each event here has a connected INPUT port,
-				# so we know that it must be resolved.
-				ret_events.erase(each_connected_event)
-	return ret_events.keys()
-
-## Returns a list of all events without an output connection.
+#region Branching Logic
+## A MultiEvent's output is based on whatever the
+## last completed event's output port is.
 ## Returns Dict[Event, Array[int]]
-func get_unresolved_ext_events() -> Dictionary:
-	var ret_events := {}
-	for event: Event in events:
-		for branch_idx in event.get_branch_names().size():
-			var connected_events: Array = event_connections.get(event, {}).get_or_add(branch_idx, [])
-			# If this slot has no connected events,
-			# we know that it must be unresolved.
-			if not connected_events:
-				ret_events.get_or_add(event, []).append(branch_idx)
-	return ret_events
-#endregion
+func _get_output_dict() -> Dictionary:
+	var output := {}
+	
+	## Review each event.
+	for event in editor_data.resources:
+		var empty_ports: Array[int] = []
+		var current_outputs: Dictionary = editor_data.get_resource_outputs(event)
+		
+		## Check each output ID on the event.
+		for branch_idx: int in event.get_output_connections():
+			## If it has a defined output, skip.
+			if branch_idx in current_outputs:
+				continue
+			empty_ports.append(branch_idx)
+		
+		## If we have empty ports, declare it in the output.
+		if empty_ports:
+			output[event] = empty_ports
+	
+	## Return our output.
+	return output
 
-#region Event Overrides
-## Gets the names of the outgoing branches.
 func get_branch_names() -> Array:
 	var base_names := super()
 	
-	## Get branches of all unresolved sub-events.
-	var unresolved_ext_events := get_unresolved_ext_events()
-	for event: Event in unresolved_ext_events:
+	## No branching occurs in these modes.
+	if complete_mode == CompleteMode.Immediate or not editor_data.get_unresolved_input_resources():
+		return base_names
+	
+	## Iterate over each available output port.
+	var output_dict := _get_output_dict()
+	for event: Event in output_dict:
+		var event_name := event.to_string()
 		var branch_names := event.get_branch_names()
-		var event_name: String = event.to_string()
-		for branch_idx: int in unresolved_ext_events[event]:
+		for branch_idx: int in output_dict[event]:
+			## Add the branch name.
 			var branch_name: String = branch_names[branch_idx]
-			base_names.append('[%s] %s' % [event_name, branch_name])
+			base_names.append('[%s]: %s' % [event_name, branch_name])
 	
 	## Return base names.
 	return base_names
 
-## Determines the branch index we're choosing based on internal state.
 func get_branch_index() -> int:
-	return 0
+	## If we have a last event defined, review our output dictionary
+	## to determine what our true branch index should be.
+	if last_event:
+		var last_event_branch := last_event.get_branch_index()
+		var output_dict := _get_output_dict()
+		var return_branch_idx := 0
+		## We have to do a linear search through the output dict,
+		## because we need the branch_idx to properly match the names.
+		for event: Event in output_dict:
+			for branch_idx: int in output_dict[event]:
+				return_branch_idx += 1
+				
+				## If the event and branch matches, we use this index.
+				if event == last_event and last_event_branch == branch_idx:
+					return return_branch_idx
+		
+		## we really should have found our true output branch here, so print error in case of failure
+		assert(false, "We should have found our true output branch.
+		%s - %s - %s - %s" % [last_event, last_event_branch, output_dict, return_branch_idx])
+		return super()
+	else:
+		## No last event, so we just rely on the default branch.
+		return super()
+#endregion
 
-## The color that represents this event in the editor.
-static func get_editor_color() -> Color:
-	return Color.WEB_MAROON
+#region Event Overrides
+func _enter():
+	if not editor_data:
+		editor_data = GraphEditResource.new()
 
-## String representation of the event. Important to define.
-static func get_editor_name() -> String:
+func _editor_ready(edit: GraphEdit, element: GraphElement):
+	super(edit, element)
+	## Inspecting a MultiEvent = ensure that we open it in the editor
+	var node: GraphNode2 = element
+	node.inspect_button.pressed.connect(func (): edit.multi_event_editor.multi_event = self)
+	node.inspect_button.icon = preload("res://addons/graphedit2/icons/Object.png")
+
+static func get_graph_node_title() -> String:
 	return "MultiEvent"
 
-## The editor description of the event.
-func get_editor_description_text(_owner: Node) -> String:
-	return "[b][center]%s Sub-Events" % (events.size() if events else 0)
+static func get_graph_node_color() -> Color:
+	return Color.WEB_MAROON
 
-func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
-	_info_container.inspect.text = "Edit"
+func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+	return "[b][center]Sub-Events: %s" % (editor_data.resources.size() if editor_data.resources else 0)
+
+static func graph_can_be_copied() -> bool:
+	return false
 #endregion

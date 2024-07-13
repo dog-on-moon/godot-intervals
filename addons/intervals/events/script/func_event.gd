@@ -27,29 +27,34 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 		Func.new(done.emit)
 	])
 
-func get_branch_names() -> Array:
-	return ["Default"]
+#region Base Editor Overrides
+static func get_graph_dropdown_category() -> String:
+	return "Script"
 
-static func get_editor_color() -> Color:
-	return Color(0.922, 0.749, 0.549, 1.0)
-
-static func get_editor_name() -> String:
+static func get_graph_node_title() -> String:
 	return "Callable"
 
-func get_editor_description_text(_owner: Node) -> String:
-	return ("%s.%s(%s)" % [get_node_path_string(_owner, node_path), function_name, args]) if _editor_script_exists() else ("[b][color=red]Invalid Callable")
+func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+	return ("%s.%s(%s)" % [
+		get_node_path_string(_editor_owner, node_path), function_name,
+		str(args).trim_prefix('[').trim_suffix(']')]
+	) if _editor_script_exists() else ("[b][color=red]Invalid Callable")
 
-static func get_editor_category() -> String:
-	return "General"
+static func get_graph_node_color() -> Color:
+	return Color(0.271, 0.549, 1, 1.0)
 
-func _editor_ready(_owner: Node, _info_container: EventEditorInfoContainer):
-	_editor_owner = _owner
+func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+	super(_edit, _element)
+	_editor_owner = get_editor_owner(_edit)
 	_script_button = _editor_make_script_button(
-		func (): return _editor_get_target_node(node_path, _owner),
+		func (): return _editor_get_target_node(node_path, _editor_owner),
 		func (): return _editor_get_substring(),
-		_info_container
+		_element,
+		preload("res://addons/graphedit2/icons/Script.png")
 	)
+#endregion
 
+#region Script Search Logic
 func _editor_script_exists() -> bool:
 	return _editor_find_node_script(
 		_editor_get_substring(),
@@ -59,8 +64,8 @@ func _editor_script_exists() -> bool:
 func _editor_get_substring():
 	return "func %s(" % function_name
 
-static func _editor_make_script_button(node_func: Callable, substr_func: Callable, _info_container: EventEditorInfoContainer, script_search_func := _editor_find_node_script) -> Button:
-	var script_button := _info_container.add_new_button("Open Script", 1)
+static func _editor_make_script_button(node_func: Callable, substr_func: Callable, _node: GraphNode2, icon: Texture2D, script_search_func := _editor_find_node_script) -> Button:
+	var script_button := _node._add_titlebar_button(1, "", icon)
 	script_button.pressed.connect(func ():
 		script_search_func.call(substr_func.call(), node_func.call(), true)
 	)
@@ -83,3 +88,4 @@ static func _editor_get_target_node(np: NodePath, _owner: Node) -> Node:
 	if np and _owner:
 		return _owner.get_node_or_null(np)
 	return null
+#endregion

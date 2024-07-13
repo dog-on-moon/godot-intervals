@@ -57,9 +57,8 @@ func _exit_tree():
 	remove_custom_type("Sequence")
 	remove_custom_type("SequenceRandom")
 	
-	## Events
-	remove_custom_type("Event")
-	remove_custom_type("MultiEvent")
+	## Nodes
+	remove_custom_type("EventPlayer")
 	
 	## MultiEvent Editor
 	_cleanup_editor()
@@ -93,6 +92,10 @@ func _edited_object_changed():
 			_show_editor(object.multi_event)
 			_stored_object = weakref(object)
 			_stored_property = "multi_event"
+		elif object is MultiEvent:
+			_show_editor(object)
+			_stored_object = null
+			_stored_property = ""
 		elif object is not Event:
 			_hide_editor()
 	else:
@@ -108,6 +111,8 @@ func _hide_editor():
 	multi_event_editor_button.button_pressed = false
 	multi_event_editor_button.visible = false
 	multi_event_editor.multi_event = null
+	_stored_object = null
+	_stored_property = ""
 
 func _create_editor():
 	assert(not multi_event_editor)
@@ -131,3 +136,4 @@ func _reload_editor():
 	if not multi_event_editor_button.visible:
 		multi_event_editor_button.visible = true
 		multi_event_editor_button.button_pressed = true
+		multi_event_editor.graph_edit.recenter()

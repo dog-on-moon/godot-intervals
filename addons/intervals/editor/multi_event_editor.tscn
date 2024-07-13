@@ -1,12 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://denrfwms0xkc7"]
+[gd_scene load_steps=4 format=3 uid="uid://denrfwms0xkc7"]
 
 [ext_resource type="Script" path="res://addons/intervals/editor/multi_event_editor.gd" id="1_8w3a3"]
 [ext_resource type="Script" path="res://addons/intervals/editor/multi_event_graph_edit.gd" id="5_vb6tf"]
-[ext_resource type="Script" path="res://addons/intervals/editor/multi_event_create_event.gd" id="6_1v6me"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c312x"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bb02y"]
 
 [node name="MultiEventEditor" type="VSplitContainer"]
 anchors_preset = 15
@@ -34,7 +31,6 @@ custom_minimum_size = Vector2(3, 0)
 layout_mode = 2
 
 [node name="UpEventLabel" type="Label" parent="Header"]
-custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_stretch_ratio = 0.22
 theme_override_styles/normal = SubResource("StyleBoxEmpty_c312x")
@@ -66,7 +62,7 @@ layout_mode = 2
 selected = 0
 item_count = 3
 popup/item_0/text = "All Branches"
-popup/item_1/text = "Any Branch"
+popup/item_1/text = "First Branch"
 popup/item_1/id = 1
 popup/item_2/text = "Immediate"
 popup/item_2/id = 2
@@ -98,35 +94,6 @@ grid_pattern = 1
 minimap_enabled = false
 show_zoom_label = true
 script = ExtResource("5_vb6tf")
-
-[node name="MultiEventCreateEvent" type="GraphElement" parent="GraphEdit"]
-visible = false
-custom_minimum_size = Vector2(220, 300)
-layout_mode = 0
-offset_left = 582.0
-offset_top = 18.0
-offset_right = 802.0
-offset_bottom = 318.0
-position_offset = Vector2(582, 18)
-script = ExtResource("6_1v6me")
-
-[node name="Panel" type="Panel" parent="GraphEdit/MultiEventCreateEvent"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_force_pass_scroll_events = false
-
-[node name="Tree" type="Tree" parent="GraphEdit/MultiEventCreateEvent/Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-focus_mode = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_bb02y")
 
 [node name="Label" type="Label" parent="."]
 visible = false

@@ -4,18 +4,20 @@ class_name GraphNode2
 
 ## The node resource associated with the GraphNode.
 ## Must be a GraphNodeResource or otherwise implement its traits.
-@export var resource: Resource:
+@export var resource: GraphNodeResource:
 	set(x):
-		if not x or GraphNodeResource.validate_implementation(x):
-			resource = x
-			_update_appearance()
+		resource = x
+		_has_called_resource_ready = false
+		_update_appearance()
 
 @onready var graph_edit: GraphEdit2 = get_parent()
 
-var connection_labels: Array[Label] = []
+var connection_labels: Array[Control] = []
 
 var inspect_button: Button
 var close_button: Button
+
+var _has_called_resource_ready := false
 
 func _ready() -> void:
 	# Set header label to fill real quick
@@ -23,10 +25,15 @@ func _ready() -> void:
 	#var header_label: Label = get_titlebar_hbox().get_child(0)
 	#header_label.size_flags_horizontal = SIZE_FILL + SIZE_EXPAND
 	
-	inspect_button = _add_titlebar_button(1, "I")
+	inspect_button = _add_titlebar_button(1, "", preload("res://addons/graphedit2/icons/Search.png"))
 	inspect_button.pressed.connect(func (): EditorInterface.edit_resource(resource))
-	close_button = _add_titlebar_button(2, "X")
+	close_button = _add_titlebar_button(2, "", preload("res://addons/graphedit2/icons/Close.png"))
 	close_button.pressed.connect(func (): graph_edit.remove_resource(resource))
+
+func _process(delta: float) -> void:
+	if resource:
+		resource._editor_process(graph_edit, self)
+	_update_appearance()
 
 ## Adds a button to the titlebar.
 func _add_titlebar_button(index: int, text: String = "", icon: Texture2D = null) -> Button:
@@ -34,6 +41,19 @@ func _add_titlebar_button(index: int, text: String = "", icon: Texture2D = null)
 	var button := Button.new()
 	button.text = text
 	button.icon = icon
+	
+	var stylebox := StyleBoxEmpty.new()
+	button.add_theme_stylebox_override(&"focus", stylebox)
+	button.add_theme_stylebox_override(&"disabled_mirrored", stylebox)
+	button.add_theme_stylebox_override(&"disabled", stylebox)
+	button.add_theme_stylebox_override(&"hover_pressed_mirrored", stylebox)
+	button.add_theme_stylebox_override(&"hover_pressed", stylebox)
+	button.add_theme_stylebox_override(&"hover_mirrored", stylebox)
+	button.add_theme_stylebox_override(&"hover", stylebox)
+	button.add_theme_stylebox_override(&"pressed_mirrored", stylebox)
+	button.add_theme_stylebox_override(&"pressed", stylebox)
+	button.add_theme_stylebox_override(&"normal_mirrored", stylebox)
+	button.add_theme_stylebox_override(&"normal", stylebox)
 	
 	# Add to titlebar.
 	var title_bar := get_titlebar_hbox()
@@ -46,8 +66,8 @@ func _add_titlebar_button(index: int, text: String = "", icon: Texture2D = null)
 func _update_appearance():
 	if resource:
 		## Setup node title.
-		if title != resource.get_graph_frame_title():
-			title = resource.get_graph_node_title()
+		if title != resource.to_string():
+			title = resource.to_string()
 			var style_box := _get_title_bar_stylebox()
 			style_box.bg_color = resource.get_graph_node_color() * 0.7
 			var selected_style_box := _get_title_bar_stylebox()
@@ -57,8 +77,9 @@ func _update_appearance():
 		
 		## Create new connection labels.
 		var connection_count := get_connection_count()
-		for i in range(connection_count - connection_labels.size()):
-			var idx := connection_count + i
+		var label_count := connection_labels.size()
+		for i in range(connection_count - label_count):
+			var idx := label_count + i
 			var label := _make_connection_label(idx)
 			connection_labels.append(label)
 			add_child(label)
@@ -68,14 +89,21 @@ func _update_appearance():
 			var label := connection_labels.pop_back()
 			label.queue_free()
 		
-		## Update all labels.
-		for i in connection_labels.size():
-			_update_label(connection_labels[i], i)
+		## Update all slots.
+		for child in get_children():
+			_update_slot(child)
+		
+		## Setup resource calls here.
+		if not _has_called_resource_ready:
+			resource._editor_ready(graph_edit, self)
+			_has_called_resource_ready = true
+		resource._editor_process(graph_edit, self)
 	else:
 		## Cleanup node title.
 		title = ""
 		remove_theme_stylebox_override(&"titlebar")
 		remove_theme_stylebox_override(&"titlebar_selected")
+	size = Vector2.ZERO
 
 ## Called to create a connection label.
 func _make_connection_label(idx := 0) -> Control:
@@ -86,16 +114,26 @@ func _make_connection_label(idx := 0) -> Control:
 	return label
 
 ## Called to update a connection label.
-func _update_label(label: Label, idx := 0):
-	var inbound_connections: int = resource.get_inbound_connections()
-	var outbound_connections: int = resource.get_outbound_connections()
-	set_slot(idx, idx < inbound_connections, 0, Color.WHITE, idx < outbound_connections, 0, Color.WHITE, null, null, false)
+func _update_slot(control: Control):
+	var slot_idx := get_children().find(control)
+	if control in connection_labels:
+		var input_connections: int = resource.get_input_connections()
+		var output_connections: int = resource.get_output_connections()
+		var label_idx: int = connection_labels.find(control)
+		set_slot(slot_idx,
+			label_idx < input_connections, 0, Color.WHITE,
+			label_idx < output_connections, 0, Color.WHITE,
+			null, null, false
+		)
+	else:
+		set_slot_enabled_left(slot_idx, false)
+		set_slot_enabled_right(slot_idx, false)
 
 ## Returns the number of connection labels present.
 func get_connection_count() -> int:
 	if not resource:
 		return 0
-	return max(resource.get_inbound_connections(), resource.get_outbound_connections())
+	return max(resource.get_input_connections(), resource.get_output_connections())
 
 ## Returns the stylebox for the title bar.
 static func _get_title_bar_stylebox() -> StyleBox:

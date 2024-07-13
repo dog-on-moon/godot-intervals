@@ -1,22 +1,164 @@
-[gd_scene load_steps=6 format=3 uid="uid://bjgcah7n83kha"]
+[gd_scene load_steps=40 format=3 uid="uid://bjgcah7n83kha"]
 
 [ext_resource type="Script" path="res://addons/intervals/nodes/event_player.gd" id="1_uleni"]
-[ext_resource type="Script" path="res://addons/intervals/events/event.gd" id="2_ke26o"]
-[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="3_g1s76"]
+[ext_resource type="Script" path="res://addons/graphedit2/resources/graph_edit_resource.gd" id="2_coj0g"]
+[ext_resource type="Script" path="res://addons/intervals/events/animate/animation_player_event.gd" id="2_i2gb4"]
+[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="4_a4xyj"]
+[ext_resource type="Script" path="res://addons/intervals/events/script/func_event.gd" id="5_7cnsf"]
+[ext_resource type="Script" path="res://addons/intervals/events/animate/wait_event.gd" id="6_bsk02"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/signal_event.gd" id="7_ee433"]
+[ext_resource type="Script" path="res://addons/intervals/events/script/emit_event.gd" id="8_oqqdy"]
+[ext_resource type="Script" path="res://addons/intervals/events/meta/event_ref.gd" id="9_ygn35"]
+[ext_resource type="Script" path="res://addons/intervals/events/meta/print_event.gd" id="10_ol2kp"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/block_event.gd" id="11_wi5vs"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/end_multi_event.gd" id="12_g1ey3"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/router_random.gd" id="13_xqycx"]
+[ext_resource type="Script" path="res://demos/dialog/dialogue_event.gd" id="14_inp48"]
+[ext_resource type="Script" path="res://demos/dialog/clear_dialogue_event.gd" id="15_4saej"]
 
 [sub_resource type="GDScript" id="GDScript_gyeig"]
 script/source = "extends Node
+
+signal blam
 
 func test(extra := \"\"):
 	print('Hello world! ' + extra)
 "
 
-[sub_resource type="Resource" id="Resource_n7ig1"]
-resource_name = "Cool Dice Roll"
-script = ExtResource("3_g1s76")
-events = Array[ExtResource("2_ke26o")]([])
-event_connections = {}
-event_positions = {}
+[sub_resource type="Resource" id="Resource_5oe1o"]
+script = ExtResource("2_i2gb4")
+animation_player_np = NodePath("")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_1fus8"]
+script = ExtResource("7_ee433")
+node_path = NodePath("")
+signal_name = &""
+
+[sub_resource type="Resource" id="Resource_rowbu"]
+script = ExtResource("2_i2gb4")
+animation_player_np = NodePath("")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_6iky2"]
+script = ExtResource("2_i2gb4")
+animation_player_np = NodePath("")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_bkslh"]
+script = ExtResource("12_g1ey3")
+
+[sub_resource type="Resource" id="Resource_bylcc"]
+script = ExtResource("2_coj0g")
+resources = [SubResource("Resource_5oe1o"), SubResource("Resource_1fus8"), SubResource("Resource_rowbu"), SubResource("Resource_6iky2"), SubResource("Resource_bkslh")]
+connections = [[SubResource("Resource_5oe1o"), 0, SubResource("Resource_1fus8"), 0], [SubResource("Resource_5oe1o"), 0, SubResource("Resource_rowbu"), 0], [SubResource("Resource_5oe1o"), 0, SubResource("Resource_6iky2"), 0], [SubResource("Resource_rowbu"), 0, SubResource("Resource_bkslh"), 0], [SubResource("Resource_6iky2"), 0, SubResource("Resource_bkslh"), 0]]
+positions = {
+SubResource("Resource_5oe1o"): Vector2(-596.5, -121),
+SubResource("Resource_1fus8"): Vector2(-376.5, -121),
+SubResource("Resource_rowbu"): Vector2(-364.5, -22),
+SubResource("Resource_6iky2"): Vector2(-364.5, 58),
+SubResource("Resource_bkslh"): Vector2(-84.5, -42)
+}
+
+[sub_resource type="Resource" id="Resource_g1r78"]
+resource_name = "everything all at once"
+script = ExtResource("4_a4xyj")
+editor_data = SubResource("Resource_bylcc")
+complete_mode = 0
+cycles = false
+debug = false
+
+[sub_resource type="Resource" id="Resource_tiumn"]
+script = ExtResource("2_i2gb4")
+animation_player_np = NodePath("AnimationPlayer")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_0eqd7"]
+script = ExtResource("2_i2gb4")
+animation_player_np = NodePath("")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_ewacp"]
+script = ExtResource("5_7cnsf")
+node_path = NodePath(".")
+function_name = "test"
+args = []
+
+[sub_resource type="Resource" id="Resource_d7ojt"]
+script = ExtResource("7_ee433")
+node_path = NodePath(".")
+signal_name = &"blam"
+
+[sub_resource type="Resource" id="Resource_h6l2q"]
+script = ExtResource("6_bsk02")
+duration = 2.0
+
+[sub_resource type="Resource" id="Resource_cgm72"]
+script = ExtResource("8_oqqdy")
+node_path = NodePath(".")
+signal_name = &"blam"
+
+[sub_resource type="Resource" id="Resource_cg33c"]
+script = ExtResource("9_ygn35")
+event = SubResource("Resource_d7ojt")
+
+[sub_resource type="Resource" id="Resource_w3j8q"]
+script = ExtResource("10_ol2kp")
+msg = "[wave]Hello world! It's Me! The cool dialogue box you've always dreamed of..."
+enabled = true
+
+[sub_resource type="Resource" id="Resource_uj83l"]
+script = ExtResource("11_wi5vs")
+event = SubResource("Resource_g1r78")
+
+[sub_resource type="Resource" id="Resource_ejl0b"]
+script = ExtResource("12_g1ey3")
+
+[sub_resource type="Resource" id="Resource_gpr7c"]
+script = ExtResource("12_g1ey3")
+
+[sub_resource type="Resource" id="Resource_7qynu"]
+script = ExtResource("13_xqycx")
+branches = 2
+
+[sub_resource type="Resource" id="Resource_cas57"]
+script = ExtResource("14_inp48")
+text = "oh okay this is already like basically working out of the box?
+[shake][center]Freaky!!!!!!!!"
+
+[sub_resource type="Resource" id="Resource_up525"]
+script = ExtResource("15_4saej")
+
+[sub_resource type="Resource" id="Resource_ommmu"]
+script = ExtResource("2_coj0g")
+resources = [SubResource("Resource_g1r78"), SubResource("Resource_tiumn"), SubResource("Resource_ewacp"), SubResource("Resource_0eqd7"), SubResource("Resource_h6l2q"), SubResource("Resource_d7ojt"), SubResource("Resource_cgm72"), SubResource("Resource_cg33c"), SubResource("Resource_w3j8q"), SubResource("Resource_uj83l"), SubResource("Resource_ejl0b"), SubResource("Resource_gpr7c"), SubResource("Resource_7qynu"), SubResource("Resource_cas57"), SubResource("Resource_up525")]
+connections = [[SubResource("Resource_g1r78"), 0, SubResource("Resource_tiumn"), 0], [SubResource("Resource_tiumn"), 0, SubResource("Resource_0eqd7"), 0], [SubResource("Resource_0eqd7"), 0, SubResource("Resource_ewacp"), 0], [SubResource("Resource_d7ojt"), 0, SubResource("Resource_h6l2q"), 0], [SubResource("Resource_cgm72"), 0, SubResource("Resource_h6l2q"), 0], [SubResource("Resource_g1r78"), 1, SubResource("Resource_d7ojt"), 0], [SubResource("Resource_g1r78"), 1, SubResource("Resource_cgm72"), 0], [SubResource("Resource_cgm72"), 0, SubResource("Resource_cg33c"), 0], [SubResource("Resource_cgm72"), 0, SubResource("Resource_w3j8q"), 0], [SubResource("Resource_uj83l"), 0, SubResource("Resource_ejl0b"), 0], [SubResource("Resource_ewacp"), 0, SubResource("Resource_gpr7c"), 0], [SubResource("Resource_w3j8q"), 0, SubResource("Resource_7qynu"), 0], [SubResource("Resource_cas57"), 0, SubResource("Resource_up525"), 0], [SubResource("Resource_cg33c"), 0, SubResource("Resource_uj83l"), 0]]
+positions = {
+SubResource("Resource_g1r78"): Vector2(-529.169, -317.673),
+SubResource("Resource_tiumn"): Vector2(-289.169, -317.673),
+SubResource("Resource_ewacp"): Vector2(190.831, -317.673),
+SubResource("Resource_0eqd7"): Vector2(-49.1693, -317.673),
+SubResource("Resource_h6l2q"): Vector2(-49.1693, -237.673),
+SubResource("Resource_d7ojt"): Vector2(-289.169, -237.673),
+SubResource("Resource_cgm72"): Vector2(-289.169, -157.673),
+SubResource("Resource_cg33c"): Vector2(-49.1693, -157.673),
+SubResource("Resource_w3j8q"): Vector2(-49.1693, -57.6733),
+SubResource("Resource_uj83l"): Vector2(190.831, -237.673),
+SubResource("Resource_ejl0b"): Vector2(430.831, -237.673),
+SubResource("Resource_gpr7c"): Vector2(430.831, -317.673),
+SubResource("Resource_7qynu"): Vector2(470.831, -97.673),
+SubResource("Resource_cas57"): Vector2(-599.649, -79.1243),
+SubResource("Resource_up525"): Vector2(-39.6493, 20.8757)
+}
+
+[sub_resource type="Resource" id="Resource_qc5ex"]
+script = ExtResource("4_a4xyj")
+editor_data = SubResource("Resource_ommmu")
 complete_mode = 0
 cycles = false
 debug = false
@@ -26,6 +168,8 @@ script = SubResource("GDScript_gyeig")
 
 [node name="EventPlayer" type="Node" parent="."]
 script = ExtResource("1_uleni")
-multi_event = SubResource("Resource_n7ig1")
+multi_event = SubResource("Resource_qc5ex")
 autoplay = true
 looping = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
