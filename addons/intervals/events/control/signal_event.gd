@@ -23,25 +23,23 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	return Connect.new(node[signal_name], done.emit, CONNECT_ONE_SHOT)
 
 #region Base Editor Overrides
-static func get_graph_dropdown_category() -> String:
-	return "Control"
-
-static func get_graph_node_title() -> String:
-	return "Await Signal"
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Await Signal",
+		"category": "Control",
+		"modulate": Color(0.8, 0.545, 0.376, 1.0),
+	})
 
 func _get_editor_description_prefix() -> String:
 	return "Awaiting"
 
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	return ("%s %s.%s()" % [
 		_get_editor_description_prefix(),
 		get_node_path_string(_editor_owner, node_path), signal_name
 	]) if _editor_signal_exists() else ("[b][color=red]Invalid Signal")
 
-static func get_graph_node_color() -> Color:
-	return Color(0.8, 0.545, 0.376, 1.0)
-
-func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+func _editor_ready(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
 	_editor_owner = get_editor_owner(_edit)
 	_script_button = FuncEvent._editor_make_script_button(

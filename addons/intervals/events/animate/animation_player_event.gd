@@ -26,7 +26,14 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 		])
 
 #region Base Editor Overrides
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "AnimationPlayer",
+		"category": "Meta",
+		"modulate": Color(0.765, 0.557, 0.945, 1.0),
+	})
+
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	var owner := get_editor_owner(_edit)
 	return (("%s\n[b]Animation:[/b] %s\n%sBlocking" % [
 		get_node_path_string(owner, animation_player_np),
@@ -34,16 +41,7 @@ func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> Str
 	]) if _anim_present() else "[b][color=orange]Animation Not Found"
 	) if _node_exists() else "[b][color=red]Invalid AnimationPlayer"
 
-static func get_graph_dropdown_category() -> String:
-	return "Animate"
-
-static func get_graph_node_title() -> String:
-	return "AnimationPlayer"
-
-static func get_graph_node_color() -> Color:
-	return Color(0.765, 0.557, 0.945, 1.0)
-
-func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+func _editor_ready(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
 	_editor_owner = get_editor_owner(_edit)
 	_inspect_node_button = _element._add_titlebar_button(1, "", preload("res://addons/graphedit2/icons/Object.png"))

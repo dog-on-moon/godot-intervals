@@ -28,22 +28,20 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	])
 
 #region Base Editor Overrides
-static func get_graph_dropdown_category() -> String:
-	return "Script"
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Callable",
+		"category": "Script",
+		"modulate": Color(0.271, 0.549, 1, 1.0),
+	})
 
-static func get_graph_node_title() -> String:
-	return "Callable"
-
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	return ("%s.%s(%s)" % [
 		get_node_path_string(_editor_owner, node_path), function_name,
 		str(args).trim_prefix('[').trim_suffix(']')]
 	) if _editor_script_exists() else ("[b][color=red]Invalid Callable")
 
-static func get_graph_node_color() -> Color:
-	return Color(0.271, 0.549, 1, 1.0)
-
-func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+func _editor_ready(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
 	_editor_owner = get_editor_owner(_edit)
 	_script_button = _editor_make_script_button(

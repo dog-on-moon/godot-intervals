@@ -51,11 +51,11 @@ func _on_signal(_owner: Node, idx: int):
 func get_branch_count() -> int:
 	return signal_count
 
-static func get_graph_node_title() -> String:
-	return "Router: Signal Multiplex"
-
-static func is_in_graph_dropdown() -> bool:
-	return true
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Router: Signal Multiplex",
+		"can_create": true,
+	})
 
 #region Branching Logic
 func get_branch_names() -> Array:
@@ -77,7 +77,7 @@ func get_branch_names() -> Array:
 func get_branch_index() -> int:
 	return chosen_branch
 
-func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+func _editor_ready(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
 	_editor_owner = get_editor_owner(_edit)
 	# print(get_property_list())

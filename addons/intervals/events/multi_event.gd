@@ -165,19 +165,19 @@ func _enter():
 	if not editor_data:
 		editor_data = GraphEditResource.new()
 
-func _editor_ready(edit: GraphEdit, element: GraphElement):
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "MultiEvent",
+		"modulate": Color.WEB_MAROON,
+	})
+
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
+	return "[b][center]Sub-Events: %s" % (editor_data.resources.size() if editor_data.resources else 0)
+
+func _editor_ready(edit: GraphEdit2, element: GraphElement):
 	super(edit, element)
 	## Inspecting a MultiEvent = ensure that we open it in the editor
 	var node: GraphNode2 = element
 	node.inspect_button.pressed.connect(func (): edit.multi_event_editor.multi_event = self)
 	node.inspect_button.icon = preload("res://addons/graphedit2/icons/Object.png")
-
-static func get_graph_node_title() -> String:
-	return "MultiEvent"
-
-static func get_graph_node_color() -> Color:
-	return Color.WEB_MAROON
-
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
-	return "[b][center]Sub-Events: %s" % (editor_data.resources.size() if editor_data.resources else 0)
 #endregion

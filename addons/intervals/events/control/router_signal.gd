@@ -29,19 +29,20 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 func get_branch_count() -> int:
 	return branches
 
-static func get_graph_node_title() -> String:
-	return "Router: Signal Result"
-
-static func is_in_graph_dropdown() -> bool:
-	return true
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Router: Signal Result",
+		"can_create": true,
+		"make_node_controls": true,
+	})
 
 #region Base Editor Overrides
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	return ("Awaiting %s.%s()" % [
 		get_node_path_string(_editor_owner, node_path), signal_name
 	]) if _editor_script_exists() else ("[b][color=red]Invalid Signal")
 
-func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+func _editor_ready(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
 	_editor_owner = get_editor_owner(_edit)
 	_script_button = FuncEvent._editor_make_script_button(
@@ -51,9 +52,6 @@ func _editor_ready(_edit: GraphEdit, _element: GraphElement):
 		preload("res://addons/graphedit2/icons/Signals.png"),
 		SignalEvent._editor_find_node_script
 	)
-
-func _editor_make_node_controls() -> bool:
-	return true
 #endregion
 
 #region Script Search Logic

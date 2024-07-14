@@ -8,13 +8,10 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 		Func.new(done.emit)
 	])
 
-#region Base Editor Overrides
-static func get_graph_dropdown_category() -> String:
-	return "Demo/Dialogue"
-
-static func get_graph_node_title() -> String:
-	return "End Dialogue"
-
-static func get_graph_node_color() -> Color:
-	return DialogueEvent.get_graph_node_color()
-#endregion
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "End Dialogue",
+		"category": "Demo/Dialogue",
+		"modulate": DialogueEvent._args['modulate'],
+		"node_min_width": 0,
+	})

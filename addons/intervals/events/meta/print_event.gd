@@ -12,13 +12,11 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 		Func.new(done.emit)
 	]) if enabled else Func.new(done.emit)
 
-#region Base Editor Overrides
-static func get_graph_dropdown_category() -> String:
-	return "Meta"
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Print to Console",
+		"category": "Meta",
+	})
 
-static func get_graph_node_title() -> String:
-	return "Print to Console"
-
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	return ("[color=ff6666][s]" if not enabled else "") + (msg if msg else "[color=red][b][No Message]")
-#endregion

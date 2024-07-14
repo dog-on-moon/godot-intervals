@@ -69,9 +69,9 @@ func _update_appearance():
 		if title != resource.to_string():
 			title = resource.to_string()
 			var style_box := _get_title_bar_stylebox()
-			style_box.bg_color = resource.get_graph_node_color() * 0.7
+			style_box.bg_color = resource._args['modulate'] * 0.7
 			var selected_style_box := _get_title_bar_stylebox()
-			selected_style_box.bg_color = resource.get_graph_node_color() * 0.85
+			selected_style_box.bg_color = resource._args['modulate'] * 0.85
 			add_theme_stylebox_override(&"titlebar", style_box)
 			add_theme_stylebox_override(&"titlebar_selected", selected_style_box)
 		

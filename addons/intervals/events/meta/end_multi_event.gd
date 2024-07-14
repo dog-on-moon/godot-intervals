@@ -3,19 +3,16 @@ extends Event
 class_name EndMultiEvent
 ## A special event that instantly terminates a MultiEvent.
 
-
-#region Branching Logic
 func get_branch_names() -> Array[String]:
 	return []
-#endregion
 
-#region Base Editor Overrides
-static func get_graph_dropdown_category() -> String:
-	return "Meta"
-
-static func get_graph_node_title() -> String:
-	return "MultiEvent End"
-
-static func get_graph_node_color() -> Color:
-	return MultiEvent.get_graph_node_color()
-#endregion
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "MultiEvent End",
+		"category": "Meta",
+		"modulate": MultiEvent._args['modulate'],
+		
+		## Determines if we should flatten the default connection label.
+		"flatten_initial_connection_label": true,
+		"icon": preload("res://addons/intervals/icons/event.png"),
+	})

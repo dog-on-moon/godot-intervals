@@ -55,13 +55,14 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	])
 
 #region Base Editor Overrides
-static func get_graph_dropdown_category() -> String:
-	return "Script"
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Property",
+		"category": "Script",
+		"modulate": FuncEvent._args['modulate'],
+	})
 
-static func get_graph_node_title() -> String:
-	return "Property"
-
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	if not _object_exists():
 		return "[b][color=red]Invalid Object"
 	elif not _property_valid():
@@ -75,17 +76,14 @@ func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> Str
 		string += "\n%s seconds" % duration
 	return string
 
-static func get_graph_node_color() -> Color:
-	return FuncEvent.get_graph_node_color()
-
-func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+func _editor_ready(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
 	_editor_owner = get_editor_owner(_edit)
 	_node_button = _element._add_titlebar_button(1, "", preload("res://addons/graphedit2/icons/Object.png"))
 	_node_button.pressed.connect(_on_inspect)
 	_node_button.visible = _object_exists()
 
-func _editor_process(_edit: GraphEdit, _element: GraphElement):
+func _editor_process(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
 	# print(get_property_list())
 #endregion

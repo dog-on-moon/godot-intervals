@@ -46,19 +46,17 @@ func on_reached():
 		done.emit() 
 
 #region Base Editor Overrides
-static func get_graph_dropdown_category() -> String:
-	return "Control"
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Await Event",
+		"category": "Control",
+		"modulate": SignalEvent._args["modulate"],
+	})
 
-static func get_graph_node_title() -> String:
-	return "Await Event"
-
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	return  ("Awaiting %s" % event.to_string()) if event else "[color=red][b]Event Undefined"
 
-static func get_graph_node_color() -> Color:
-	return SignalEvent.get_graph_node_color()
-
-func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+func _editor_ready(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
 	_inspect_node_button = _element._add_titlebar_button(1, "", preload("res://addons/graphedit2/icons/Object.png"))
 	_inspect_node_button.pressed.connect(_on_inspect)

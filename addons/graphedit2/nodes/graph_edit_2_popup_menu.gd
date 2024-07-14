@@ -51,7 +51,7 @@ func _create_resource_menu(parent: PopupMenu):
 	## Get all visible element classes.
 	var element_resource_classes: Array = graph_edit.get_element_resource_classes()
 	element_resource_classes = element_resource_classes.filter(
-		func (x): return x.is_in_graph_dropdown()
+		func (x): return x._args['can_create']
 	)
 	if not element_resource_classes:
 		return
@@ -59,7 +59,7 @@ func _create_resource_menu(parent: PopupMenu):
 	## Create a dict for mapping all categories.
 	var category_dict := {"": {}}  # defining default path for no category
 	for resource_class in element_resource_classes:
-		var category_path: String = resource_class.get_graph_dropdown_category()
+		var category_path: String = resource_class._args['category']
 		var categories := category_path.split(DELIMITER)
 		var curr_dict := category_dict
 		for category: String in categories:
@@ -72,12 +72,8 @@ func _create_resource_menu(parent: PopupMenu):
 	## Create all category for events groups.
 	var groups := {}
 	for resource_class in element_resource_classes:
-		var category: String = resource_class.get_graph_dropdown_category()
-		groups.get_or_add(category, []).append([
-			resource_class.get_graph_node_title() if &"get_graph_node_title" in resource_class
-			else (resource_class.get_graph_frame_title() if &"get_graph_frame_title" in resource_class
-			else 'Undefined')
-		, resource_class])
+		var category: String = resource_class._args['category']
+		groups.get_or_add(category, []).append([resource_class._args['title'], resource_class])
 	for group_array: Array in groups.values():
 		group_array.sort_custom(func (a, b): return a[0] < b[0])
 	
@@ -88,9 +84,9 @@ func _create_resource_menu(parent: PopupMenu):
 			var item_name: String = event_data[0]
 			var resource_class: GDScript = event_data[1]
 			
-			var icon: Texture2D = resource_class.get_graph_dropdown_icon()
-			var modulate: Color = resource_class.get_graph_dropdown_icon_modulate(resource_class)
-			var width: int = resource_class.get_graph_dropdown_icon_max_width()
+			var icon: Texture2D = resource_class._args['icon']
+			var modulate: Color = resource_class._args['modulate']
+			var width: int = resource_class._args['icon_max_width']
 			
 			## Create menu item.
 			var parent_menu: PopupMenu = category_path_to_popup_menu.get(category)

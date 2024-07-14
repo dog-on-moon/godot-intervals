@@ -98,7 +98,7 @@ func _copy_nodes_request():
 	connection_clipboard = []
 	var res_to_copy = {}
 	for node in selected_elements:
-		if node.resource.graph_can_be_copied():
+		if node.resource._args['can_copy']:
 			res_to_copy[node.resource] = node.resource.duplicate()
 	
 	## Determine the connections to be copied.

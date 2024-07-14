@@ -24,11 +24,11 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 		Func.new(done.emit)
 	])
 
-static func get_graph_node_title() -> String:
-	return "Router: State Value"
-
-static func is_in_graph_dropdown() -> bool:
-	return true
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Router: State Value",
+		"can_create": true,
+	})
 
 func get_branch_names() -> Array:
 	var branches: Array[String] = [

@@ -32,61 +32,49 @@ func get_branch_index() -> int:
 #endregion
 
 #region Base Editor Overrides
-## The category that the event will belong to.
-static func get_graph_dropdown_category() -> String:
-	return "Meta"
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Event",
+		"category": "Meta",
+		"modulate": Color.DIM_GRAY,
+		
+		## Determines if we should flatten the default connection label.
+		"flatten_initial_connection_label": true,
+		"icon": preload("res://addons/intervals/icons/event.png"),
+	})
 
-## The title of the graph node for this Event.
-static func get_graph_node_title() -> String:
-	return "Event"
-
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	return ""
 
-## The color of the graph node for this Event.
-static func get_graph_node_color() -> Color:
-	return Color.DIM_GRAY
-
 ## Called from the GraphNode regarding this Event.
-func _editor_ready(_edit: GraphEdit, _element: GraphElement):
+func _editor_ready(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
-	if _editor_flatten_default_label():
-		if _element.connection_labels:
-			# Remove the initial connection label and replace it with a flat control.
-			var default_connection_label: Label = _element.connection_labels.pop_at(0)
-			default_connection_label.queue_free()
-			var flat_connection_substitute := Control.new()
-			flat_connection_substitute.size = Vector2.ZERO
-			_element.add_child(flat_connection_substitute)
-			_element.move_child(flat_connection_substitute, 0)
-			_element.connection_labels.insert(0, flat_connection_substitute)
+	if _args['flatten_initial_connection_label'] and _element.connection_labels:
+		# Remove the initial connection label and replace it with a flat control.
+		var default_connection_label: Label = _element.connection_labels.pop_at(0)
+		default_connection_label.queue_free()
+		var flat_connection_substitute := Control.new()
+		flat_connection_substitute.size = Vector2.ZERO
+		_element.add_child(flat_connection_substitute)
+		_element.move_child(flat_connection_substitute, 0)
+		_element.connection_labels.insert(0, flat_connection_substitute)
 
 ## Called each frame from the Graphnode regarding this Event.
-func _editor_process(_edit: GraphEdit, _element: GraphElement):
+func _editor_process(_edit: GraphEdit2, _element: GraphElement):
 	super(_edit, _element)
 	
 	if _element.connection_labels:
-		var offset := 1 if _editor_flatten_default_label() else 0
+		var offset := 1 if _args['flatten_initial_connection_label'] else 0
 		var branch_names := get_branch_names()
 		for i: int in min(_element.connection_labels.size(), branch_names.size()) - offset:
 			var label: Label = _element.connection_labels[i + offset]
 			if label.text != branch_names[i + offset]:
 				label.text = branch_names[i + offset]
-
-## Determines if we should flattern the default label.
-func _editor_flatten_default_label() -> bool:
-	return true
-#endregion
-
-#region GraphElement overrides
-## The icon that the element uses in the dropdown.
-static func get_graph_dropdown_icon() -> Texture2D:
-	return preload("res://addons/intervals/icons/event.png")
 #endregion
 
 #region Helpers
 ## Returns the scene owner for nodepaths.
-static func get_editor_owner(edit: GraphEdit) -> Node:
+static func get_editor_owner(edit: GraphEdit2) -> Node:
 	return edit.multi_event_editor.event_owner
 #endregion
 

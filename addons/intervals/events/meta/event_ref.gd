@@ -18,17 +18,14 @@ func get_branch_index() -> int:
 #endregion
 
 #region Base Editor Overrides
-static func get_graph_dropdown_category() -> String:
-	return "Meta"
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Event Reference",
+		"category": "Meta",
+	})
 
-static func get_graph_node_title() -> String:
-	return "Event Reference"
-
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	return (
 		"[b]%s[/b]\n%s" % [event.to_string(), event.get_graph_node_description(_edit, _element)]
 	) if event else ("[color=red]No Reference")
-
-static func get_graph_node_color() -> Color:
-	return Color.DIM_GRAY
 #endregion

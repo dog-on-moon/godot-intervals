@@ -5,13 +5,13 @@ class_name CommentEvent
 
 @export_multiline var msg := ""
 
-static func get_graph_dropdown_category() -> String:
-	return "Meta"
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Comment",
+		"category": "Meta",
+	})
 
-static func get_graph_node_title() -> String:
-	return "Comment"
-
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	return msg
 
 func get_input_connections() -> int:

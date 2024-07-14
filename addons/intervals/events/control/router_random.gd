@@ -14,8 +14,8 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 func get_branch_count() -> int:
 	return branches
 
-static func get_graph_node_title() -> String:
-	return "Router: Random"
-
-static func is_in_graph_dropdown() -> bool:
-	return true
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Router: Random",
+		"can_create": true,
+	})

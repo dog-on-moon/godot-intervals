@@ -7,22 +7,22 @@ class_name GraphNodeResource
 var _graph_node_text_label: RichTextLabel = null
 var _padding: Control = null
 
-## Returns the title of the GraphNode.
-static func get_graph_node_title() -> String:
-	return "GraphNode"
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		## The title of the GraphNode.
+		"title": "GraphNode",
+		
+		## The minimum width of the GraphNode.
+		"node_min_width": 80,
+		
+		## Determines if we make custom text label node controls.
+		"make_node_controls": true,
+	})
 
 ## The base description that appears on the GraphNode.
 ## When defined, a RichTextLabel is created according to our base ready.
-func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
+func get_graph_node_description(_edit: GraphEdit2, _element: GraphElement) -> String:
 	return ""
-
-## Returns the color of the GraphNode.
-static func get_graph_node_color() -> Color:
-	return Color.WHITE
-
-## Returns the minimum width of this graph node.
-static func get_graph_node_width() -> int:
-	return 80
 
 ## Returns the number of input connections.
 func get_input_connections() -> int:
@@ -32,10 +32,10 @@ func get_input_connections() -> int:
 func get_output_connections() -> int:
 	return 0
 
-func _editor_ready(edit: GraphEdit, element: GraphElement):
+func _editor_ready(edit: GraphEdit2, element: GraphElement):
 	super(edit, element)
 	
-	if _editor_make_node_controls():
+	if _args['make_node_controls']:
 		var desc := get_graph_node_description(edit, element)
 		_graph_node_text_label = RichTextLabel.new()
 		_graph_node_text_label.bbcode_enabled = true
@@ -49,11 +49,11 @@ func _editor_ready(edit: GraphEdit, element: GraphElement):
 		
 		_padding = Control.new()
 		_padding.size = Vector2.ZERO
-		_padding.custom_minimum_size = Vector2(get_graph_node_width(), 3)
+		_padding.custom_minimum_size = Vector2(_args['node_min_width'], 3)
 		_padding.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		element.add_child(_padding)
 
-func _editor_process(edit: GraphEdit, element: GraphElement):
+func _editor_process(edit: GraphEdit2, element: GraphElement):
 	if _graph_node_text_label and is_instance_valid(_graph_node_text_label):
 		var desc := get_graph_node_description(edit, element)
 		if _graph_node_text_label.text != desc:
@@ -62,14 +62,5 @@ func _editor_process(edit: GraphEdit, element: GraphElement):
 	if _padding and _padding != element.get_child(element.get_child_count() - 1):
 		element.move_child(_padding, -1)
 
-static func get_graph_dropdown_icon_modulate(script: Script = null) -> Color:
-	return script.get_graph_node_color() if script else get_graph_node_color()
-
-func _editor_make_node_controls() -> bool:
-	return true
-
 func _make_graph_control() -> Control:
 	return GraphNode2.new()
-
-func _to_string() -> String:
-	return resource_name if resource_name else get_graph_node_title()

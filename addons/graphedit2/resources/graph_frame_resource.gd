@@ -3,20 +3,10 @@
 extends GraphElementResource
 class_name GraphFrameResource
 ## A resource for information within a GraphFrame.
+## huge TODO tbh
 
-## Returns the title of the GraphFrame.
-static func get_graph_frame_title() -> String:
-	return "Frame"
-
-## Returns the color of the GraphFrame.
-static func get_graph_frame_color() -> Color:
-	return Color.WHITE
-
-static func get_graph_dropdown_icon_modulate(script: Script = null) -> Color:
-	return script.get_graph_frame_color() if script else get_graph_frame_color()
+static func get_graph_args() -> Dictionary:
+	return super().merged({})
 
 func _make_graph_control() -> Control:
 	return GraphFrame2.new()
-
-func _to_string() -> String:
-	return resource_name if resource_name else get_graph_frame_title()

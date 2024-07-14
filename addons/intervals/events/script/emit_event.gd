@@ -10,17 +10,12 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 		Func.new(done.emit)
 	])
 
-
-#region Base Editor Overrides
-static func get_graph_dropdown_category() -> String:
-	return "Script"
-
-static func get_graph_node_title() -> String:
-	return "Signal"
-
-static func get_graph_node_color() -> Color:
-	return FuncEvent.get_graph_node_color()
-#endregion
+static func get_graph_args() -> Dictionary:
+	return super().merged({
+		"title": "Signal",
+		"category": "Script",
+		"modulate": FuncEvent._args['modulate'],
+	})
 
 func _get_editor_description_prefix() -> String:
 	return "Emitting"
