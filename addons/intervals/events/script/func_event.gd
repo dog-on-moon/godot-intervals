@@ -6,12 +6,12 @@ class_name FuncEvent
 @export_node_path("Node") var node_path: NodePath = ^"":
 	set(x):
 		node_path = x
-		if _script_button:
+		if _script_button and is_instance_valid(_script_button):
 			_script_button.visible = _editor_script_exists()
 @export var function_name: String = "":
 	set(x):
 		function_name = x
-		if _script_button:
+		if _script_button and is_instance_valid(_script_button):
 			_script_button.visible = _editor_script_exists()
 @export var args: Array = []
 

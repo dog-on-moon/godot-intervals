@@ -7,12 +7,12 @@ class_name SignalEvent
 @export_node_path("Node") var node_path: NodePath = ^"":
 	set(x):
 		node_path = x
-		if _script_button:
+		if _script_button and is_instance_valid(_script_button):
 			_script_button.visible = _editor_script_exists()
 @export var signal_name: StringName = &"":
 	set(x):
 		signal_name = x
-		if _script_button:
+		if _script_button and is_instance_valid(_script_button):
 			_script_button.visible = _editor_script_exists()
 
 var _script_button: Button = null
