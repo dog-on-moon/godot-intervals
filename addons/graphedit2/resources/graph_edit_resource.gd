@@ -7,16 +7,19 @@ class_name GraphEditResource
 ## Emitted to refresh the GraphEditor's visual state.
 signal editor_refresh
 
+# 4.2 backport: @export instead of @export_storage for resources, connections,
+# and positions.
+
 ## The elements that the GraphEdit keeps track of.
-@export_storage var resources: Array = []
+@export var resources: Array = []
 
 ## Dictionary of stored event connections.
 ## A connection is [from_resource, from_port, to_resource, to_port]
-@export_storage var connections: Array = []
+@export var connections: Array = []
 
 ## Editor storage for resource positions.
 ## Dictionary[Resource, Vector2]
-@export_storage var positions := {}
+@export var positions := {}
 
 ## Adds a resource. Must be unique.
 func add_resource(resource: GraphElementResource, position: Vector2 = Vector2.ZERO):
@@ -76,8 +79,17 @@ func get_resource_inputs(resource) -> Dictionary:
 	var inputs := {}
 	for c in connections:
 		if c[2] == resource:
-			inputs.get_or_add(c[3], []).append(c[0])
+			# 4.2 backport: Use backported get_or_add().
+			#inputs.get_or_add(c[3], []).append(c[0])
+			GraphEditResource._backport_get_or_add(inputs, c[3], []).append(c[0])
 	return inputs
+
+## Quick, non-optimal backport of dict.get_or_add() in Godot 4.3.
+## Implemented in Godot 4.2.
+static func _backport_get_or_add(dict: Dictionary, key: Variant, else_add: Variant) -> Variant:
+	if !(key in dict):
+		dict[key] = else_add
+	return dict[key]
 
 ## Returns the resources connected to each output port.
 ## Input is type GraphNodeResource
@@ -86,7 +98,9 @@ func get_resource_outputs(resource) -> Dictionary:
 	var outputs := {}
 	for c in connections:
 		if c[0] == resource:
-			outputs.get_or_add(c[1], []).append(c[2])
+			# 4.2 backport: Use backported get_or_add().
+			#outputs.get_or_add(c[1], []).append(c[2])
+			GraphEditResource._backport_get_or_add(outputs, c[1], []).append(c[2])
 	return outputs
 
 ## Returns a list of all node resources missing an input connection.

@@ -63,7 +63,9 @@ func _create_resource_menu(parent: PopupMenu):
 		var categories := category_path.split(DELIMITER)
 		var curr_dict := category_dict
 		for category: String in categories:
-			curr_dict = curr_dict.get_or_add(category, {})
+			# 4.2 backport: Use backported get_or_add().
+			#curr_dict = curr_dict.get_or_add(category, {})
+			curr_dict = GraphEditResource._backport_get_or_add(curr_dict, category, {})
 	
 	## Build the header items.
 	var category_path_to_popup_menu := {"": parent}
@@ -73,7 +75,13 @@ func _create_resource_menu(parent: PopupMenu):
 	var groups := {}
 	for resource_class in element_resource_classes:
 		var category: String = resource_class.get_graph_dropdown_category()
-		groups.get_or_add(category, []).append([
+		# 4.2 backport: Use backported get_or_add().
+		#groups.get_or_add(category, []).append([
+			#resource_class.get_graph_node_title() if &"get_graph_node_title" in resource_class
+			#else (resource_class.get_graph_frame_title() if &"get_graph_frame_title" in resource_class
+			#else 'Undefined')
+		#, resource_class])
+		GraphEditResource._backport_get_or_add(groups, category, []).append([
 			resource_class.get_graph_node_title() if &"get_graph_node_title" in resource_class
 			else (resource_class.get_graph_frame_title() if &"get_graph_frame_title" in resource_class
 			else 'Undefined')

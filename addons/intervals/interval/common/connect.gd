@@ -13,4 +13,9 @@ func _init(p_signal: Signal, p_method: Callable, p_flags := 0) -> void:
 	flags = p_flags
 
 func _onto_tween(tween: Tween):
-	tween.tween_callback(_signal.connect.bind(method, flags))
+	# 4.2 backport: Use lambda capture instead of Callable.bind()
+	#tween.tween_callback(_signal.connect.bind(method, flags))
+	tween.tween_callback(
+		func(): _signal.emit(method, flags)
+	)
+

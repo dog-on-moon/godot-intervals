@@ -96,7 +96,9 @@ func _edited_object_changed():
 			_show_editor(object)
 			_stored_object = null
 			_stored_property = ""
-		elif object is not Event:
+		# 4.2 backport: 'foo is not Type' isn't supported in 4.2.
+		#elif object is not Event:
+		elif !(object is Event):
 			_hide_editor()
 	else:
 		_hide_editor()

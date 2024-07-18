@@ -49,7 +49,9 @@ var multi_event_stack: Array[MultiEvent] = []
 			update()
 
 var event_owner: Node:
-	get(): return get_tree().edited_scene_root
+	#get(): return get_tree().edited_scene_root
+	# 4.2 backport: Use 4.2-style getter.
+	get: return get_tree().edited_scene_root
 
 var undo_redo: EditorUndoRedoManager
 
@@ -70,7 +72,12 @@ func _ready() -> void:
 	)
 	up_event_button.pressed.connect(func (): up_event_stack())
 	event_name_edit.text_changed.connect(func (): multi_event.resource_name = event_name_edit.text)
-	reload_button.pressed.connect(request_reload.emit)
+	# 4.2 backport: Use method wrapper instead of emit as Callable.
+	#reload_button.pressed.connect(request_reload.emit)
+	reload_button.pressed.connect(_backport_emit_request_reload)
+
+func _backport_emit_request_reload():
+	request_reload.emit()
 
 func up_event_stack():
 	if multi_event_stack:

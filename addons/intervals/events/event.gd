@@ -18,7 +18,12 @@ signal done()
 ## Must be implemented by event subclasses.
 ## Remember to emit [signal done].
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
-	return Func.new(done.emit)
+	# 4.2 backport: Use method wrapper instead of emit as Callable.
+	#return Func.new(done.emit)
+	return Func.new(_backport_emit_done)
+
+func _backport_emit_done():
+	done.emit()
 
 #region Branching Logic
 ## Gets the names of the outgoing branches.

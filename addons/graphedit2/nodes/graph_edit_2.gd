@@ -289,7 +289,9 @@ func recenter():
 ## Returns an array of all element resource classes that can be created in this GraphEdit.
 static func get_element_resource_classes() -> Array:
 	## see load_scripts_of_base_class()
-	return [GraphElementResource, GraphFrameResource, GraphNodeResource]
+	# 4.2 backport: GraphFrame doesn't exist yet.
+	#return [GraphElementResource, GraphFrameResource, GraphNodeResource]
+	return [GraphElementResource, GraphNodeResource]
 
 ## Gets the popup menu class used for 
 static func _get_popup_menu_class() -> Script:

@@ -4,14 +4,17 @@ extends Event
 class_name MultiEvent
 ## A MultiEvent contains multiple events and can be used for advanced, dynamic cutscenes.
 
+# 4.2 backport note: @export instead of @export_storage for editor_data,
+# cycles, debug.
+
 ## The editor data for this MultiEvent.
-@export_storage var editor_data: Resource = null
+@export var editor_data: Resource = null
 
 ## When true, cycles are allowed in the Multievent.
-@export_storage var cycles := false
+@export var cycles := false
 
 ## When true, all started events will log their properties to the terminal.
-@export_storage var debug := false
+@export var debug := false
 
 ## Whether or not we have completed this MultiEvent.
 var completed := false
