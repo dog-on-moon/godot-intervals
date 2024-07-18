@@ -10,7 +10,9 @@ class_name StateEvent
 
 @export var key := &""
 
-@export_storage var value := 0
+# 4.2 backport: @export instead of @export_storage
+#@export_storage var value := 0
+@export var value := 0
 
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	return Func.new(func ():

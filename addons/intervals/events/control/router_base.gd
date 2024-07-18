@@ -9,7 +9,8 @@ var chosen_branch := 0
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	return Sequence.new([
 		Func.new(func (): chosen_branch = 0),
-		Func.new(done.emit)
+		# 4.2 backport: Wrap Signal.emit in lambda
+		Func.new(func(): done.emit())
 	])
 
 func get_branch_count() -> int:

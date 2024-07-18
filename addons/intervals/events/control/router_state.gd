@@ -21,7 +21,8 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 			else:
 				chosen_branch = 4
 			),
-		Func.new(done.emit)
+		# backport 4.2: Wrap Signal.emit in lambda
+		Func.new(func(): done.emit())
 	])
 
 static func get_graph_node_title() -> String:

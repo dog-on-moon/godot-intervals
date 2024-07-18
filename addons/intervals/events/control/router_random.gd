@@ -8,7 +8,9 @@ class_name RouterRandom
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	return Sequence.new([
 		Func.new(func (): chosen_branch = 1 + randi_range(0, get_branch_count() - 1)),
-		Func.new(done.emit)
+		# 4.2 backport: Wrap Signal.emit in lambda
+		#Func.new(done.emit)
+		Func.new(func(): done.emit())
 	])
 
 func get_branch_count() -> int:

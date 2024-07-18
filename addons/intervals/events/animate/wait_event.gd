@@ -9,7 +9,9 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	if not is_zero_approx(duration):
 		return Sequence.new([
 			Wait.new(duration),
-			Func.new(done.emit)
+			# 4.2 backport: Wrap Signal.emit in lambda
+			#Func.new(done.emit)
+			Func.new(func(): done.emit())
 		])
 	else:
 		return super(_owner, _state)

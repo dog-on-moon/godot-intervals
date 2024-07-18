@@ -24,7 +24,9 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	var callable: Callable = node[function_name]
 	return Sequence.new([
 		Func.new(callable.bindv(args)),
-		Func.new(done.emit)
+		# 4.2 backport: wrap Signal.emit in lambda
+		#Func.new(done.emit)
+		Func.new(func(): done.emit())
 	])
 
 #region Base Editor Overrides

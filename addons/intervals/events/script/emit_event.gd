@@ -7,7 +7,9 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	var node: Node = _owner.get_node(node_path)
 	return Sequence.new([
 		Func.new(node.emit_signal.bind(signal_name)),
-		Func.new(done.emit)
+		# 4.2 backport: Wrap Signal.emit in lambda
+		#Func.new(done.emit)
+		Func.new(func(): done.emit())
 	])
 
 

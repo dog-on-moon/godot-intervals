@@ -6,7 +6,9 @@ class_name EventRef
 @export var event: Event
 
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
-	event.done.connect(done.emit, CONNECT_ONE_SHOT)
+	# 4.2 backport: wrap Signal.emit in lambda
+	#event.done.connect(done.emit, CONNECT_ONE_SHOT)
+	event.done.connect(func(): done.emit(), CONNECT_ONE_SHOT)
 	return event._get_interval(_owner, _state)
 
 #region Branching Logic
