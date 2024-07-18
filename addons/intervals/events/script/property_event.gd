@@ -16,7 +16,18 @@ class_name PropertyEvent
 		if _node_button and is_instance_valid(_node_button):
 			_node_button.visible = _object_exists()
 
-@export_storage var value: Variant
+# 4.2 backport: @export instead of @export_storage
+#@export_storage var value: Variant
+@export var value_store := {} # Can't directly store Variant in 4.2
+var value: Variant:
+	get:
+		if value_store == null: value_store = {}
+		if !(&"value" in value_store): value_store[&"value"] = null
+		return value_store[&"value"]
+	set(v):
+		if value_store == null: value_store = {}
+		if !(&"value" in value_store): value_store[&"value"] = null
+		value_store[&"value"] = v
 
 @export_range(0.0, 5.0, 0.01, "or_greater") var duration := 0.0:
 	set(x):
@@ -25,14 +36,45 @@ class_name PropertyEvent
 		if resets:
 			notify_property_list_changed()
 
-@export_storage var ease := Tween.EASE_IN_OUT
-@export_storage var trans := Tween.TRANS_LINEAR
-@export_storage var flags := 0:  # 1 = relative, 2 = has_initial
+# 4.2 backport: @export instead of @export_storage
+#@export_storage var ease := Tween.EASE_IN_OUT
+@export var ease := Tween.EASE_IN_OUT
+#@export_storage var trans := Tween.TRANS_LINEAR
+@export var trans := Tween.TRANS_LINEAR
+#@export_storage var flags := 0:  # 1 = relative, 2 = has_initial
+@export var flags := 0:  # 1 = relative, 2 = has_initial
 	set(x):
 		flags = x
 		notify_property_list_changed()
 
-@export_storage var initial_value: Variant
+#@export_storage var initial_value: Variant
+@export var initial_value_store := {} # Can't directly store Variant in 4.2
+var initial_value: Variant:
+	get:
+		if initial_value_store == null: initial_value_store = {}
+		if !(&"value" in initial_value_store): initial_value_store[&"value"] = null
+		return initial_value_store[&"value"]
+	set(v):
+		if initial_value_store == null: initial_value_store = {}
+		if !(&"value" in initial_value_store): initial_value_store[&"value"] = null
+		initial_value_store[&"value"] = v
+	
+
+# 4.2 backport: I don't think setting TYPE_NIL will work the way we want in
+# 4.2 (which would be to serialize value & initial_value as any Variant type)
+#func _get_property_list():
+	#var properties = []
+	#properties.append({
+		#"name": "value",
+		#"type": TYPE_NIL,
+		#"usage": PROPERTY_USAGE_NO_EDITOR,
+	#})
+	#properties.append({
+		#"name": "initial_value",
+		#"type": TYPE_NIL,
+		#"usage": PROPERTY_USAGE_NO_EDITOR,
+	#})
+	#return properties
 
 var node: Node:
 	get: return _editor_owner.get_node_or_null(node_path) if node_path and _editor_owner and is_instance_valid(_editor_owner) else null
@@ -51,7 +93,8 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 			.values(initial_value if flags & 2 else null, flags & 1)\
 			.interp(ease, trans)
 		),
-		Func.new(done.emit)
+		# 4.2 backport: Wrap Signal.emit in lambda
+		Func.new(func(): done.emit())
 	])
 
 #region Base Editor Overrides
