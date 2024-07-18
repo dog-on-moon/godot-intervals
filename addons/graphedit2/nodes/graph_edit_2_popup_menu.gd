@@ -157,7 +157,19 @@ func _recusrive_make_category_items(category_dict: Dictionary, out: Dictionary, 
 		var category_menu := parent
 		if category_path:
 			category_menu = PopupMenu.new()
-			parent.add_submenu_node_item(category, category_menu)
+			# 4.2 backport: add_submenu_node_item does not yet exist, implement
+			# a backported version in _backport_add_submenu_node_item.
+			#parent.add_submenu_node_item(category, category_menu)
+			_backport_add_submenu_node_item(parent, category, category_menu)
 			out[category_path] = category_menu
 		
 		_recusrive_make_category_items(category_dict[category], out, category_menu, category_path)
+
+
+# Useful reference: https://github.com/godotengine/godot/pull/85477/files
+# (The PR that adds PopupMenu.add_submenu_node_item().)
+static func _backport_add_submenu_node_item(parent: PopupMenu,
+submenu_label: String, submenu: PopupMenu):
+	parent.add_child(submenu)
+	parent.add_submenu_item(submenu_label, submenu.name)
+
