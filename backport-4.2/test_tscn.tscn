@@ -1,0 +1,161 @@
+[gd_scene load_steps=37 format=3 uid="uid://kl0vh4drebn4"]
+
+[ext_resource type="Script" path="res://addons/intervals/nodes/event_player.gd" id="1_smxth"]
+[ext_resource type="Script" path="res://addons/intervals/events/animate/animation_player_event.gd" id="2_l6pgp"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/signal_event.gd" id="3_ikc66"]
+[ext_resource type="Script" path="res://addons/intervals/events/meta/end_multi_event.gd" id="4_ljnhc"]
+[ext_resource type="Script" path="res://addons/graphedit2/resources/graph_edit_resource.gd" id="5_miyta"]
+[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="6_hj0w3"]
+[ext_resource type="Script" path="res://addons/intervals/events/script/func_event.gd" id="7_f4o4i"]
+[ext_resource type="Script" path="res://addons/intervals/events/script/emit_event.gd" id="8_3235e"]
+[ext_resource type="Script" path="res://addons/intervals/events/animate/wait_event.gd" id="9_w5qqh"]
+[ext_resource type="Script" path="res://addons/intervals/events/meta/event_ref.gd" id="10_wuw3h"]
+[ext_resource type="Script" path="res://demos/dialog/dialogue_event.gd" id="12_c51bg"]
+[ext_resource type="Script" path="res://addons/intervals/events/meta/print_event.gd" id="12_l7v6i"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/router_random.gd" id="13_utaav"]
+[ext_resource type="Script" path="res://demos/dialog/clear_dialogue_event.gd" id="15_fypqm"]
+
+[sub_resource type="GDScript" id="GDScript_o6l7q"]
+script/source = "extends Node
+
+signal blam
+
+func test(extra := \"\"):
+	print('Hello world! ' + extra)
+"
+
+[sub_resource type="Resource" id="Resource_u8ug7"]
+script = ExtResource("2_l6pgp")
+animation_player_np = NodePath("AnimationPlayer")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_27rj7"]
+script = ExtResource("2_l6pgp")
+animation_player_np = NodePath("")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_hcmwl"]
+script = ExtResource("7_f4o4i")
+node_path = NodePath(".")
+function_name = "test"
+args = []
+
+[sub_resource type="Resource" id="Resource_rqtdk"]
+script = ExtResource("4_ljnhc")
+
+[sub_resource type="Resource" id="Resource_1o587"]
+script = ExtResource("8_3235e")
+node_path = NodePath(".")
+signal_name = &"blam"
+
+[sub_resource type="Resource" id="Resource_kjm8v"]
+script = ExtResource("9_w5qqh")
+duration = 2.0
+
+[sub_resource type="Resource" id="Resource_fw7gi"]
+script = ExtResource("12_l7v6i")
+msg = "[wave]Hello world! It's me! The cool dialogue box you've always dreamed of..."
+enabled = true
+
+[sub_resource type="Resource" id="Resource_wq7l0"]
+script = ExtResource("13_utaav")
+branches = 2
+
+[sub_resource type="Resource" id="Resource_ucu0k"]
+script = ExtResource("12_c51bg")
+text = "oh okay this is already like basically working out of the box?
+[center][shake]Freaky!!!!!!!!!"
+
+[sub_resource type="Resource" id="Resource_3xy6d"]
+script = ExtResource("15_fypqm")
+
+[sub_resource type="Resource" id="Resource_bv3n6"]
+script = ExtResource("3_ikc66")
+node_path = NodePath(".")
+signal_name = &"blam"
+
+[sub_resource type="Resource" id="Resource_hmo6r"]
+script = ExtResource("10_wuw3h")
+event = SubResource("Resource_bv3n6")
+
+[sub_resource type="Resource" id="Resource_7q7kl"]
+script = ExtResource("2_l6pgp")
+animation_player_np = NodePath("")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_qamqf"]
+script = ExtResource("3_ikc66")
+node_path = NodePath("")
+signal_name = &""
+
+[sub_resource type="Resource" id="Resource_j21mv"]
+script = ExtResource("2_l6pgp")
+animation_player_np = NodePath("")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_xfcu3"]
+script = ExtResource("2_l6pgp")
+animation_player_np = NodePath("")
+animation_name = &""
+blocking = true
+
+[sub_resource type="Resource" id="Resource_h07o2"]
+script = ExtResource("4_ljnhc")
+
+[sub_resource type="Resource" id="Resource_gg8w7"]
+script = ExtResource("5_miyta")
+resources = [SubResource("Resource_7q7kl"), SubResource("Resource_qamqf"), SubResource("Resource_j21mv"), SubResource("Resource_xfcu3"), SubResource("Resource_h07o2")]
+connections = [[SubResource("Resource_7q7kl"), 0, SubResource("Resource_qamqf"), 0], [SubResource("Resource_7q7kl"), 0, SubResource("Resource_j21mv"), 0], [SubResource("Resource_7q7kl"), 0, SubResource("Resource_xfcu3"), 0], [SubResource("Resource_j21mv"), 0, SubResource("Resource_h07o2"), 0], [SubResource("Resource_xfcu3"), 0, SubResource("Resource_h07o2"), 0]]
+positions = {
+SubResource("Resource_7q7kl"): Vector2(420, 56),
+SubResource("Resource_qamqf"): Vector2(680, 56),
+SubResource("Resource_j21mv"): Vector2(680, 136),
+SubResource("Resource_xfcu3"): Vector2(680, 216),
+SubResource("Resource_h07o2"): Vector2(940, 136)
+}
+
+[sub_resource type="Resource" id="Resource_fs5gi"]
+resource_name = "everything all at once"
+script = ExtResource("6_hj0w3")
+editor_data = SubResource("Resource_gg8w7")
+cycles = false
+debug = false
+
+[sub_resource type="Resource" id="Resource_jbfyr"]
+script = ExtResource("5_miyta")
+resources = [SubResource("Resource_u8ug7"), SubResource("Resource_27rj7"), SubResource("Resource_hcmwl"), SubResource("Resource_rqtdk"), SubResource("Resource_1o587"), SubResource("Resource_kjm8v"), SubResource("Resource_ucu0k"), SubResource("Resource_fw7gi"), SubResource("Resource_wq7l0"), SubResource("Resource_3xy6d"), SubResource("Resource_bv3n6"), SubResource("Resource_hmo6r"), SubResource("Resource_fs5gi")]
+connections = [[SubResource("Resource_u8ug7"), 0, SubResource("Resource_27rj7"), 0], [SubResource("Resource_27rj7"), 0, SubResource("Resource_hcmwl"), 0], [SubResource("Resource_hcmwl"), 0, SubResource("Resource_rqtdk"), 0], [SubResource("Resource_1o587"), 0, SubResource("Resource_kjm8v"), 0], [SubResource("Resource_1o587"), 0, SubResource("Resource_fw7gi"), 0], [SubResource("Resource_fw7gi"), 0, SubResource("Resource_wq7l0"), 0], [SubResource("Resource_ucu0k"), 0, SubResource("Resource_3xy6d"), 0], [SubResource("Resource_bv3n6"), 0, SubResource("Resource_kjm8v"), 0], [SubResource("Resource_1o587"), 0, SubResource("Resource_hmo6r"), 0], [SubResource("Resource_fs5gi"), 0, SubResource("Resource_u8ug7"), 0], [SubResource("Resource_fs5gi"), 1, SubResource("Resource_bv3n6"), 0], [SubResource("Resource_fs5gi"), 1, SubResource("Resource_1o587"), 0]]
+positions = {
+SubResource("Resource_u8ug7"): Vector2(-1100.8, -368.479),
+SubResource("Resource_27rj7"): Vector2(-860.802, -368.479),
+SubResource("Resource_hcmwl"): Vector2(-600.802, -368.479),
+SubResource("Resource_rqtdk"): Vector2(-360.802, -368.479),
+SubResource("Resource_1o587"): Vector2(-1080.8, -188.479),
+SubResource("Resource_kjm8v"): Vector2(-820.802, -268.479),
+SubResource("Resource_ucu0k"): Vector2(-1380.8, -68.4793),
+SubResource("Resource_fw7gi"): Vector2(-820.802, -88.4793),
+SubResource("Resource_wq7l0"): Vector2(-300.802, -128.479),
+SubResource("Resource_3xy6d"): Vector2(-820.802, 11.5207),
+SubResource("Resource_bv3n6"): Vector2(-1080.8, -268.479),
+SubResource("Resource_hmo6r"): Vector2(-820.802, -188.479),
+SubResource("Resource_fs5gi"): Vector2(-1340.8, -368.479)
+}
+
+[sub_resource type="Resource" id="Resource_2nk0t"]
+script = ExtResource("6_hj0w3")
+editor_data = SubResource("Resource_jbfyr")
+cycles = false
+debug = false
+
+[node name="Node" type="Node"]
+script = SubResource("GDScript_o6l7q")
+
+[node name="EventPlayer" type="Node" parent="."]
+script = ExtResource("1_smxth")
+multi_event = SubResource("Resource_2nk0t")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

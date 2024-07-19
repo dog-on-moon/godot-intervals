@@ -1,0 +1,197 @@
+[gd_scene load_steps=31 format=3 uid="uid://dc5pepbb63mua"]
+
+[ext_resource type="Script" path="res://addons/intervals/nodes/event_player.gd" id="1_3fl3s"]
+[ext_resource type="Script" path="res://demos/dialog/dialogue_container.gd" id="2_hehqd"]
+[ext_resource type="Script" path="res://demos/dialog/dialogue_event.gd" id="2_s2wb6"]
+[ext_resource type="Script" path="res://addons/graphedit2/resources/graph_edit_resource.gd" id="3_1e3kg"]
+[ext_resource type="Script" path="res://addons/intervals/events/script/property_event.gd" id="3_d3imt"]
+[ext_resource type="Script" path="res://demos/dialog/clear_dialogue_event.gd" id="4_vkagw"]
+[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="4_xeshj"]
+[ext_resource type="Script" path="res://addons/intervals/events/animate/wait_event.gd" id="5_od75i"]
+
+[sub_resource type="Gradient" id="Gradient_f7fsh"]
+offsets = PackedFloat32Array(0, 0.507, 1)
+colors = PackedColorArray(0.117647, 0.239216, 0.34902, 1, 0.301961, 0.301961, 0.301961, 1, 0.117647, 0.239216, 0.34902, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_n5k61"]
+gradient = SubResource("Gradient_f7fsh")
+width = 8
+height = 8
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Resource" id="Resource_rqp5m"]
+script = ExtResource("2_s2wb6")
+text = "What do you love?"
+
+[sub_resource type="Resource" id="Resource_gde6u"]
+script = ExtResource("2_s2wb6")
+text = "To me, that is what your game should be about."
+
+[sub_resource type="Resource" id="Resource_1j5vg"]
+script = ExtResource("2_s2wb6")
+text = "Some wisdom from me to you:"
+
+[sub_resource type="Resource" id="Resource_f2csd"]
+script = ExtResource("2_s2wb6")
+text = "Whatever it is that you think you are doing,
+or that you want to do,"
+
+[sub_resource type="Resource" id="Resource_2781i"]
+resource_name = "Color Background"
+script = ExtResource("3_d3imt")
+node_path = NodePath("Background")
+property = "self_modulate"
+value_store = {
+"value": Color(0.788235, 0.666667, 0.443137, 1)
+}
+value = Color(0.788235, 0.666667, 0.443137, 1)
+duration = 3.0
+ease = 2
+trans = 0
+flags = 0
+initial_value_store = {}
+
+[sub_resource type="Resource" id="Resource_ypwto"]
+script = ExtResource("2_s2wb6")
+text = "When was the last time you really
+thought about it?"
+
+[sub_resource type="Resource" id="Resource_s2nlb"]
+script = ExtResource("2_s2wb6")
+text = "I'm not saying you should stop
+making games. Keep doing it!"
+
+[sub_resource type="Resource" id="Resource_hnygf"]
+script = ExtResource("2_s2wb6")
+text = "But, what do you want your games to
+be about?"
+
+[sub_resource type="Resource" id="Resource_m08nt"]
+resource_name = "Color Background"
+script = ExtResource("3_d3imt")
+node_path = NodePath("Background")
+property = "self_modulate"
+value_store = {
+"value": Color(0, 0, 0, 1)
+}
+value = Color(0, 0, 0, 1)
+duration = 1.5
+ease = 2
+trans = 0
+flags = 0
+initial_value_store = {}
+
+[sub_resource type="Resource" id="Resource_rjeae"]
+script = ExtResource("2_s2wb6")
+text = "What impression do you want to leave?"
+
+[sub_resource type="Resource" id="Resource_2lhns"]
+script = ExtResource("2_s2wb6")
+text = "What do you want to inspire in others?"
+
+[sub_resource type="Resource" id="Resource_tvy7q"]
+resource_name = "Color Background"
+script = ExtResource("3_d3imt")
+node_path = NodePath("Background")
+property = "self_modulate"
+value_store = {
+"value": Color(0.423529, 0.192157, 0.490196, 1)
+}
+value = Color(0.423529, 0.192157, 0.490196, 1)
+duration = 1.5
+ease = 2
+trans = 0
+flags = 0
+initial_value_store = {}
+
+[sub_resource type="Resource" id="Resource_gsl63"]
+script = ExtResource("2_s2wb6")
+text = "Make something special, OK?
+Promise me!"
+
+[sub_resource type="Resource" id="Resource_mhbdl"]
+script = ExtResource("4_vkagw")
+
+[sub_resource type="Resource" id="Resource_evll2"]
+resource_name = "Color Background"
+script = ExtResource("3_d3imt")
+node_path = NodePath("Background")
+property = "self_modulate"
+value_store = {
+"value": Color(0, 0, 0, 1)
+}
+value = Color(0, 0, 0, 1)
+duration = 1.5
+ease = 2
+trans = 0
+flags = 0
+initial_value_store = {}
+
+[sub_resource type="Resource" id="Resource_wa71l"]
+script = ExtResource("2_s2wb6")
+text = "...Thanks for listening."
+
+[sub_resource type="Resource" id="Resource_22fj0"]
+script = ExtResource("5_od75i")
+duration = 1.0
+
+[sub_resource type="Resource" id="Resource_1d7v4"]
+script = ExtResource("4_vkagw")
+
+[sub_resource type="Resource" id="Resource_vycqf"]
+script = ExtResource("3_1e3kg")
+resources = [SubResource("Resource_tvy7q"), SubResource("Resource_rqp5m"), SubResource("Resource_gde6u"), SubResource("Resource_1j5vg"), SubResource("Resource_f2csd"), SubResource("Resource_2781i"), SubResource("Resource_ypwto"), SubResource("Resource_s2nlb"), SubResource("Resource_hnygf"), SubResource("Resource_m08nt"), SubResource("Resource_rjeae"), SubResource("Resource_2lhns"), SubResource("Resource_gsl63"), SubResource("Resource_mhbdl"), SubResource("Resource_evll2"), SubResource("Resource_wa71l"), SubResource("Resource_22fj0"), SubResource("Resource_1d7v4")]
+connections = [[SubResource("Resource_rqp5m"), 0, SubResource("Resource_gde6u"), 0], [SubResource("Resource_1j5vg"), 0, SubResource("Resource_f2csd"), 0], [SubResource("Resource_f2csd"), 0, SubResource("Resource_2781i"), 0], [SubResource("Resource_f2csd"), 0, SubResource("Resource_ypwto"), 0], [SubResource("Resource_ypwto"), 0, SubResource("Resource_s2nlb"), 0], [SubResource("Resource_s2nlb"), 0, SubResource("Resource_hnygf"), 0], [SubResource("Resource_hnygf"), 0, SubResource("Resource_m08nt"), 0], [SubResource("Resource_hnygf"), 0, SubResource("Resource_rjeae"), 0], [SubResource("Resource_rjeae"), 0, SubResource("Resource_2lhns"), 0], [SubResource("Resource_2lhns"), 0, SubResource("Resource_tvy7q"), 0], [SubResource("Resource_2lhns"), 0, SubResource("Resource_rqp5m"), 0], [SubResource("Resource_gde6u"), 0, SubResource("Resource_gsl63"), 0], [SubResource("Resource_gsl63"), 0, SubResource("Resource_mhbdl"), 0], [SubResource("Resource_gsl63"), 0, SubResource("Resource_evll2"), 0], [SubResource("Resource_evll2"), 0, SubResource("Resource_wa71l"), 0], [SubResource("Resource_wa71l"), 0, SubResource("Resource_22fj0"), 0], [SubResource("Resource_wa71l"), 0, SubResource("Resource_1d7v4"), 0]]
+positions = {
+SubResource("Resource_1d7v4"): Vector2(-92.9816, -186.592),
+SubResource("Resource_22fj0"): Vector2(-92.9816, -306.592),
+SubResource("Resource_wa71l"): Vector2(-432.982, -306.592),
+SubResource("Resource_evll2"): Vector2(-732.982, -306.592),
+SubResource("Resource_mhbdl"): Vector2(-732.982, -406.592),
+SubResource("Resource_gsl63"): Vector2(-1192.98, -406.592),
+SubResource("Resource_2lhns"): Vector2(-2472.98, -546.592),
+SubResource("Resource_rjeae"): Vector2(-2912.98, -546.592),
+SubResource("Resource_m08nt"): Vector2(-2912.98, -726.592),
+SubResource("Resource_hnygf"): Vector2(-3312.98, -726.592),
+SubResource("Resource_s2nlb"): Vector2(-3652.98, -726.592),
+SubResource("Resource_ypwto"): Vector2(-4052.98, -726.592),
+SubResource("Resource_2781i"): Vector2(-4052.98, -906.592),
+SubResource("Resource_f2csd"): Vector2(-4592.98, -906.592),
+SubResource("Resource_1j5vg"): Vector2(-4932.98, -906.592),
+SubResource("Resource_gde6u"): Vector2(-1712.98, -406.592),
+SubResource("Resource_rqp5m"): Vector2(-2012.98, -406.592),
+SubResource("Resource_tvy7q"): Vector2(-2012.98, -546.592)
+}
+
+[sub_resource type="Resource" id="Resource_eigmy"]
+resource_name = "Mission Statement"
+script = ExtResource("4_xeshj")
+editor_data = SubResource("Resource_vycqf")
+cycles = false
+debug = false
+
+[node name="DemoDialog" type="Node"]
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_n5k61")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="EventPlayer" type="Node" parent="."]
+script = ExtResource("1_3fl3s")
+multi_event = SubResource("Resource_eigmy")
+autoplay = true
+
+[node name="DialogueContainer" type="Container" parent="."]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("2_hehqd")
