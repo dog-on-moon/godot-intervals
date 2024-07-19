@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://dmx22jq87iscw"]
+[gd_scene load_steps=52 format=3 uid="uid://dmx22jq87iscw"]
 
 [ext_resource type="Script" path="res://demos/demo.gd" id="1_7ulym"]
 [ext_resource type="Script" path="res://demos/colors/color_button.gd" id="2_rnxpk"]
@@ -110,80 +110,8 @@ border_width_bottom = 8
 border_color = Color(0, 0, 0, 0.627451)
 border_blend = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dli1x"]
-bg_color = Color(0.415686, 1, 0.341176, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0, 0, 0.627451)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ript"]
-bg_color = Color(0.415686, 1, 0.341176, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0, 0, 0.627451)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1pk7w"]
-bg_color = Color(0.415686, 1, 0.341176, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0, 0, 0.627451)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2oe1i"]
-bg_color = Color(0.415686, 1, 0.341176, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0, 0, 0.627451)
-border_blend = true
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncj8m"]
 bg_color = Color(1, 0.341176, 0.968627, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0, 0, 0.627451)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yfn45"]
-bg_color = Color(0.341176, 0.603922, 1, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0, 0, 0.627451)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nexht"]
-bg_color = Color(0.341176, 0.603922, 1, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0, 0, 0.627451)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pe4lb"]
-bg_color = Color(0.341176, 0.603922, 1, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0, 0, 0.627451)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6h0io"]
-bg_color = Color(0.341176, 0.603922, 1, 1)
 border_width_left = 8
 border_width_top = 8
 border_width_right = 8
@@ -271,7 +199,7 @@ script = ExtResource("5_y4432")
 node_path = NodePath("Background")
 property = "self_modulate"
 value = Color(1, 0.309804, 0.309804, 1)
-duration = 0.0
+duration = 1.0
 ease = 2
 trans = 0
 flags = 0
@@ -282,7 +210,7 @@ script = ExtResource("5_y4432")
 node_path = NodePath("Background")
 property = "self_modulate"
 value = Color(0.443137, 1, 0.368627, 1)
-duration = 0.0
+duration = 1.0
 ease = 2
 trans = 0
 flags = 0
@@ -293,7 +221,7 @@ script = ExtResource("5_y4432")
 node_path = NodePath("Background")
 property = "self_modulate"
 value = Color(0.368627, 0.443137, 1, 1)
-duration = 0.0
+duration = 1.0
 ease = 2
 trans = 0
 flags = 0
@@ -304,7 +232,7 @@ script = ExtResource("5_y4432")
 node_path = NodePath("Background")
 property = "self_modulate"
 value = Color(0.901961, 0.341176, 1, 1)
-duration = 0.0
+duration = 1.0
 ease = 2
 trans = 0
 flags = 0
@@ -423,7 +351,7 @@ resource_name = "Set Label Text"
 script = ExtResource("5_y4432")
 node_path = NodePath("Background/RichTextLabel")
 property = "text_string"
-value = "I hope that is to your liking."
+value = "Thank you for your time."
 duration = 0.0
 ease = 2
 trans = 0
@@ -453,33 +381,33 @@ script = ExtResource("6_a61yc")
 resources = [SubResource("Resource_mbvoj"), SubResource("Resource_pw2je"), SubResource("Resource_7cou8"), SubResource("Resource_blbnj"), SubResource("Resource_gges4"), SubResource("Resource_sb31q"), SubResource("Resource_5hj2a"), SubResource("Resource_4qlx6"), SubResource("Resource_w1gtk"), SubResource("Resource_0vduq"), SubResource("Resource_nhwb8"), SubResource("Resource_bipsu"), SubResource("Resource_wcju0"), SubResource("Resource_jb74d"), SubResource("Resource_nh8lh"), SubResource("Resource_h3icq"), SubResource("Resource_242b0"), SubResource("Resource_lm4pe"), SubResource("Resource_sf3xn"), SubResource("Resource_5xm7m"), SubResource("Resource_yyx4v"), SubResource("Resource_vafpw"), SubResource("Resource_maifo"), SubResource("Resource_foum4"), SubResource("Resource_jbxq2"), SubResource("Resource_ngaoj"), SubResource("Resource_882jv")]
 connections = [[SubResource("Resource_mbvoj"), 0, SubResource("Resource_7cou8"), 0], [SubResource("Resource_sb31q"), 1, SubResource("Resource_w1gtk"), 0], [SubResource("Resource_sb31q"), 2, SubResource("Resource_0vduq"), 0], [SubResource("Resource_sb31q"), 3, SubResource("Resource_nhwb8"), 0], [SubResource("Resource_sb31q"), 4, SubResource("Resource_bipsu"), 0], [SubResource("Resource_w1gtk"), 0, SubResource("Resource_wcju0"), 0], [SubResource("Resource_0vduq"), 0, SubResource("Resource_jb74d"), 0], [SubResource("Resource_nhwb8"), 0, SubResource("Resource_nh8lh"), 0], [SubResource("Resource_bipsu"), 0, SubResource("Resource_h3icq"), 0], [SubResource("Resource_w1gtk"), 0, SubResource("Resource_242b0"), 0], [SubResource("Resource_0vduq"), 0, SubResource("Resource_242b0"), 0], [SubResource("Resource_nhwb8"), 0, SubResource("Resource_242b0"), 0], [SubResource("Resource_bipsu"), 0, SubResource("Resource_242b0"), 0], [SubResource("Resource_242b0"), 0, SubResource("Resource_lm4pe"), 0], [SubResource("Resource_242b0"), 0, SubResource("Resource_sf3xn"), 0], [SubResource("Resource_242b0"), 0, SubResource("Resource_5xm7m"), 0], [SubResource("Resource_242b0"), 0, SubResource("Resource_yyx4v"), 0], [SubResource("Resource_blbnj"), 0, SubResource("Resource_maifo"), 0], [SubResource("Resource_blbnj"), 0, SubResource("Resource_gges4"), 0], [SubResource("Resource_7cou8"), 0, SubResource("Resource_foum4"), 0], [SubResource("Resource_7cou8"), 0, SubResource("Resource_blbnj"), 0], [SubResource("Resource_gges4"), 0, SubResource("Resource_jbxq2"), 0], [SubResource("Resource_jbxq2"), 0, SubResource("Resource_sb31q"), 0], [SubResource("Resource_jbxq2"), 0, SubResource("Resource_5hj2a"), 0], [SubResource("Resource_jbxq2"), 0, SubResource("Resource_4qlx6"), 0], [SubResource("Resource_sf3xn"), 0, SubResource("Resource_vafpw"), 0], [SubResource("Resource_sf3xn"), 0, SubResource("Resource_ngaoj"), 0], [SubResource("Resource_ngaoj"), 0, SubResource("Resource_882jv"), 0]]
 positions = {
-SubResource("Resource_882jv"): Vector2(2936.59, 24.1005),
-SubResource("Resource_ngaoj"): Vector2(2656.59, 24.1005),
-SubResource("Resource_jbxq2"): Vector2(1336.59, -175.899),
-SubResource("Resource_foum4"): Vector2(756.586, -175.899),
-SubResource("Resource_maifo"): Vector2(1076.59, -175.899),
-SubResource("Resource_vafpw"): Vector2(2656.59, -55.8995),
-SubResource("Resource_yyx4v"): Vector2(2396.59, 184.101),
-SubResource("Resource_5xm7m"): Vector2(2396.59, 84.1005),
-SubResource("Resource_sf3xn"): Vector2(2396.59, 24.1005),
-SubResource("Resource_lm4pe"): Vector2(2396.59, -55.8995),
-SubResource("Resource_242b0"): Vector2(2116.59, 24.1005),
-SubResource("Resource_h3icq"): Vector2(2116.59, -55.8995),
-SubResource("Resource_nh8lh"): Vector2(2116.59, -135.899),
-SubResource("Resource_jb74d"): Vector2(2116.59, -215.899),
-SubResource("Resource_wcju0"): Vector2(2116.59, -295.899),
-SubResource("Resource_bipsu"): Vector2(1876.59, -55.8995),
-SubResource("Resource_nhwb8"): Vector2(1876.59, -135.899),
-SubResource("Resource_0vduq"): Vector2(1876.59, -215.899),
-SubResource("Resource_w1gtk"): Vector2(1876.59, -295.899),
-SubResource("Resource_4qlx6"): Vector2(1596.59, 4.10054),
-SubResource("Resource_5hj2a"): Vector2(1596.59, -115.899),
-SubResource("Resource_sb31q"): Vector2(1596.59, -295.899),
-SubResource("Resource_gges4"): Vector2(1076.59, -95.8995),
-SubResource("Resource_blbnj"): Vector2(756.586, -95.8995),
-SubResource("Resource_7cou8"): Vector2(476.586, -95.8995),
-SubResource("Resource_pw2je"): Vector2(476.586, -275.899),
-SubResource("Resource_mbvoj"): Vector2(476.586, -175.899)
+SubResource("Resource_882jv"): Vector2(568.805, 7.53043),
+SubResource("Resource_ngaoj"): Vector2(288.805, 7.53043),
+SubResource("Resource_jbxq2"): Vector2(-1025.81, -235.266),
+SubResource("Resource_foum4"): Vector2(-1605.81, -235.266),
+SubResource("Resource_maifo"): Vector2(-1285.81, -235.266),
+SubResource("Resource_vafpw"): Vector2(288.805, -72.4696),
+SubResource("Resource_yyx4v"): Vector2(28.8054, 167.53),
+SubResource("Resource_5xm7m"): Vector2(28.8054, 67.5304),
+SubResource("Resource_sf3xn"): Vector2(28.8054, 7.53043),
+SubResource("Resource_lm4pe"): Vector2(28.8054, -72.4696),
+SubResource("Resource_242b0"): Vector2(-251.195, 7.53043),
+SubResource("Resource_h3icq"): Vector2(-251.195, -92.4696),
+SubResource("Resource_nh8lh"): Vector2(-251.195, -172.47),
+SubResource("Resource_jb74d"): Vector2(-251.195, -272.47),
+SubResource("Resource_wcju0"): Vector2(-251.195, -372.47),
+SubResource("Resource_bipsu"): Vector2(-485.806, -115.266),
+SubResource("Resource_nhwb8"): Vector2(-485.806, -195.266),
+SubResource("Resource_0vduq"): Vector2(-485.806, -275.266),
+SubResource("Resource_w1gtk"): Vector2(-485.806, -355.266),
+SubResource("Resource_4qlx6"): Vector2(-765.806, -55.2659),
+SubResource("Resource_5hj2a"): Vector2(-765.806, -175.266),
+SubResource("Resource_sb31q"): Vector2(-765.806, -355.266),
+SubResource("Resource_gges4"): Vector2(-1285.81, -155.266),
+SubResource("Resource_blbnj"): Vector2(-1605.81, -155.266),
+SubResource("Resource_7cou8"): Vector2(-1885.81, -155.266),
+SubResource("Resource_pw2je"): Vector2(-1885.81, -335.266),
+SubResource("Resource_mbvoj"): Vector2(-1885.81, -235.266)
 }
 
 [sub_resource type="Resource" id="Resource_8kwol"]
@@ -489,8 +417,9 @@ editor_data = SubResource("Resource_jd5fw")
 cycles = false
 debug = false
 
-[node name="DemoColors" type="Node"]
+[node name="DemoColors" type="Node" node_paths=PackedStringArray("event_player")]
 script = ExtResource("1_7ulym")
+event_player = NodePath("EventPlayer")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -562,10 +491,10 @@ color = Color(0.415686, 1, 0.341176, 1)
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_veuvq")
-theme_override_styles/hover = SubResource("StyleBoxFlat_dli1x")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_8ript")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_1pk7w")
-theme_override_styles/focus = SubResource("StyleBoxFlat_2oe1i")
+theme_override_styles/hover = SubResource("StyleBoxFlat_veuvq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_veuvq")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_veuvq")
+theme_override_styles/focus = SubResource("StyleBoxFlat_veuvq")
 script = ExtResource("2_rnxpk")
 color = Color(0.341176, 0.603922, 1, 1)
 
@@ -573,10 +502,10 @@ color = Color(0.341176, 0.603922, 1, 1)
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_ncj8m")
-theme_override_styles/hover = SubResource("StyleBoxFlat_yfn45")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nexht")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_pe4lb")
-theme_override_styles/focus = SubResource("StyleBoxFlat_6h0io")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ncj8m")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ncj8m")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ncj8m")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ncj8m")
 script = ExtResource("2_rnxpk")
 color = Color(1, 0.341176, 0.968627, 1)
 
@@ -593,6 +522,9 @@ offset_right = 221.5
 offset_bottom = 230.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 32
+fit_content = true
+autowrap_mode = 0
 script = ExtResource("3_xn1qn")
 
 [node name="EventPlayer" type="Node" parent="."]
