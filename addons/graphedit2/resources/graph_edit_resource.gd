@@ -12,14 +12,17 @@ signal editor_refresh
 
 ## The elements that the GraphEdit keeps track of.
 @export var resources: Array = []
+#@export_storage var resources: Array = []
 
 ## Dictionary of stored event connections.
 ## A connection is [from_resource, from_port, to_resource, to_port]
 @export var connections: Array = []
+#@export_storage var connections: Array = []
 
 ## Editor storage for resource positions.
 ## Dictionary[Resource, Vector2]
 @export var positions := {}
+#@export_storage var positions := {}
 
 ## Adds a resource. Must be unique.
 func add_resource(resource: GraphElementResource, position: Vector2 = Vector2.ZERO):

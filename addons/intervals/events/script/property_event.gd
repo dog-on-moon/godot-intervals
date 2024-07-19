@@ -58,10 +58,11 @@ var initial_value: Variant:
 		if initial_value_store == null: initial_value_store = {}
 		if !(&"value" in initial_value_store): initial_value_store[&"value"] = null
 		initial_value_store[&"value"] = v
-	
 
 # 4.2 backport: I don't think setting TYPE_NIL will work the way we want in
 # 4.2 (which would be to serialize value & initial_value as any Variant type)
+# (this block was explored as a means of supporting value / initial_value
+# Variant serialization)
 #func _get_property_list():
 	#var properties = []
 	#properties.append({
