@@ -117,6 +117,9 @@ func _value_to_bbcode(v) -> String:
 	## Do formatting based on expected type.
 	match node_property['type']:
 		TYPE_COLOR:
+			# 4.2 backport: node_property['type'] may be out-of-sync with
+			# actual value type when changing NodePaths
+			if typeof(v) != TYPE_COLOR: return str(v) # do our best
 			var hex_code: String = v.to_html()
 			return "[color=%s]██████[/color]" % hex_code
 	return str(v)
