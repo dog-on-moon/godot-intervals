@@ -68,7 +68,7 @@ func _editor_signal_exists() -> bool:
 	if not _editor_owner or not is_instance_valid(_editor_owner):
 		return false
 	var node := FuncEvent._editor_get_target_node(node_path, _editor_owner)
-	return node and node.has_signal(signal_name) or _editor_script_exists(node)
+	return node and (node.has_signal(signal_name) or _editor_script_exists(node))
 
 func _editor_get_substring():
 	return "signal %s" % signal_name

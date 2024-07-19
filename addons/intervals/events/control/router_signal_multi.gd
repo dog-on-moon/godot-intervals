@@ -13,8 +13,8 @@ class_name RouterSignalMulti
 		notify_property_list_changed()
 
 # 4.2 backport: @export instead of @export_storage, and untype the Arrays
-# TODO: Something in the construction path when adding multiplex signals
-# is broken, more investigation needed.
+# TODO: Can recreate export_storage by using _validate_property or
+# _get_property_list I think?
 #@export_storage var node_paths: Array[NodePath] = []
 @export var node_paths: Array[NodePath] = []
 #@export_storage var signal_names: Array[StringName] = []
@@ -38,7 +38,21 @@ func _setup_signals(_owner: Node):
 			var node: Node = _owner.get_node_or_null(np)
 			if node:
 				if node.has_signal(signal_name) or node.has_user_signal(signal_name):
-					node.connect(signal_name, _on_signal.bind(_owner, idx), CONNECT_ONE_SHOT)
+					#node.connect(signal_name, _on_signal.bind(_owner, idx), CONNECT_ONE_SHOT)
+					# 4.2 backport: See note in _clear_signals; we need to
+					# track that a one-shot is being called before letting its
+					# handler invoke, to avoid a double-disconnect error.
+					var callable := _on_signal.bind(_owner, idx)
+					var callable_key := [_on_signal, _owner, idx]
+					var wrapped_callable = _backport_wrap_signal_oneshot.bind(callable, callable_key)
+					node.connect(signal_name, wrapped_callable, CONNECT_ONE_SHOT)
+
+# 4.2 backport: Workaround wrapper & memo for avoiding double-disconnect in
+# one-shot handlers.
+func _backport_wrap_signal_oneshot(callable: Callable, callable_key: Variant):
+	_sig_oneshot_called[callable_key] = true
+	callable.call()
+var _sig_oneshot_called := {}
 
 func _clear_signals(_owner: Node):
 	for idx in range(1, get_branch_count() + 1):
@@ -48,8 +62,27 @@ func _clear_signals(_owner: Node):
 			var node: Node = _owner.get_node_or_null(np)
 			if node:
 				var callable := _on_signal.bind(_owner, idx)
-				if node.is_connected(signal_name, callable):
-					node.disconnect(signal_name, callable)
+				# 4.2 backport: is_connected is incorrectly returning true
+				# *during* the evaluation of the one-shot callback, while
+				# disconnect thinks the connection no longer exists.
+				# I believe this is fixed in 4.3 due to this PR:
+				# https://github.com/godotengine/godot/pull/89451
+				#
+				# This workaround tracks signal callbacks via _sig_oneshot_called
+				# so we don't have to rely on is_connected().
+				var wrapped_callable = _backport_wrap_signal_oneshot.bind(callable)
+				var callable_key := [_on_signal, _owner, idx]
+				if callable_key in _sig_oneshot_called:
+					# Don't call disconnect, because one-shot handlers aren't
+					# disconnected before their callbacks are called. Using
+					# is_connected()->disconnect() will cause a double-disconnect
+					# in 4.2 one-shot signal handlers.
+					pass 
+				elif node.is_connected(signal_name, wrapped_callable):
+				#if node.is_connected(signal_name, callable):
+					node.disconnect(signal_name, wrapped_callable)
+	# 4.2 backport: Clear one-shot signal memo.
+	_sig_oneshot_called.clear()
 
 func _on_signal(_owner: Node, idx: int):
 	_clear_signals(_owner)

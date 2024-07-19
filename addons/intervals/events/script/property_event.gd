@@ -16,18 +16,9 @@ class_name PropertyEvent
 		if _node_button and is_instance_valid(_node_button):
 			_node_button.visible = _object_exists()
 
-# 4.2 backport: @export instead of @export_storage
+# handles marking it for serialization, so no annotation is needed.
 #@export_storage var value: Variant
-@export var value_store := {} # Can't directly store Variant in 4.2
-var value: Variant:
-	get:
-		if value_store == null: value_store = {}
-		if !(&"value" in value_store): value_store[&"value"] = null
-		return value_store[&"value"]
-	set(v):
-		if value_store == null: value_store = {}
-		if !(&"value" in value_store): value_store[&"value"] = null
-		value_store[&"value"] = v
+var value: Variant
 
 @export_range(0.0, 5.0, 0.01, "or_greater") var duration := 0.0:
 	set(x):
@@ -47,35 +38,10 @@ var value: Variant:
 		flags = x
 		notify_property_list_changed()
 
+# 4.2 backport: @export_storage doesn't exist in 4.2, but _validate_property
+# handles marking it for serialization, so no annotation is needed.
 #@export_storage var initial_value: Variant
-@export var initial_value_store := {} # Can't directly store Variant in 4.2
-var initial_value: Variant:
-	get:
-		if initial_value_store == null: initial_value_store = {}
-		if !(&"value" in initial_value_store): initial_value_store[&"value"] = null
-		return initial_value_store[&"value"]
-	set(v):
-		if initial_value_store == null: initial_value_store = {}
-		if !(&"value" in initial_value_store): initial_value_store[&"value"] = null
-		initial_value_store[&"value"] = v
-
-# 4.2 backport: I don't think setting TYPE_NIL will work the way we want in
-# 4.2 (which would be to serialize value & initial_value as any Variant type)
-# (this block was explored as a means of supporting value / initial_value
-# Variant serialization)
-#func _get_property_list():
-	#var properties = []
-	#properties.append({
-		#"name": "value",
-		#"type": TYPE_NIL,
-		#"usage": PROPERTY_USAGE_NO_EDITOR,
-	#})
-	#properties.append({
-		#"name": "initial_value",
-		#"type": TYPE_NIL,
-		#"usage": PROPERTY_USAGE_NO_EDITOR,
-	#})
-	#return properties
+var initial_value: Variant
 
 var node: Node:
 	get: return _editor_owner.get_node_or_null(node_path) if node_path and _editor_owner and is_instance_valid(_editor_owner) else null
@@ -151,6 +117,9 @@ func _value_to_bbcode(v) -> String:
 	## Do formatting based on expected type.
 	match node_property['type']:
 		TYPE_COLOR:
+			# 4.2 backport: node_property['type'] may be out-of-sync with
+			# actual value type when changing NodePaths
+			if typeof(v) != TYPE_COLOR: return str(v) # do our best
 			var hex_code: String = v.to_html()
 			return "[color=%s]██████[/color]" % hex_code
 	return str(v)
@@ -197,6 +166,10 @@ func _validate_property(p: Dictionary):
 					p.hint = node_property.hint
 					p.hint_string = node_property.hint_string
 					p.usage = node_property.usage
+					# 4.2 backport: Ensure initial_value is serialized to match
+					# its @export_storage annotation in 4.3.
+					if not (p.usage & PROPERTY_USAGE_STORAGE):
+						p.usage += PROPERTY_USAGE_STORAGE
 			"ease":
 				p.usage += PROPERTY_USAGE_EDITOR
 				p.class_name = "Tween.EaseType"
