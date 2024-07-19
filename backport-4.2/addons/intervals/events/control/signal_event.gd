@@ -69,14 +69,8 @@ func _editor_script_exists(node: Node = null) -> bool:
 
 func _editor_signal_exists() -> bool:
 	if not _editor_owner or not is_instance_valid(_editor_owner):
-		#print("SignalRef --- signal fail reason: !_editor_owner")
 		return false
 	var node := FuncEvent._editor_get_target_node(node_path, _editor_owner)
-	#var bad_node = !node
-	#if bad_node: print("SignalRef --- signal fail reason: !node")
-	#var lacks_signal = null
-	#if !!node: lacks_signal = node.has_signal(signal_name)
-	#if lacks_signal != null && !lacks_signal: print("SignalRef --- signal fail reason: lacks_signal")
 	return node and (node.has_signal(signal_name) or _editor_script_exists(node))
 
 func _editor_get_substring():
