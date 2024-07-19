@@ -9,13 +9,18 @@ class_name RouterSignalMulti
 		signal_count = x
 		node_paths.resize(signal_count)
 		signal_names.resize(signal_count)
+		_initialized_signal_count = true
 		notify_property_list_changed()
 
-# 4.2 backport: @export instead of @export_storage
+# 4.2 backport: @export instead of @export_storage, and untype the Arrays
+# TODO: Something in the construction path when adding multiplex signals
+# is broken, more investigation needed.
 #@export_storage var node_paths: Array[NodePath] = []
 @export var node_paths: Array[NodePath] = []
 #@export_storage var signal_names: Array[StringName] = []
 @export var signal_names: Array[StringName] = []
+
+var _initialized_signal_count := false
 
 var _editor_owner: Node
 
@@ -136,6 +141,11 @@ func _property_get_revert(property: StringName) -> Variant:
 	return null
 
 func _get(property):
+	# 4.2 backport: signal_count setter needs to be invoked before
+	# _get(property) is valid for node_paths and signal_names.
+	if !_initialized_signal_count:
+		signal_count = signal_count # calls resize() on node_paths & signal_names
+		_initialized_signal_count = true
 	if property.begins_with("node_path_"):
 		var index = property.get_slice("_", 2).to_int() - 1
 		return node_paths[index]
@@ -144,6 +154,11 @@ func _get(property):
 		return signal_names[index]
 
 func _set(property, value):
+	# 4.2 backport: signal_count setter needs to be invoked before
+	# _get(property) is valid for node_paths and signal_names.
+	if !_initialized_signal_count:
+		signal_count = signal_count # calls resize() on node_paths & signal_names
+		_initialized_signal_count = true
 	if property.begins_with("node_path_"):
 		var index = property.get_slice("_", 2).to_int() - 1
 		node_paths[index] = value
