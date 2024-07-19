@@ -31,6 +31,9 @@ func add_resource(resource: GraphElementResource, position: Vector2 = Vector2.ZE
 
 ## Removes a resource.
 func remove_resource(resource: GraphElementResource):
+	# 4.2 backport: Deleting multiple graph elements at once can trigger
+	# the below assert, so we just return if the resource isn't tracked.
+	if !(resource in resources): return
 	assert(resource in resources)
 	resources.erase(resource)
 	positions.erase(resource)
