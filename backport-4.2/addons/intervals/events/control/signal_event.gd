@@ -45,10 +45,7 @@ static func get_graph_node_color() -> Color:
 
 func _editor_ready(_edit: GraphEdit, _element: GraphElement):
 	super(_edit, _element)
-	print("signal_event %s: _editor_ready, getting owner" % [self])
 	_editor_owner = get_editor_owner(_edit)
-	if !_editor_owner: print("signal_event %s: lacked editor_owner :(" % [self])
-	if !!_editor_owner: print("signal_event %s: OK, %s has editor_owner" % [self, resource_name])
 	_script_button = FuncEvent._editor_make_script_button(
 		func (): return FuncEvent._editor_get_target_node(node_path, _editor_owner),
 		func (): return _editor_get_substring(),
