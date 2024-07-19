@@ -1,0 +1,601 @@
+[gd_scene load_steps=60 format=3 uid="uid://dmx22jq87iscw"]
+
+[ext_resource type="Script" path="res://demos/demo.gd" id="1_7ulym"]
+[ext_resource type="Script" path="res://demos/colors/color_button.gd" id="2_rnxpk"]
+[ext_resource type="Script" path="res://demos/colors/rich_text_label.gd" id="3_xn1qn"]
+[ext_resource type="Script" path="res://addons/intervals/nodes/event_player.gd" id="4_1tuab"]
+[ext_resource type="Script" path="res://addons/intervals/events/script/property_event.gd" id="5_y4432"]
+[ext_resource type="Script" path="res://addons/graphedit2/resources/graph_edit_resource.gd" id="6_a61yc"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/signal_event.gd" id="6_qb3jy"]
+[ext_resource type="Script" path="res://addons/intervals/events/control/router_signal_multi.gd" id="7_iop28"]
+[ext_resource type="Script" path="res://addons/intervals/events/multi_event.gd" id="7_u7ele"]
+[ext_resource type="Script" path="res://addons/intervals/events/meta/end_multi_event.gd" id="8_qrv2h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rh5ue"]
+bg_color = Color(1, 0.341176, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_44jb4"]
+bg_color = Color(1, 0.341176, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x7uas"]
+bg_color = Color(1, 0.341176, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4ksc"]
+bg_color = Color(1, 0.341176, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n1tl3"]
+bg_color = Color(1, 0.341176, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dun2s"]
+bg_color = Color(0.415686, 1, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2y6he"]
+bg_color = Color(0.415686, 1, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4at7u"]
+bg_color = Color(0.415686, 1, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0e34q"]
+bg_color = Color(0.415686, 1, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gtcvg"]
+bg_color = Color(0.415686, 1, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_veuvq"]
+bg_color = Color(0.341176, 0.603922, 1, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dli1x"]
+bg_color = Color(0.415686, 1, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ript"]
+bg_color = Color(0.415686, 1, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1pk7w"]
+bg_color = Color(0.415686, 1, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2oe1i"]
+bg_color = Color(0.415686, 1, 0.341176, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncj8m"]
+bg_color = Color(1, 0.341176, 0.968627, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yfn45"]
+bg_color = Color(0.341176, 0.603922, 1, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nexht"]
+bg_color = Color(0.341176, 0.603922, 1, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pe4lb"]
+bg_color = Color(0.341176, 0.603922, 1, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6h0io"]
+bg_color = Color(0.341176, 0.603922, 1, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+border_blend = true
+
+[sub_resource type="Resource" id="Resource_mbvoj"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Hmmm...."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_7cou8"]
+script = ExtResource("6_qb3jy")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_sb31q"]
+script = ExtResource("7_iop28")
+signal_count = 4
+node_paths = Array[NodePath]([NodePath("Background/ColorRoot/Mover/HBoxContainer/RedButton"), NodePath("Background/ColorRoot/Mover/HBoxContainer/GreenButton"), NodePath("Background/ColorRoot/Mover/HBoxContainer/BlueButton"), NodePath("Background/ColorRoot/Mover/HBoxContainer/PinkButton")])
+signal_names = Array[StringName]([&"pressed", &"pressed", &"pressed", &"pressed"])
+node_path_1 = NodePath("Background/ColorRoot/Mover/HBoxContainer/RedButton")
+signal_name_1 = &"pressed"
+node_path_2 = NodePath("Background/ColorRoot/Mover/HBoxContainer/GreenButton")
+signal_name_2 = &"pressed"
+node_path_3 = NodePath("Background/ColorRoot/Mover/HBoxContainer/BlueButton")
+signal_name_3 = &"pressed"
+node_path_4 = NodePath("Background/ColorRoot/Mover/HBoxContainer/PinkButton")
+signal_name_4 = &"pressed"
+
+[sub_resource type="Resource" id="Resource_w1gtk"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Red? Very well then."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_0vduq"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Green... A wise choice."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_nhwb8"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Blue, a classic."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_bipsu"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Pink! You got it."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_wcju0"]
+resource_name = "Update Background"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background")
+property = "self_modulate"
+value = Color(1, 0.309804, 0.309804, 1)
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_jb74d"]
+resource_name = "Update Background"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background")
+property = "self_modulate"
+value = Color(0.443137, 1, 0.368627, 1)
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_nh8lh"]
+resource_name = "Update Background"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background")
+property = "self_modulate"
+value = Color(0.368627, 0.443137, 1, 1)
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_h3icq"]
+resource_name = "Update Background"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background")
+property = "self_modulate"
+value = Color(0.901961, 0.341176, 1, 1)
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_242b0"]
+script = ExtResource("6_qb3jy")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_lm4pe"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "I hope that is to your liking."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_sf3xn"]
+script = ExtResource("6_qb3jy")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_5xm7m"]
+resource_name = "Mover Offscreen"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/ColorRoot/Mover")
+property = "position"
+value = Vector2(0, 400)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_yyx4v"]
+resource_name = "Invisible Root"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/ColorRoot")
+property = "modulate"
+value = Color(1, 1, 1, 0)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_blbnj"]
+script = ExtResource("6_qb3jy")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_maifo"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "I'd like your feedback."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_gges4"]
+script = ExtResource("6_qb3jy")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_foum4"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "It's not very scenic around here."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_jbxq2"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "Could you select a color?
+"
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_5hj2a"]
+resource_name = "Mover Onscreen"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/ColorRoot/Mover")
+property = "position"
+value = Vector2(0, 0)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_4qlx6"]
+resource_name = "Visible Root"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/ColorRoot")
+property = "modulate"
+value = Color(1, 1, 1, 1)
+duration = 1.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_vafpw"]
+resource_name = "Set Label Text"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/RichTextLabel")
+property = "text_string"
+value = "I hope that is to your liking."
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_ngaoj"]
+script = ExtResource("6_qb3jy")
+node_path = NodePath("Background/RichTextLabel")
+signal_name = &"done"
+
+[sub_resource type="Resource" id="Resource_882jv"]
+script = ExtResource("8_qrv2h")
+
+[sub_resource type="Resource" id="Resource_pw2je"]
+resource_name = "ColorRoot Offscreen"
+script = ExtResource("5_y4432")
+node_path = NodePath("Background/ColorRoot/Mover")
+property = "position"
+value = Vector2(0, 400)
+duration = 0.0
+ease = 2
+trans = 0
+flags = 0
+
+[sub_resource type="Resource" id="Resource_jd5fw"]
+script = ExtResource("6_a61yc")
+resources = [SubResource("Resource_mbvoj"), SubResource("Resource_pw2je"), SubResource("Resource_7cou8"), SubResource("Resource_blbnj"), SubResource("Resource_gges4"), SubResource("Resource_sb31q"), SubResource("Resource_5hj2a"), SubResource("Resource_4qlx6"), SubResource("Resource_w1gtk"), SubResource("Resource_0vduq"), SubResource("Resource_nhwb8"), SubResource("Resource_bipsu"), SubResource("Resource_wcju0"), SubResource("Resource_jb74d"), SubResource("Resource_nh8lh"), SubResource("Resource_h3icq"), SubResource("Resource_242b0"), SubResource("Resource_lm4pe"), SubResource("Resource_sf3xn"), SubResource("Resource_5xm7m"), SubResource("Resource_yyx4v"), SubResource("Resource_vafpw"), SubResource("Resource_maifo"), SubResource("Resource_foum4"), SubResource("Resource_jbxq2"), SubResource("Resource_ngaoj"), SubResource("Resource_882jv")]
+connections = [[SubResource("Resource_mbvoj"), 0, SubResource("Resource_7cou8"), 0], [SubResource("Resource_sb31q"), 1, SubResource("Resource_w1gtk"), 0], [SubResource("Resource_sb31q"), 2, SubResource("Resource_0vduq"), 0], [SubResource("Resource_sb31q"), 3, SubResource("Resource_nhwb8"), 0], [SubResource("Resource_sb31q"), 4, SubResource("Resource_bipsu"), 0], [SubResource("Resource_w1gtk"), 0, SubResource("Resource_wcju0"), 0], [SubResource("Resource_0vduq"), 0, SubResource("Resource_jb74d"), 0], [SubResource("Resource_nhwb8"), 0, SubResource("Resource_nh8lh"), 0], [SubResource("Resource_bipsu"), 0, SubResource("Resource_h3icq"), 0], [SubResource("Resource_w1gtk"), 0, SubResource("Resource_242b0"), 0], [SubResource("Resource_0vduq"), 0, SubResource("Resource_242b0"), 0], [SubResource("Resource_nhwb8"), 0, SubResource("Resource_242b0"), 0], [SubResource("Resource_bipsu"), 0, SubResource("Resource_242b0"), 0], [SubResource("Resource_242b0"), 0, SubResource("Resource_lm4pe"), 0], [SubResource("Resource_242b0"), 0, SubResource("Resource_sf3xn"), 0], [SubResource("Resource_242b0"), 0, SubResource("Resource_5xm7m"), 0], [SubResource("Resource_242b0"), 0, SubResource("Resource_yyx4v"), 0], [SubResource("Resource_blbnj"), 0, SubResource("Resource_maifo"), 0], [SubResource("Resource_blbnj"), 0, SubResource("Resource_gges4"), 0], [SubResource("Resource_7cou8"), 0, SubResource("Resource_foum4"), 0], [SubResource("Resource_7cou8"), 0, SubResource("Resource_blbnj"), 0], [SubResource("Resource_gges4"), 0, SubResource("Resource_jbxq2"), 0], [SubResource("Resource_jbxq2"), 0, SubResource("Resource_sb31q"), 0], [SubResource("Resource_jbxq2"), 0, SubResource("Resource_5hj2a"), 0], [SubResource("Resource_jbxq2"), 0, SubResource("Resource_4qlx6"), 0], [SubResource("Resource_sf3xn"), 0, SubResource("Resource_vafpw"), 0], [SubResource("Resource_sf3xn"), 0, SubResource("Resource_ngaoj"), 0], [SubResource("Resource_ngaoj"), 0, SubResource("Resource_882jv"), 0]]
+positions = {
+SubResource("Resource_882jv"): Vector2(2936.59, 24.1005),
+SubResource("Resource_ngaoj"): Vector2(2656.59, 24.1005),
+SubResource("Resource_jbxq2"): Vector2(1336.59, -175.899),
+SubResource("Resource_foum4"): Vector2(756.586, -175.899),
+SubResource("Resource_maifo"): Vector2(1076.59, -175.899),
+SubResource("Resource_vafpw"): Vector2(2656.59, -55.8995),
+SubResource("Resource_yyx4v"): Vector2(2396.59, 184.101),
+SubResource("Resource_5xm7m"): Vector2(2396.59, 84.1005),
+SubResource("Resource_sf3xn"): Vector2(2396.59, 24.1005),
+SubResource("Resource_lm4pe"): Vector2(2396.59, -55.8995),
+SubResource("Resource_242b0"): Vector2(2116.59, 24.1005),
+SubResource("Resource_h3icq"): Vector2(2116.59, -55.8995),
+SubResource("Resource_nh8lh"): Vector2(2116.59, -135.899),
+SubResource("Resource_jb74d"): Vector2(2116.59, -215.899),
+SubResource("Resource_wcju0"): Vector2(2116.59, -295.899),
+SubResource("Resource_bipsu"): Vector2(1876.59, -55.8995),
+SubResource("Resource_nhwb8"): Vector2(1876.59, -135.899),
+SubResource("Resource_0vduq"): Vector2(1876.59, -215.899),
+SubResource("Resource_w1gtk"): Vector2(1876.59, -295.899),
+SubResource("Resource_4qlx6"): Vector2(1596.59, 4.10054),
+SubResource("Resource_5hj2a"): Vector2(1596.59, -115.899),
+SubResource("Resource_sb31q"): Vector2(1596.59, -295.899),
+SubResource("Resource_gges4"): Vector2(1076.59, -95.8995),
+SubResource("Resource_blbnj"): Vector2(756.586, -95.8995),
+SubResource("Resource_7cou8"): Vector2(476.586, -95.8995),
+SubResource("Resource_pw2je"): Vector2(476.586, -275.899),
+SubResource("Resource_mbvoj"): Vector2(476.586, -175.899)
+}
+
+[sub_resource type="Resource" id="Resource_8kwol"]
+resource_name = "ColorChooser"
+script = ExtResource("7_u7ele")
+editor_data = SubResource("Resource_jd5fw")
+cycles = false
+debug = false
+
+[node name="DemoColors" type="Node"]
+script = ExtResource("1_7ulym")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.207843, 0.207843, 0.207843, 1)
+
+[node name="ColorRoot" type="Control" parent="Background"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Mover" type="Control" parent="Background/ColorRoot"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/ColorRoot/Mover"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 64
+
+[node name="RedButton" type="Button" parent="Background/ColorRoot/Mover/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_rh5ue")
+theme_override_styles/hover = SubResource("StyleBoxFlat_44jb4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x7uas")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_t4ksc")
+theme_override_styles/focus = SubResource("StyleBoxFlat_n1tl3")
+script = ExtResource("2_rnxpk")
+color = Color(1, 0.341176, 0.341176, 1)
+
+[node name="GreenButton" type="Button" parent="Background/ColorRoot/Mover/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_dun2s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2y6he")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4at7u")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0e34q")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gtcvg")
+script = ExtResource("2_rnxpk")
+color = Color(0.415686, 1, 0.341176, 1)
+
+[node name="BlueButton" type="Button" parent="Background/ColorRoot/Mover/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_veuvq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dli1x")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8ript")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1pk7w")
+theme_override_styles/focus = SubResource("StyleBoxFlat_2oe1i")
+script = ExtResource("2_rnxpk")
+color = Color(0.341176, 0.603922, 1, 1)
+
+[node name="PinkButton" type="Button" parent="Background/ColorRoot/Mover/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ncj8m")
+theme_override_styles/hover = SubResource("StyleBoxFlat_yfn45")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nexht")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pe4lb")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6h0io")
+script = ExtResource("2_rnxpk")
+color = Color(1, 0.341176, 0.968627, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Background"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.5
+offset_top = 185.0
+offset_right = 221.5
+offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_xn1qn")
+
+[node name="EventPlayer" type="Node" parent="."]
+script = ExtResource("4_1tuab")
+multi_event = SubResource("Resource_8kwol")
+autoplay = true

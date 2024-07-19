@@ -1,6 +1,7 @@
-[gd_scene load_steps=31 format=3 uid="uid://dc5pepbb63mua"]
+[gd_scene load_steps=32 format=3 uid="uid://dc5pepbb63mua"]
 
 [ext_resource type="Script" path="res://addons/intervals/nodes/event_player.gd" id="1_3fl3s"]
+[ext_resource type="Script" path="res://demos/demo.gd" id="1_sxp2p"]
 [ext_resource type="Script" path="res://demos/dialog/dialogue_container.gd" id="2_hehqd"]
 [ext_resource type="Script" path="res://demos/dialog/dialogue_event.gd" id="2_s2wb6"]
 [ext_resource type="Script" path="res://addons/graphedit2/resources/graph_edit_resource.gd" id="3_1e3kg"]
@@ -41,15 +42,11 @@ resource_name = "Color Background"
 script = ExtResource("3_d3imt")
 node_path = NodePath("Background")
 property = "self_modulate"
-value_store = {
-"value": Color(0.788235, 0.666667, 0.443137, 1)
-}
-value = Color(0.788235, 0.666667, 0.443137, 1)
+value = null
 duration = 3.0
 ease = 2
 trans = 0
 flags = 0
-initial_value_store = {}
 
 [sub_resource type="Resource" id="Resource_ypwto"]
 script = ExtResource("2_s2wb6")
@@ -71,15 +68,11 @@ resource_name = "Color Background"
 script = ExtResource("3_d3imt")
 node_path = NodePath("Background")
 property = "self_modulate"
-value_store = {
-"value": Color(0, 0, 0, 1)
-}
-value = Color(0, 0, 0, 1)
+value = null
 duration = 1.5
 ease = 2
 trans = 0
 flags = 0
-initial_value_store = {}
 
 [sub_resource type="Resource" id="Resource_rjeae"]
 script = ExtResource("2_s2wb6")
@@ -94,15 +87,11 @@ resource_name = "Color Background"
 script = ExtResource("3_d3imt")
 node_path = NodePath("Background")
 property = "self_modulate"
-value_store = {
-"value": Color(0.423529, 0.192157, 0.490196, 1)
-}
-value = Color(0.423529, 0.192157, 0.490196, 1)
+value = null
 duration = 1.5
 ease = 2
 trans = 0
 flags = 0
-initial_value_store = {}
 
 [sub_resource type="Resource" id="Resource_gsl63"]
 script = ExtResource("2_s2wb6")
@@ -117,15 +106,11 @@ resource_name = "Color Background"
 script = ExtResource("3_d3imt")
 node_path = NodePath("Background")
 property = "self_modulate"
-value_store = {
-"value": Color(0, 0, 0, 1)
-}
-value = Color(0, 0, 0, 1)
+value = null
 duration = 1.5
 ease = 2
 trans = 0
 flags = 0
-initial_value_store = {}
 
 [sub_resource type="Resource" id="Resource_wa71l"]
 script = ExtResource("2_s2wb6")
@@ -171,6 +156,7 @@ cycles = false
 debug = false
 
 [node name="DemoDialog" type="Node"]
+script = ExtResource("1_sxp2p")
 
 [node name="Background" type="TextureRect" parent="."]
 anchors_preset = 15
