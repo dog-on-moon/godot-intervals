@@ -2,7 +2,7 @@
 
 # Godot Intervals
 
-Intervals is a lightweight animation plugin for Godot 4.3 designed to supplement both Tweens and AnimationPlayer by providing powerful, dynamic alternatives.
+Intervals is a lightweight animation plugin for Godot 4.2.2+ designed to supplement both Tweens and AnimationPlayer by providing powerful, dynamic alternatives.
 This plugin is created based on what I felt was lacking from Godot in regards to efficient animation development, and I hope it will serve your purposes too.
 
 The plugin features two separate, powerful libraries for animations: **Intervals** and **Events**.
@@ -84,4 +84,6 @@ The repository does come with a couple of demos.
 
 ## Installation
 
-Copy the contents of the `addons` folder into the `addons` folder in your own Godot project. Both `intervals` and `graphedit2` are required. Be sure to enable both plugins from Project Settings.
+This repository contains the plugin for v4.3. Copy the contents of the `addons` folder into the `addons` folder in your own Godot project. Both `intervals` and `graphedit2` are required. Be sure to enable both plugins from Project Settings.
+
+For v4.2.2 support, please install the repository from [vabrador's fork.](https://github.com/vabrador/godot-intervals/tree/backport-4.2)
