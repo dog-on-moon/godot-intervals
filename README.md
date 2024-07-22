@@ -78,9 +78,9 @@ Events are contained within a MultiEvent, which can be created by placing an Eve
 
 ## Documentation
 
-Figure it out yourself! That's part of the fun of Intervals! 💗💐🌸 (Kidding, I'll get to this later...)
+You can view the [documentation](https://github.com/dog-on-moon/godot-intervals/tree/main/docs) from within this repository.
 
-The repository does come with a couple of demos.
+In addition, the repository comes with a couple of demos.
 
 ## Installation
 
