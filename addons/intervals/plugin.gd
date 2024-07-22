@@ -22,6 +22,7 @@ func _enter_tree():
 	add_custom_type("Func", "Interval", preload("res://addons/intervals/interval/common/func.gd"), INTERVAL)
 	add_custom_type("LerpFunc", "Interval", preload("res://addons/intervals/interval/common/lerp_func.gd"), INTERVAL)
 	add_custom_type("LerpProperty", "Interval", preload("res://addons/intervals/interval/common/lerp_property.gd"), INTERVAL)
+	add_custom_type("SetProperty", "Interval", preload("res://addons/intervals/interval/common/set_property.gd"), INTERVAL)
 	add_custom_type("Wait", "Interval", preload("res://addons/intervals/interval/common/wait.gd"), INTERVAL)
 	
 	## Container Intervals
@@ -46,9 +47,11 @@ func _exit_tree():
 	remove_custom_type("Interval")
 	
 	## Common Intervals
+	remove_custom_type("Connect")
 	remove_custom_type("Func")
 	remove_custom_type("LerpFunc")
 	remove_custom_type("LerpProperty")
+	remove_custom_type("SetProperty")
 	remove_custom_type("Wait")
 	
 	## Container Intervals
@@ -97,7 +100,8 @@ func _edited_object_changed():
 			_stored_object = null
 			_stored_property = ""
 		elif object is not Event:
-			_hide_editor()
+			pass
+			# _hide_editor()
 	else:
 		_hide_editor()
 

@@ -57,11 +57,12 @@ The complete list of built-in Intervals are listed below (note that it is easy t
 1. **Func** - Performs a function call. Equivalent to `tween.tween_callback(callable)`.
 2. **LerpFunc** - Calls a method with a singular argument, lerping between two values. Equivalent to `tween.tween_method(...)`.
 3. **LerpProperty** - Lerps a property between two values on a given object. Equivalent to `tween.tween_property(...)`.
-4. **Wait** - Waits a certain amount of time. Equivalent to `tween.tween_interval(time)`.
-5. **Connect** - Connects a method to a signal.
-6. **Sequence** - Performs all of its sub-tweens in order.
-7. **Parallel** - Performs all of its sub-tweens simultaneously. *NOTE: A bug prevents us from nesting Sequences or Parallels inside other Parallels :(*
-8. **SequenceRandom** - Performs all of its sub-tweens in a random order.
+4. **SetProperty** - Sets a property on a given object.
+5. **Wait** - Waits a certain amount of time. Equivalent to `tween.tween_interval(time)`.
+6. **Connect** - Connects a method to a signal.
+7. **Sequence** - Performs all of its sub-tweens in order.
+8. **Parallel** - Performs all of its sub-tweens simultaneously. *NOTE: A bug prevents us from nesting Sequences or Parallels inside other Parallels :(*
+9. **SequenceRandom** - Performs all of its sub-tweens in a random order.
 
 ## Events
 
