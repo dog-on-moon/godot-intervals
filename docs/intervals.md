@@ -25,6 +25,8 @@ The main advantage of Intervals is that they represent a Tween action as an obje
 
 A common example of an Interval is to fade a CanvasItem's modulate. For individual Intervals, the similarity with Tweens is very apparent.
 
+![demo-gif](https://github.com/fauxhaus/godot-intervals/blob/main/docs/images/fade.gif)
+
 ```gdscript
 ## Interval example
 static func make_fade_interval_tween(control: Control, duration := 0.5, alpha := 0.0) -> Tween:
@@ -38,6 +40,8 @@ static func make_fade_tween(control: Control, duration := 0.5, alpha := 0.0) -> 
 ### Batched UI Movement
 
 You can use Tweens to batch dynamic UI movement together. Intervals can be grouped using Sequences and Parallels.
+
+![demo-gif](https://github.com/fauxhaus/godot-intervals/blob/main/docs/images/ui.gif)
 
 ```gdscript
 ## Interval example
@@ -125,6 +129,8 @@ func _onto_tween(tween: Tween):
 ### Projectile Move
 
 This is a complex custom interval which implements projectile motion on a Node2D between start and end positions. The vertical arc is automatically calculated.
+
+![demo-gif](https://github.com/fauxhaus/godot-intervals/blob/main/docs/images/projectile.gif)
 
 ```gdscript
 extends Interval
