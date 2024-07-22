@@ -17,6 +17,7 @@ var _resource_ref: WeakRef
 		if resource:
 			resource.editor_refresh.connect(_refresh)
 		if is_node_ready():
+			_validate_connections()
 			_refresh()
 			recenter()
 			recenter()
@@ -60,6 +61,9 @@ func _ready() -> void:
 	## Popup menu signals
 	popup_menu.request_create_resource.connect(add_resource)
 	popup_menu.request_paste_resources.connect(func (x): _paste_nodes_request(x))
+
+func _process(delta: float) -> void:
+	_validate_connections()
 
 #region GraphEdit Signals
 func _connection_request(from_node_name: StringName, from_port: int, to_node_name: StringName, to_port: int):
@@ -249,6 +253,22 @@ func _refresh():
 			var from_node: GraphNode2 = resource_to_element[c[0]]
 			var to_node: GraphNode2 = resource_to_element[c[2]]
 			connect_node(from_node.name, c[1], to_node.name, c[3])
+
+## Validates all of the connections in the GraphNode.
+func _validate_connections():
+	if not resource:
+		return
+	
+	## Validate the connections for each GraphNode.
+	for c: Array in resource.connections.duplicate():
+		var from_resource: GraphNodeResource = c[0]
+		var from_port: int = c[1]
+		var to_resource: GraphNodeResource = c[2]
+		var to_port: int = c[3]
+		
+		if from_port >= from_resource.get_output_connections() \
+				or to_port >= to_resource.get_input_connections():
+			resource.disconnect_resources(from_resource, from_port, to_resource, to_port)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cut") and selected_elements:
