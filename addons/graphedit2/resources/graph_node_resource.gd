@@ -58,7 +58,13 @@ func _editor_process(edit: GraphEdit, element: GraphElement):
 		var desc := get_graph_node_description(edit, element)
 		if _graph_node_text_label.text != desc:
 			_graph_node_text_label.text = desc
-			_graph_node_text_label.visible = desc != ""
+		# We force the visibility of the text label when there's a description,
+		# or when there's a handful of connections present -- this is because
+		# GraphNode has issues placing ports on the right nodes when there's
+		# invisible children, so this label must be visible.
+		_graph_node_text_label.visible = (desc != "") or (
+			max(get_input_connections(), get_output_connections()) >= 2
+		)
 	if _padding and _padding != element.get_child(element.get_child_count() - 1):
 		element.move_child(_padding, -1)
 
