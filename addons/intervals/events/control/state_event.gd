@@ -20,6 +20,7 @@ func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 			1:
 				_state.erase(key)
 			2:
+				_state.get_or_add(key, 0)
 				_state[key] += value
 		done.emit()
 	)
