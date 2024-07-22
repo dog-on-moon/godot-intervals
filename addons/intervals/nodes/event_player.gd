@@ -26,6 +26,9 @@ func _ready() -> void:
 	if autoplay:
 		play()
 
+func _exit_tree() -> void:
+	state = {}
+
 func play(callback: Callable = func(): pass):
 	active = true
 	plays += 1
