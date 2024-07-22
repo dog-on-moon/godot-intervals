@@ -151,9 +151,7 @@ func get_branch_index() -> int:
 				if event == last_event and last_event_branch == branch_idx:
 					return return_branch_idx
 		
-		## we really should have found our true output branch here, so print error in case of failure
-		assert(false, "We should have found our true output branch.
-		%s - %s - %s - %s" % [last_event, last_event_branch, output_dict, return_branch_idx])
+		## No branch found (perhaps ended on a branchless node)
 		return super()
 	else:
 		## No last event, so we just rely on the default branch.
