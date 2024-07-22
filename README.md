@@ -49,7 +49,7 @@ func start():
 		),
 		
 		# Set can continue flag.
-		Func.new(func (): can_continue = true),
+		SetProperty.new(self, &"can_continue", true),
 	]).as_tween(self)
 ```
 
