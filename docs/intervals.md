@@ -137,7 +137,7 @@ extends Interval
 class_name Projectile2DMove
 ## Moves a Node2D in a vertical arc from a start to an end point.
 ## The start and end point are guaranteed, the vertical velocity is automatically
-## determined based on the gravity defined (pixels per second).
+## determined based on the gravity defined (pixels per second per second).
 
 var node_2d: Node2D
 var duration: float
