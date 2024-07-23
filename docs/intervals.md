@@ -111,19 +111,19 @@ This is a custom interval which implements the fade example from above as a reus
 extends Interval
 class_name CanvasItemVisibility
 
-var object: Object
+var canvas_item: CanvasItem
 var duration: float
 var visibility: float
 
-func _init(p_object: Object = null,
+func _init(p_canvas_item: CanvasItem = null,
 		p_duration := 1.0,
 		p_visibility: := 1.0) -> void:
-	object = p_object
+	canvas_item = p_canvas_item
 	duration = p_duration
 	visibility = p_visibility
 
 func _onto_tween(tween: Tween):
-	tween.tween_property(object, ^"modulate:a", visibility, duration)
+	tween.tween_property(canvas_item, ^"modulate:a", visibility, duration)
 ```
 
 ### Projectile Move
