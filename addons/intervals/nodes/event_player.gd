@@ -27,12 +27,17 @@ func _ready() -> void:
 		play()
 
 func _exit_tree() -> void:
+	if tween:
+		tween.kill()
+		tween = null
+	plays = 0
 	state = {}
 
 func play(callback: Callable = func(): pass):
 	active = true
 	plays += 1
 	state['PLAYS'] = plays
+	state['EventPlayer'] = self
 	tween = multi_event.play(owner, _complete.bind(callback), state)
 
 func _complete(callback: Callable):
@@ -42,4 +47,4 @@ func _complete(callback: Callable):
 		callback.call()
 	finished.emit()
 	if looping:
-		play.call_deferred()
+		play.call_deferred(callback)
