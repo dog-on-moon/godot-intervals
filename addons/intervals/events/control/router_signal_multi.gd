@@ -11,8 +11,8 @@ class_name RouterSignalMulti
 		signal_names.resize(signal_count)
 		notify_property_list_changed()
 
-@export_storage var node_paths: Array[NodePath] = []
-@export_storage var signal_names: Array[StringName] = []
+@export_storage var node_paths: Array[NodePath] = [^"", ^""]
+@export_storage var signal_names: Array[StringName] = [&"", &""]
 
 var _editor_owner: Node
 
