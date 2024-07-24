@@ -13,9 +13,9 @@ The complete list of built-in Intervals are listed below (note that it is easy t
 4. **SetProperty** - Sets a property on a given object.
 5. **Wait** - Waits a certain amount of time. Equivalent to `tween.tween_interval(time)`.
 6. **Connect** - Connects a method to a signal.
-7. **Sequence** - Performs all of its sub-tweens in order.
-8. **Parallel** - Performs all of its sub-tweens simultaneously. *NOTE: A bug prevents us from nesting Sequences or Parallels inside other Parallels :(*
-9. **SequenceRandom** - Performs all of its sub-tweens in a random order.
+7. **Sequence** - Performs all of its sub-intervals in order.
+8. **Parallel** - Performs all of its sub-intervals simultaneously. *NOTE: A bug prevents us from nesting Sequences or Parallels inside other Parallels :(*
+9. **SequenceRandom** - Performs all of its sub-intervals in a random order.
 
 ## Interval vs. Tween
 
