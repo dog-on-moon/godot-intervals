@@ -9,28 +9,21 @@ class_name AnimationPlayerEvent
 		if _inspect_node_button:
 			_inspect_node_button.visible = _node_exists()
 @export var animation_name: StringName
-@export var blocking := true
 
 var _inspect_node_button: Button = null
 var _editor_owner: Node = null
 
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	var animation_player: AnimationPlayer = _owner.get_node(animation_player_np)
-	if blocking:
-		animation_player.animation_finished.connect(done.emit, CONNECT_ONE_SHOT)
-		return Func.new(animation_player.play.bind(animation_name))
-	else:
-		return Sequence.new([
-			Func.new(animation_player.play.bind(animation_name)),
-			Func.new(done.emit)
-		])
+	animation_player.animation_finished.connect(done.emit, CONNECT_ONE_SHOT)
+	return Func.new(animation_player.play.bind(animation_name))
 
 #region Base Editor Overrides
 func get_graph_node_description(_edit: GraphEdit, _element: GraphElement) -> String:
 	var owner := get_editor_owner(_edit)
-	return (("%s\n[b]Animation:[/b] %s\n%sBlocking" % [
+	return (("%s\n[b]Animation:[/b] %s" % [
 		get_node_path_string(owner, animation_player_np),
-		animation_name if animation_name else "undefined", "[color=green]Non-" if not blocking else ""
+		animation_name if animation_name else "undefined"
 	]) if _anim_present() else "[b][color=orange]Animation Not Found"
 	) if _node_exists() else "[b][color=red]Invalid AnimationPlayer"
 
