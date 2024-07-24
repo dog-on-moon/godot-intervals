@@ -119,9 +119,13 @@ func _create_resource_menu(parent: PopupMenu):
 					match _activation_mode:
 						2:
 							## Connect from existing input port
+							if self.resource.get_resource_inputs(res):
+								continue
 							self.resource.connect_resources(_activation_resource, _activation_port, res, 0)
 						1:
 							## Connect from existing output port
+							if self.resource.get_resource_outputs(res):
+								continue
 							self.resource.connect_resources(res, 0, _activation_resource, _activation_port)
 		)
 
