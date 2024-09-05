@@ -15,7 +15,7 @@ var _editor_owner: Node = null
 
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	var animation_player: AnimationPlayer = _owner.get_node(animation_player_np)
-	animation_player.animation_finished.connect(done.emit, CONNECT_ONE_SHOT)
+	animation_player.animation_finished.connect(done.emit.unbind(1), CONNECT_ONE_SHOT)
 	return Func.new(animation_player.play.bind(animation_name))
 
 #region Base Editor Overrides

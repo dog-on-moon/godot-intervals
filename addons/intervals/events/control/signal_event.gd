@@ -20,7 +20,7 @@ var _editor_owner: Node = null
 
 func _get_interval(_owner: Node, _state: Dictionary) -> Interval:
 	var node: Node = _owner.get_node(node_path)
-	return Connect.new(node[signal_name], done.emit, CONNECT_ONE_SHOT)
+	return Connect.new(node[signal_name], done.emit, CONNECT_ONE_SHOT, true)
 
 #region Base Editor Overrides
 static func get_graph_dropdown_category() -> String:
